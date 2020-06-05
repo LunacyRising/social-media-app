@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import SnackbarMessages from "./SnackbarMessages";
 import { makeStyles } from "@material-ui/core/styles";
 import UsersTable from "./UsersTable";
 import { Redirect } from "react-router-dom";

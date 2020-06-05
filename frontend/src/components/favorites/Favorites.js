@@ -1,13 +1,13 @@
 import React,{ useEffect } from "react";  
 import { Redirect } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux"; 
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { CircularProgress, Container, Box } from "@material-ui/core"; 
 import { makeStyles } from "@material-ui/core/styles";
 import { fetchFavorites } from "../../actions/favoritesActions/fetchFavorites";
 import SnackBarMessages from "../SnackbarMessages";
 import Favorite from "./Favorite";
-import NoFavorites from "./NoFavorites";
-import { TransitionGroup, CSSTransition } from 'react-transition-group'; 
+import NoFavorites from "./NoFavorites"; 
 
 
 

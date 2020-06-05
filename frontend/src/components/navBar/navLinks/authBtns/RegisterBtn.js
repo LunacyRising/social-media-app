@@ -1,7 +1,7 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-//import {IconButton,Tooltip, List, ListItem, ListItemText, ListItemIcon, Divider } from "@material-ui/core";
+import { useTranslation } from "react-i18next";
+import { Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { registerModalOpen } from "../../../../actions/modalsActions/register";
 
@@ -20,22 +20,24 @@ const RegisterBtn = () => {
         "&:hover": {
           textDecoration: "none",
           color: "#8b70d2",
-          backgroundColor: "transparent"
+          backgroundColor: "transparent" 
         },
       }
   }));
   const classes = useStyles();
+
   const { btn } = classes;
 
+  const { t } = useTranslation();
 
   const dispatch = useDispatch()
 
 
     return (
             <>
-                <Link className={btn} onClick={() => dispatch(registerModalOpen())}>
-                    Register
-                </Link>
+                <Button className={btn} onClick={() => dispatch(registerModalOpen())}>
+                    {t("Register")}
+                </Button>
             </>
         )
     }

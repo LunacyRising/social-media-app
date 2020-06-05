@@ -1,7 +1,7 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { Typography, Box, Paper } from "@material-ui/core";
+import { Typography, Box } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import error from "../utils/images/error2.gif";
 

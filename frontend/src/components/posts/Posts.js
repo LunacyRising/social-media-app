@@ -1,14 +1,18 @@
 import React from "react";
-import Post from "./Post";
+import PostCard from "./PostCard";
 import { useSelector } from "react-redux";
 
-const Posts = ({ posts }) => {
+const Posts = () => {
 
   const { userId, avatar } = useSelector(state => state.authReducer);
+
+  const { posts } = useSelector(state => state.postReducer); 
+  console.log(posts)
+
   return (
     <>  
-        {posts.map(post => (
-          <Post
+        {posts && posts.map( post => (
+          <PostCard
             key={post._id}
             postId={post._id} 
             userId={post.userId}  

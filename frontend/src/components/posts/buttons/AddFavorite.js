@@ -1,5 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 import { makeStyles } from "@material-ui/core/styles";
 import StarTwoToneIcon from '@material-ui/icons/StarTwoTone';
 import { IconButton,Tooltip } from "@material-ui/core";
@@ -24,6 +25,8 @@ const AddFavorite = ({ postId }) => {
 
     const { isAuthenticated } = useSelector(state => state.authReducer);
 
+    const { t } = useTranslation();
+
     const dispatch = useDispatch(); 
 
     const addFavorite = () => {
@@ -32,7 +35,7 @@ const AddFavorite = ({ postId }) => {
   
     return (
         <>
-            <Tooltip title="add to favorites!">
+            <Tooltip title={t("AddFavorites")}>
                 <IconButton className={btn}  onClick={() => addFavorite()}>
                     <StarTwoToneIcon />
                 </IconButton>

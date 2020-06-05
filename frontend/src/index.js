@@ -1,11 +1,12 @@
-import React from "react";
+import React , { Suspense }from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { PersistGate } from "redux-persist/integration/react";
 import { Provider } from "react-redux";
-import { createStore2, createPersistor } from "./store";
+import { createStore2, createPersistor } from "./store"; 
+import "./i18next";
 
 
 
@@ -13,7 +14,9 @@ import { createStore2, createPersistor } from "./store";
 ReactDOM.render(
     <Provider store={createStore2()}>
       <PersistGate loading={null} persistor={createPersistor()}>
-        <App />
+        <Suspense fallback={(<div>loading ....</div>)}>
+          <App />
+        </Suspense>
       </PersistGate>
     </Provider>
 ,
@@ -21,6 +24,6 @@ ReactDOM.render(
 );
 
 // If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
+// unregister() to register() below. Note this comes with some pitfalls. 
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();

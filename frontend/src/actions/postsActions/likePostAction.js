@@ -1,7 +1,5 @@
 import axios from "axios";
 import { returnMessages, snackOpen } from "../messagesActions";
-import { fetchPosts } from "./fetchPostsAction";
-
 import { LIKE_SUCCESS, LIKE_FAIL } from "../types";
 
 export const likePost = ({  postId, creatorUserName, title}) => async (dispatch,getState) => {
@@ -27,7 +25,6 @@ export const likePost = ({  postId, creatorUserName, title}) => async (dispatch,
     let messageCode = response.data.code;
     dispatch(returnMessages(messageCode, message));
     dispatch(snackOpen());
-    //dispatch(fetchPosts());
     console.log(response.data.message, response.data.likes);
   } catch (err) {
     console.log(err.response) 

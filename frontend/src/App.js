@@ -14,6 +14,7 @@ import EmailConmirmation from "./components/EmailConfirmation";
 import SpecificUserInfoPage from "./components/SpecificUserInfoPage";
 import SinglePostPage from "./components/posts/SinglePostPage";
 import Favorites from "./components/favorites/Favorites";
+import Gallery from "./components/gallery/Gallery";
 import LogingOut from "./components/auth/LogingOut";
 import Test from "./components/Test";
 import ServerDown from "./components/ServerDown";
@@ -23,7 +24,7 @@ function App() {
 
   const { darkMode } = useSelector(state => state.darkModeReducer);
 
-  const theme = createMuiTheme({
+  const theme = createMuiTheme({ 
     typography: {
       "fontFamily": "\"Saira\",\"Roboto\", \"Helvetica\", \"Arial\", sans-serif", 
      },
@@ -41,9 +42,13 @@ function App() {
       type: darkMode ? "dark" : "light" 
     }
   });
+
   console.log(theme)
-  useEffect(() => { document.body.style.backgroundColor = darkMode ? "#272727" : "#f5f5f5" },
-     [darkMode]
+
+  useEffect(() => { document.body.style.backgroundColor = darkMode ? "#272727" : "#f5f5f5" 
+    
+  },
+  [darkMode]
    );
 
 
@@ -55,7 +60,7 @@ function App() {
           <Switch>
             <Route path="/" exact component={Home} />
             <Route path="/login" exact component={Login} />
-            <Route path="/register" exact component={Register} />
+            <Route path="/register" exact component={Register}/>
             <Route
               path="/emailConfirmation"
               exact
@@ -67,6 +72,7 @@ function App() {
             <Route path="/users/user/:userId" exact component={SpecificUserInfoPage} />
             <Route path="/favorites" exact component={Favorites} />
             <Route path="/posts/:postId" exact component={SinglePostPage}/>
+            <Route path="/gallery/:userId" exact component={Gallery}/>
             <Route path="/logingOut" exact component={LogingOut}/>
             <Route path="/test" exact component={Test}/>
             <Route path="/error" exact component={ServerDown} />

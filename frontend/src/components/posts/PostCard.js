@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography, Card, Divider, Box } from "@material-ui/core";
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import {  CSSTransition } from 'react-transition-group' 
 import dayjs from "dayjs";
-import { loginModalOpen } from "../../actions/modalsActions/login";
 import relativeTime from "dayjs/plugin/relativeTime";
 import CommentSection from "../comments/CommentSection";
 import LikeBtn from "./buttons/LikeBtn";
@@ -15,36 +13,39 @@ import AddFavorite from "./buttons/AddFavorite";
 import AddComment from "./buttons/AddComment";
 import EditPost from "./buttons/EditPost";
 import DeletePost from "./buttons/DeletePost";
+import GoToPost from "./buttons/GoToPost";
 import CommentModal from "../comments/CommentModal"; 
 import EditPostModal from "../EditPostModal";
 import UserDetails from "./userDetails/UserDetails";
 import PulsingGreenBall from "../PulsingGreenBall";
 import UserRanking from "./UserRanking";
 import AddFriend from "../friends/AddFriend";
+import { loginModalOpen } from "../../actions/modalsActions/login";
 
-const Post = ({
+const PostCard = ({
   postId,
   userId,
   creatorUserName,
-  creatorAmountOfPosts,
+  creatorAmountOfPosts, 
   title,
   post,
   date,
-  amountOfComments,
+  amountOfComments, 
   likes,
   dislikes,
   avatar,
-  userIsOnline
+  userIsOnline,
+  singlePost
 }) => {
   const useStyles = makeStyles((theme) => ({
 
-    cardContainer: {
+    card: {
       display: "flex",
       flexDirection: "column",
       marginBottom: 30,
       animation: "drop 1s ease",
-      transition: "0.5s ease all",
       overflow:"visible",
+      width: "100%"
     },
     avatarAndText: {
       position: "relative",
@@ -81,6 +82,7 @@ const Post = ({
     },
     creator: {
       fontSize: 12,
+      cursor: "pointer",
       '&::after': {
         content: `'|'`,
         marginLeft: 15
@@ -120,20 +122,21 @@ const Post = ({
     },
   }));
   const classes = useStyles();
-  const {cardContainer, avatarAndText, userAvatar, postInfo, postTitle, creatorAndDate, creator, createdAt, btns, editAndDeletePostHidden, editAndDeletePostVisible, likeDislikeBtns,restOfBtns, friendBtnContainer } = classes;
+  
+  const {card, avatarAndText, userAvatar, postInfo, postTitle, creatorAndDate, creator, createdAt, btns, editAndDeletePostHidden, editAndDeletePostVisible, likeDislikeBtns,restOfBtns, friendBtnContainer } = classes;
 
-  dayjs.extend(relativeTime);
+  dayjs.extend(relativeTime); 
 
   const { userName, isAuthenticated } = useSelector(state => state.authReducer);
  
+  const [commentsNumber, setCommentsNumber] = useState(amountOfComments); 
+
+  const [showDetails, setShowDetails] = useState(false);
+
   const [comentModalOpen, setCommentModalOpen] = useState(false);
 
   const [openEditPostModal, setOpenEditPostModal] = useState(false);
 
-  const [commentsNumber, setCommentsNumber] = useState(amountOfComments);
-
-  const [showDetails, setShowDetails] = useState(false);
- 
   const handleCommentModal = () => {
     isAuthenticated ? setCommentModalOpen(prev => !prev) : dispatch(loginModalOpen());
   };
@@ -142,13 +145,14 @@ const Post = ({
     setOpenEditPostModal(prev => !prev);
   };
 
+
   const dispatch = useDispatch(); 
 
   return ( 
-    <>
-        <EditPostModal  openEditPostModal={openEditPostModal} editPostModal={editPostModal} postToEdit={post} postId={postId} />
-        <CommentModal  comentModalOpen={comentModalOpen} handleCommentModal={handleCommentModal} postId={postId} postCreator={userId} title={title} post={post} amountOfComments={commentsNumber} setCommentsNumber={setCommentsNumber}/>
-        <Card className={cardContainer}>
+    <>  
+        <EditPostModal postToEdit={post} postId={postId} openEditPostModal={openEditPostModal} editPostModal={editPostModal} />
+        <CommentModal  postId={postId} postCreator={userId} title={title} amountOfComments={commentsNumber} setCommentsNumber={setCommentsNumber} comentModalOpen={comentModalOpen} handleCommentModal={handleCommentModal}/>   
+        <Card className={card}>
           <Box className={avatarAndText}>
             <Box style={{ position:"relative", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"space-between"}}>
               {userIsOnline && <PulsingGreenBall/>}
@@ -166,7 +170,7 @@ const Post = ({
             </Box>
             <Box className={postInfo}> 
               <CSSTransition in={showDetails} timeout={500} unmountOnExit={true} classNames="userInfo">
-                <UserDetails avatar={avatar} creatorUserName={creatorUserName}/> 
+                <UserDetails avatar={avatar} creatorUserName={creatorUserName} setShowDetails={setShowDetails}/> 
               </CSSTransition>
               <Typography
                   className={postTitle}
@@ -183,9 +187,6 @@ const Post = ({
                   <Typography
                     className={creator}
                     onClick={() => setShowDetails(true)}
-                    //component={Link}
-                    //to={`/users/user/${userId}`}
-                    //target="_blank"
                     color="primary"
                     >
                     {creatorUserName}
@@ -205,10 +206,11 @@ const Post = ({
               <DislikeBtn postId={postId} dislikes={dislikes}/>
             </Box>
             <Box className={restOfBtns}>
-                <AddComment handleCommentModal={handleCommentModal}/>
+                {!singlePost && <GoToPost postId={postId}/>}
+                <AddComment postId={postId} handleCommentModal={handleCommentModal}/> 
                 <AddFavorite postId={postId} userId={userId} title={title} post={post} userName={userName} amountOfComments={amountOfComments} date={date} />
               <Box className={userName !== creatorUserName ? editAndDeletePostHidden : editAndDeletePostVisible}>
-                <EditPost editPostModal={editPostModal}/>
+                <EditPost postId={postId} editPostModal={editPostModal} />
                 <DeletePost postId={postId} title={title}/>
               </Box>   
             </Box>
@@ -220,4 +222,4 @@ const Post = ({
   );
 };
 
-export default Post;
+export default PostCard;

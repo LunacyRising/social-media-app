@@ -1,6 +1,6 @@
 import React from "react"
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { deleteFavorite } from "../../actions/favoritesActions/deleteFavorite";
 import { Typography, IconButton, Card, Tooltip, Box}  from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";

@@ -3,9 +3,10 @@ import { useDispatch } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import {Card, Tooltip, CardContent, Avatar, Typography, Box, IconButton} from "@material-ui/core";
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+import HighlightOffOutlinedIcon from '@material-ui/icons/HighlightOffOutlined';
 
 
-const UserDetails = ({avatar,creatorUserName}) => {
+const UserDetails = ({ avatar, creatorUserName, setShowDetails }) => {
 
     const useStyles = makeStyles((theme) => ({
         wholeCont: {
@@ -48,18 +49,25 @@ const UserDetails = ({avatar,creatorUserName}) => {
             display: "flex",
             justifyContent: "space-around",
             alignItems: "center",
-            marginTop: 10
-        }
+            marginTop: 10, 
+        },
+        btn: {
+            width: 30,
+            height: 30,
+          }
         }));
     const classes = useStyles();
 
-    const {wholeCont ,container, avatarContainer, userAvatar, info,individualInfo, individualInfo2,btns} = classes;
+    const {wholeCont ,container, avatarContainer, userAvatar, info,individualInfo, individualInfo2, btns, btn} = classes;
 
     const dispatch = useDispatch(); 
 
     return (
         <>
             <Card className={wholeCont}>
+                <IconButton className={btn} onClick={() => setShowDetails(prev => prev)}>
+                    <HighlightOffOutlinedIcon/>
+                </IconButton>
                 <Box className={avatarContainer}>
                     <Avatar className={userAvatar} alt="userAvatar" src={avatar}/>
                     <Typography>{creatorUserName}</Typography>
@@ -89,17 +97,17 @@ const UserDetails = ({avatar,creatorUserName}) => {
                     </Box>
                     <Box className={btns}>
                         <Tooltip title="Add To Friend!">
-                            <IconButton>
+                            <IconButton className={btn}>
                                 <AddCircleIcon/>
                             </IconButton>
                         </Tooltip>
                         <Tooltip title="Add To Friend!">
-                            <IconButton>
+                            <IconButton className={btn}>
                                 <AddCircleIcon/>
                             </IconButton>
                         </Tooltip>
                         <Tooltip title="Add To Friend!">
-                            <IconButton>
+                            <IconButton className={btn}>
                                 <AddCircleIcon/>
                             </IconButton>
                         </Tooltip>

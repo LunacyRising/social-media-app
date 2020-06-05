@@ -17,7 +17,7 @@ import {
     switch (action.type) {
       case MODAL_LOGIN_OPEN: {
         return {
-          openLogin: true
+          openLogin: true 
         };
       }
       case MODAL_LOGIN_CLOSE: {

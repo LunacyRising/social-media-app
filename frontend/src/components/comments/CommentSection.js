@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
+import { useTranslation } from "react-i18next";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Typography,
@@ -22,7 +24,7 @@ const CommentSection = ({ postId, commentsCount }) => {
   const useStyles = makeStyles(() => ({ 
     commentContainer: {
       display: "flex",
-      borderBottom: "1px solid #3b4248" 
+      transition: "all 0.3s ease"
     },
     commentAvatar: {},
     commentDetails: {
@@ -48,33 +50,38 @@ const CommentSection = ({ postId, commentsCount }) => {
 
   const { commentContainer, commentDetails, date } = classes;
 
-  const { comments, amountOfComment } = useSelector(state => state.commentsReducer);
+  const { commentsLoading, comments, amountOfComments } = useSelector(state => state.commentsReducer);
+
+  const { t } = useTranslation();
 
   let [ skip, setSkip] = useState(0);
 
-  const [ limit, setLimit] = useState(1);
+  const [ limit ] = useState(1);
 
-  let [ lengthOfComments, setLengthOfComments] = useState(amountOfComment)
-
-  const [ commentsLoading, setCommentsLoading ] = useState(false)
-
-  const testingFetch = () => {
+  const fetchComments = () => {
     // no hay comentarios
-    if(commentsCount === 0 ) return;
-    setCommentsLoading(true);
+    if(commentsCount === 0 || commentsCount === amountOfComments) return; 
     setSkip( prev => prev + limit);
-    dispatch(fetchCommentsByPost({postId, skip, limit}));
-    setCommentsLoading(false)
+    dispatch(fetchCommentsByPost({ postId, skip, limit }));
   }
 
   dayjs.extend(relativeTime);
 
   const dispatch = useDispatch();
 
-  let filteredComments = commentsLoading ? <p>loading ...</p> : comments.filter(comment =>(comment.postId === postId))
+  let filteredComments = 
+  commentsLoading ? <p>{t("Loading")}</p> :
+  <TransitionGroup component={null}>
+  {comments.filter(comment =>(comment.postId === postId))
   .map((comment) =>( 
+    <CSSTransition
+      key={comment._id}
+      timeout={500}
+      classNames="comment" 
+      unmountOnExit={true}
+      >
     <>
-      <ExpansionPanelDetails key={comment._id} className={commentContainer}>
+      <ExpansionPanelDetails key={comment._id} className={commentContainer}> 
         <Avatar alt="avatar" src={comment.avatar} />
           <div className={commentDetails}>
             <Typography
@@ -95,46 +102,22 @@ const CommentSection = ({ postId, commentsCount }) => {
       </ExpansionPanelDetails>
       <Divider/>
     </>
-  ))
-  /*let filteredComments = commentsLoading ? <p>loading...</p> : commentsByPost.filter(comment =>(comment.postId === postId))
-  .map(comment =>(
-    <>
-      <ExpansionPanelDetails key={comment._id} className={commentContainer}>
-        <Avatar alt="avatar" src={comment.avatar} />
-          <div className={commentDetails}>
-            <Typography
-              paragraph="true"
-              color="primary"
-              variant="body2"
-              component={Link}
-              to={`/users/${comment.userName}`}
-              target="_blank"
-            >
-              {comment.userName} 
-            </Typography>
-            <Typography paragraph="true" variant="caption">{comment.comment}</Typography>
-            <Typography className={date} variant="caption">
-              {dayjs(comment.createdAt).fromNow()}
-            </Typography>
-          </div>
-      </ExpansionPanelDetails>
-      <Divider/>
-    </>
-  ))*/
-
-  //let amountOfComment = filteredComments.length
-  let dinamicCommentWord = commentsCount === 1 ?  "Comment" :  "Comments"
+    </CSSTransition>
+  ))}
+  </TransitionGroup>
+  
+  let dinamicCommentWord = commentsCount === 1 ?  t("Comment") : t("Comments")
 
   return (
     <>
-      <ExpansionPanel onClick={() => testingFetch()} TransitionProps={{ unmountOnExit: true }}>
+      <ExpansionPanel onClick={() => fetchComments()} TransitionProps={{ unmountOnExit: true }}>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} >
         <ChatBubbleOutlineOutlinedIcon style={{marginRight:5}}fontSize="small"/>
           <Typography variant="caption">
             {commentsCount} {dinamicCommentWord}
           </Typography>
         </ExpansionPanelSummary>
-        {commentsCount > 0  ? filteredComments : <Typography style={{marginLeft: 17, paddingBottom: 20}}>no comments</Typography>}
+        {commentsCount > 0  ? filteredComments : <Typography style={{marginLeft: 17, paddingBottom: 20}}>{t("NoComments")}</Typography>}
       </ExpansionPanel>
     </>
   );

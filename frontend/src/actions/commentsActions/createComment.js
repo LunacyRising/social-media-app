@@ -12,7 +12,7 @@ export const createComment = ({
   dispatch({ type: LOADING });
   try {
     let response = await axios.post(
-      `http://localhost:5001/post/${postId}/comments`,
+      `http://localhost:5001/post/${postId}/comments`, 
       {
         userName,
         comment,

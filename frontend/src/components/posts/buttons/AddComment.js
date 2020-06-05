@@ -1,12 +1,12 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import {IconButton,Tooltip} from "@material-ui/core";
 import {useDispatch, useSelector} from "react-redux";
-import {loginModalOpen} from "../../../actions/modalsActions/login";
+import { useTranslation } from "react-i18next";
+import { makeStyles } from "@material-ui/core/styles";
+import { IconButton,Tooltip } from "@material-ui/core";
 import AddCommentTwoToneIcon from '@material-ui/icons/AddCommentTwoTone';
+import { loginModalOpen } from "../../../actions/modalsActions/login";
 
-
-const AddComment = ({ handleCommentModal }) => {
+const AddComment = ({ handleCommentModal  }) => {
 
   const useStyles = makeStyles(() => ({
 
@@ -21,14 +21,16 @@ const AddComment = ({ handleCommentModal }) => {
 
   const { btn } = classes;
 
-  const {isAuthenticated} = useSelector(state => state.authReducer);
+  const { isAuthenticated } = useSelector(state => state.authReducer);
+
+  const { t } = useTranslation();
 
   const dispatch = useDispatch(); 
 
   return (
       <>
-          <Tooltip title="Add a comment!">
-              <IconButton className={btn} onClick={() => isAuthenticated ? handleCommentModal() : dispatch(loginModalOpen())}>
+          <Tooltip title={t("AddComment")}>
+              <IconButton className={btn} onClick={() => isAuthenticated ? handleCommentModal()  : dispatch(loginModalOpen())}>
                 <AddCommentTwoToneIcon />
               </IconButton>
           </Tooltip>

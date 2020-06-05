@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { Redirect } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import SnackbarMessages from "../SnackbarMessages";
+import { useTranslation } from "react-i18next";
+import { CSSTransition } from 'react-transition-group' 
 import { useForm } from "react-hook-form";
-import {  Button, Typography, IconButton, Avatar, Box, Tooltip, Paper} from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import { Button, Typography, IconButton, Avatar, Box, Tooltip } from "@material-ui/core";
 import PermIdentityIcon from '@material-ui/icons/PermIdentity';
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import KeyboardBackspaceOutlinedIcon from '@material-ui/icons/KeyboardBackspaceOutlined';
@@ -10,15 +14,11 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import {CircularProgress} from "@material-ui/core";
 import FaceIcon from '@material-ui/icons/Face';
 import SendIcon from '@material-ui/icons/Send';
-import { makeStyles } from "@material-ui/core/styles";
-import { Redirect } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
 import { editProfile } from "../../actions/userActions/editProfileAction";
 import { changeAvatar } from "../../actions/uploadImageAction";
-import { clearMessages } from "../../actions/messagesActions";
 import UserNameField from "./UserNameField";
 import EmailField from "./EmailField";
-import {  CSSTransition } from 'react-transition-group' 
+import SnackbarMessages from "../SnackbarMessages";
 
 const EditProfile = () => {
 
@@ -120,10 +120,14 @@ const EditProfile = () => {
 
   const { formContainer, backBtn, backIcon, avatarContainer, userAvatar, changeAvatarBtn, changeAvatarIcon, userInfoContainer, uniqueFieldContainer, uniqueField, fieldText,paddingRight, fieldTitle,submitBtn,btnContentContainer,sendBtnText} = classes;
   
+
+  const { t } = useTranslation();
+
   const formDefaultValues = {
     editedUserName: "",
     editedEmail: ""
   };
+
   const [formValues, setFormValues] = useState(formDefaultValues);
 
   const [editUserName, seteditUserName] = useState(false);
@@ -164,8 +168,6 @@ const EditProfile = () => {
     setEditEmail(false);
   };
 
-  const clearMessagesDispatch = () => dispatch(clearMessages()); 
-
   const { handleSubmit } = useForm();
   
   const changeProfilePic = e => {
@@ -185,7 +187,7 @@ const EditProfile = () => {
     <>
       <Box className={formContainer}>
         <Box className={backBtn}>
-          <Tooltip title="Back to homepage">
+          <Tooltip title={t("BackToHomePage")}>
             <IconButton className={backIcon} onClick={() => history.push("/")}>
               <KeyboardBackspaceOutlinedIcon/> 
             </IconButton>
@@ -198,7 +200,7 @@ const EditProfile = () => {
             <Box className={avatarContainer}>
               <Avatar className={userAvatar} alt="userAvatar" src={avatar}/>
               <Button className={changeAvatarBtn} onClick={handleAvatarChange}>
-                <Typography variant="caption">Change avatar</Typography>
+                <Typography variant="caption">{t("ChangeAvatar")}</Typography>
                 <FaceIcon className={changeAvatarIcon}/>
               </Button>
               {avatarLoading && <LinearProgress style={{width:"80%",marginTop: 5}}/>}
@@ -208,7 +210,7 @@ const EditProfile = () => {
                   <CSSTransition in={editUserName} timeout={1000} unmountOnExit={true} classNames="updateProfileFields">
                     <UserNameField handleChange={handleChange} editedUserName={editedUserName}/>
                   </CSSTransition>
-                  <Typography className={fieldTitle} variant="caption" color="primary">Username</Typography>
+                  <Typography className={fieldTitle} variant="caption" color="primary">{t("UserName")}</Typography>
                   <Box className={uniqueField}>
                     <Typography className={fieldText}>{userName}</Typography>
                       <IconButton onClick={() => seteditUserName(!editUserName)} color="primary">
@@ -221,7 +223,7 @@ const EditProfile = () => {
                   <CSSTransition in={editEmail} timeout={1000} unmountOnExit={true} classNames="updateProfileFields">
                     <EmailField handleChange={handleChange} editedEmail={editedEmail}/>
                   </CSSTransition>
-                  <Typography className={fieldTitle} variant="caption" color="primary">Email</Typography>
+                  <Typography className={fieldTitle} variant="caption" color="primary">{t("Email")}</Typography>
                   <Box className={uniqueField}>
                     <Typography className={fieldText}>{email}</Typography>
                       <IconButton  onClick={() => setEditEmail(!editEmail)} color="primary">
@@ -233,7 +235,7 @@ const EditProfile = () => {
             </Box>
             <Button className={submitBtn} type="submit" color="primary">
                 <Box className={btnContentContainer}>
-                  <Typography className={sendBtnText} variant="caption">Save</Typography>
+                  <Typography className={sendBtnText} variant="caption">{t("Save")}</Typography>
                   {isLoading ? <CircularProgress size={15}/> : <SendIcon />}
                 </Box>
             </Button>

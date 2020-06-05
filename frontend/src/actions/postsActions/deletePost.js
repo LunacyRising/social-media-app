@@ -1,7 +1,7 @@
 import axios from "axios";
 import { returnMessages, snackOpen } from "../messagesActions";
 
-import { DELETE_POST, FAIL_DELETE_POST, POSTS_LOADING } from "../types";
+import { DELETE_POST, FAIL_DELETE_POST } from "../types";
 
 export const deletePost = ({ postId }) => async (dispatch, getState) => {
   const {token} = getState().authReducer;

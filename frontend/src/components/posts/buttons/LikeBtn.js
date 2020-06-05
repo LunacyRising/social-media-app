@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 import { IconButton,Tooltip } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { likePost } from "../../../actions/postsActions/likePostAction";
@@ -24,9 +25,12 @@ const LikeBtn = ({ postId, likes, title, postCreator, creatorUserName }) => {
     }
   }));
   const classes = useStyles();
+
   const { greenLike, btn } = classes;
 
   const {isAuthenticated} = useSelector(state => state.authReducer);
+
+  const { t } = useTranslation();
 
   const dispatch = useDispatch(); 
 
@@ -39,8 +43,8 @@ const LikeBtn = ({ postId, likes, title, postCreator, creatorUserName }) => {
 
     return ( 
         <>
-            <Tooltip title="Like!">
-                <IconButton className={ likesCount >= 1 ? `${greenLike} ${btn}`: btn} onClick={isAuthenticated ? () => like() : () => dispatch(loginModalOpen())}>
+            <Tooltip title={t("Like")}>
+                <IconButton className={ likesCount < 1 ?  btn : `${greenLike} ${btn}`} onClick={isAuthenticated ? () => like() : () => dispatch(loginModalOpen())}>
                     <ThumbUpTwoToneIcon/>
                 </IconButton>
             </Tooltip>

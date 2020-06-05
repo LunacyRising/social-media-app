@@ -1,21 +1,11 @@
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
 import dayjs from "dayjs";
 import LocalizedFormat from 'dayjs/plugin/localizedFormat'
 import relativeTime from "dayjs/plugin/relativeTime";
 import { useDispatch, useSelector } from "react-redux";
 import {fetchUserAction} from "../actions/userActions/fetchUserAction";
 import {fetchPostsByUser} from "../actions/postsActions/fetchPostsByUser";
-import SnackbarMessages from "../components/SnackbarMessages";
-import {
-  Typography,
-  Button,
-  Card,
-  Tooltip,
-  Divider,
-  Grid,
-  CircularProgress,
-} from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 
 import { makeStyles } from "@material-ui/core/styles";
 

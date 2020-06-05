@@ -2,7 +2,7 @@ import axios from "axios";
 import { FETCH_COMMENTS_BY_POST, FETCH_POSTS_FAIL, COMMENTS_LOADING } from "../types";
 import { returnMessages } from "../messagesActions";
 
-export const fetchCommentsByPost = ({ postId, skip, limit }) => async (dispatch, getState) => {
+export const fetchCommentsByPost = ({ postId, skip, limit }) => async (dispatch) => {
 
   dispatch({type: COMMENTS_LOADING})
   try {

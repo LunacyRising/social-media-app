@@ -20,8 +20,8 @@ import { deleteUserAction } from "../actions/userActions/deleteUserAction";
 import { fetchUsers } from "../actions/userActions/fetchUsersAction";
 
 ////////////////////////////////////////////////////////////////////////
-const UsersTable = ({ users, token, messageCode, reloadTable }) => {
-  const [anchorEl, setAnchorEl] = useState(null);
+const UsersTable = ({ users, token, reloadTable }) => {
+
   const [formOpen, setFormOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState(1);
   const [usersPerPage] = useState(10);

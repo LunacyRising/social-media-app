@@ -1,9 +1,10 @@
 import React from "react";
-import {useDispatch,useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 import { dislikePost } from "../../../actions/postsActions/dislikePostAction";
-import {loginModalOpen} from "../../../actions/modalsActions/login";
+import { loginModalOpen } from "../../../actions/modalsActions/login";
 import ThumbDownTwoToneIcon from '@material-ui/icons/ThumbDownTwoTone';
-import {IconButton,Tooltip} from "@material-ui/core";
+import { IconButton,Tooltip } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 const DislikeBtn = ({postId,dislikes}) => {
@@ -26,15 +27,17 @@ const DislikeBtn = ({postId,dislikes}) => {
 
     const { isAuthenticated } = useSelector(state => state.authReducer);
 
+    const { t } = useTranslation();
+
     const dispatch = useDispatch(); 
 
     const dislike = () => {
-      isAuthenticated ? dispatch(dislikePost({postId})): dispatch(loginModalOpen());
+      isAuthenticated ? dispatch(dislikePost({ postId })): dispatch(loginModalOpen());
     };
 
     return (
         <>
-            <Tooltip title="Dislike!">
+            <Tooltip title={t("Dislike")}>
                 <IconButton className={ dislikes >= 1 ? `${redDislike} ${btn}`: btn} onClick={() => dislike()}>
                   <ThumbDownTwoToneIcon/>
                 </IconButton>

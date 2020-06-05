@@ -5,87 +5,83 @@ import {
   TextField,
   Button,
   Modal,
+  Zoom,
   Backdrop,
   Box,
   CircularProgress
 } from "@material-ui/core";
 import { editPost } from "../actions/postsActions/editPostAction";
 
-const EditPostModal = ({ openEditPostModal, editPostModal, postToEdit, postId }) => { 
+const EditPostModal = ({ postToEdit, postId, openEditPostModal, editPostModal }) => {   
 
  
   const { loading } = useSelector(state => state.commentsReducer);
 
   const useStyles = makeStyles((theme) => ({
+
       modal: {
         display: "flex",
         alignItems: "center",
-        justifyContent: "center"
+        justifyContent: "center",
       },
-      paper: {
-        width: 400,
-        animation: "expand .3s ease",
+      modalContent: {
+        width: "50%",
         display: "flex",
+        alignItems: "center",
         flexDirection: "column",
-        position: "relative"
       },
       textArea: {
-        width: "90%",
+        width: "100%",
         margin: "auto",
         backgroundColor: theme.palette.background.paper,
         borderRadius: 5
       },
-      buttons: {
+      btn: {
         border: "solid 2px #8b70d2",
-        position: "absolute",
-        right: 125,
-        bottom: -50,
+        width: "25%",
+        marginTop: 20,
         backgroundColor: "white",
+        cursor: loading && "not-allowed !important",
         "&:hover": {
           backgroundColor: "#8b70d2 !important",
           border: "solid 2px white",
           color: "white"
         },
-      disable: {
-        opacity: 0.5,
-        cursor: "not-allowed !important"
-      },
-      spinner: {
-        marginRight: 5
-      }
     }
   }));
   const classes = useStyles();
 
-  const { paper, modal, textArea, buttons, disable, spinner } = classes;
+  const { modalContent, modal, textArea, btn } = classes;
 
   const dispatch = useDispatch();
+
   const editPostDispatch = () => {
-    dispatch(editPost({ editedPost, postId }))
-    editPostModal(); 
+    dispatch(editPost({ editedPost, postId }));
+    editPostModal();
+    setEditedPost("")
   }
 
   const [editedPost, setEditedPost] = useState(postToEdit);
 
   const handleChange = e => {
-    e.preventDefault();
+    e.preventDefault(); 
     setEditedPost(e.target.value);
   };
 
   return (
     <>
-      <Box>
-        <Modal
-          className={modal}
-          open={openEditPostModal}
-          onClose={editPostModal}
-          closeAfterTransition
-          BackdropComponent={Backdrop}
-          BackdropProps={{
-            timeout: 500
-          }}
-        >
-          <Box className={paper}>
+      <Modal
+        className={modal}
+        open={openEditPostModal}
+        onClose={() => editPostModal()}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500
+        }}
+      >
+        <Zoom in={openEditPostModal}>
+          <Box className={modalContent}>
             <TextField
               className={textArea}
               multiline
@@ -98,15 +94,14 @@ const EditPostModal = ({ openEditPostModal, editPostModal, postToEdit, postId })
             <Button
               onClick={() => editPostDispatch()}
               color="primary"
-              className={loading ? `${buttons}${disable}` : buttons}
+              className={btn}
             >
               Edit
-              {loading && <CircularProgress className={spinner} size={15} />}
+              {loading && <CircularProgress size={10} />}
             </Button>
           </Box>
-        </Modal>
-      </Box>
-       
+        </Zoom>
+      </Modal>
     </>
   );
 };

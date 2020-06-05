@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+//import { useDispatch, useSelector } from "react-redux";
 import { IconButton, Menu, Box, Divider } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -41,9 +41,9 @@ const FriendMenu = ({ creatorUserName, avatar}) => {
       };
 
     /////////////////////////////////////////////////////////
-    const {isAuthenticated} = useSelector(state => state.authReducer);
+    //const {isAuthenticated} = useSelector(state => state.authReducer);
     /////////////////////////////////////////////////////////
-    const dispatch = useDispatch(); 
+    //const dispatch = useDispatch(); 
     //////////////////////////////////////////////////////////
   
     return (

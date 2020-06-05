@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { makeStyles } from "@material-ui/core/styles";
 import { Badge, Tooltip } from "@material-ui/core";
 
@@ -39,9 +40,11 @@ const PulsingGreenBall = () => {
 
       const {badge} = classes;
 
+      const { t } = useTranslation();
+
     return (
         <>
-            <Tooltip title="Online" placement="top">
+            <Tooltip title={t("Online")} placement="top">
             <Badge
             className={badge}
             overlap="circle"

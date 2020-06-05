@@ -1,7 +1,8 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
+import { Button } from "@material-ui/core";
 import {loginModalOpen} from "../../../../actions/modalsActions/login";
 
 const LoginBtn = () => {
@@ -24,17 +25,19 @@ const LoginBtn = () => {
       }
   }));
   const classes = useStyles();
+
   const { btn } = classes;
 
+  const { t } = useTranslation();
 
   const dispatch = useDispatch()
 
 
     return (
             <>
-                <Link className={btn} onClick={() => dispatch(loginModalOpen())}>
-                    Login
-                </Link>
+                <Button className={btn} onClick={() => dispatch(loginModalOpen())}>
+                {t("Login")} 
+                </Button>
             </>
         )
     }

@@ -2,7 +2,7 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import EmailConfirmation from "../EmailConfirmation";
 import LoginForm from "./LoginForm";
-import { IconButton, Paper, Modal} from "@material-ui/core";
+import { IconButton, Paper, Modal, Zoom, Backdrop} from "@material-ui/core";
 import CloseIcon from '@material-ui/icons/Close';
 import violetBackground from "../../utils/images/violetBackground.jpg";
 import { makeStyles } from "@material-ui/core/styles";
@@ -25,7 +25,6 @@ const Login = () => {
       justifyContent: "center",
       alignItems: "center",
       textAlign: "center",
-      animation: "expand 0.3s ease",
       backgroundImage: `url(${violetBackground})`,
       color: "white",
       "@media(min-width: 320px) and (max-width: 768px)" : {
@@ -77,15 +76,15 @@ const Login = () => {
 
   const { formContainer, modal,closeBtn} = classes;
 
-  const { token } = useSelector(state => state.authReducer);
+  const { isAuthenticated } = useSelector(state => state.authReducer);
 
   const { messageCode} = useSelector(state => state.messagesReducer);
 
-  const {openLogin} = useSelector(state => state.modalsReducer);
+  const { openLogin } = useSelector(state => state.modalsReducer);
 
   const dispatch = useDispatch();
 
-  return token ? (
+  return isAuthenticated ? (
     <Redirect to="/" />
   ) : (
     <>
@@ -93,14 +92,20 @@ const Login = () => {
       className={modal}
       open={openLogin}
       onClose={() => dispatch(loginModalClose())}
+      BackdropComponent={Backdrop}
+      BackdropProps={{
+      timeout: 500,
+      }}
       closeAfterTransition>
-      <Paper className={formContainer}>
-        <IconButton onClick={() => dispatch(loginModalClose())} className={closeBtn}>
-          <CloseIcon/>
-        </IconButton>
-        <LoginForm/>
-        {messageCode === 463 && <EmailConfirmation />}
-      </Paper>
+        <Zoom in={openLogin}>
+          <Paper className={formContainer}>
+            <IconButton onClick={() => dispatch(loginModalClose())} className={closeBtn}>
+              <CloseIcon/>
+            </IconButton>
+            <LoginForm/>
+            {messageCode === 463 && <EmailConfirmation />}
+          </Paper>
+        </Zoom>
       </Modal>
       {messageCode === 500 && useHistory.push("/error")}
     </>

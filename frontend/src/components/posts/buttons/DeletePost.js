@@ -1,5 +1,5 @@
 import React  from "react";
-import { useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
 import { makeStyles } from "@material-ui/core/styles";
 import { IconButton, Tooltip, Box} from "@material-ui/core";
 import DeleteTwoToneIcon from '@material-ui/icons/DeleteTwoTone';
@@ -21,7 +21,7 @@ const DeletePost = ({ postId, title }) => {
 
     const { btn } = classes;
 
-    const dispatch = useDispatch()
+    const { t } = useTranslation();
 
     const [open, setOpen] = React.useState(false);
 
@@ -36,7 +36,7 @@ const DeletePost = ({ postId, title }) => {
     return (
 
         <Box>
-            <Tooltip title="Delete!">
+            <Tooltip title={t("Delete")}>
                 <IconButton className={btn} onClick={() => handleClickOpen()}>
                   <DeleteTwoToneIcon/>
                 </IconButton>

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { returnMessages, snackOpen } from "../messagesActions";
 
-import { EDIT_POST_SUCCESS, EDIT_POST_FAIL, LOADING } from "../types";
+import { EDIT_POST_SUCCESS, EDIT_POST_FAIL } from "../types";
 
 export const editPost = ({ token, editedPost, postId }) => async (dispatch, getState) => {
 

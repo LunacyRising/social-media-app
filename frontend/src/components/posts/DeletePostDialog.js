@@ -1,10 +1,13 @@
 import React from "react";
-import {useDispatch} from "react-redux";
+import { useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
 import { Button , Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle   } from "@material-ui/core";
 import { deletePost } from "../../actions/postsActions/deletePost";
 
 
 const DeletePostDialog = ({ open, handleClose, postId, title}) => {
+
+    const { t } = useTranslation();
 
     const dispatch = useDispatch()
 
@@ -21,18 +24,18 @@ const DeletePostDialog = ({ open, handleClose, postId, title}) => {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle id="alert-dialog-title">{"Confirmation to delete post"}</DialogTitle>
+                <DialogTitle id="alert-dialog-title">{t("ConfirmationDeletePost")}</DialogTitle>
                 <DialogContent> 
                 <DialogContentText id="alert-dialog-description">
-                    Are you sure you want to delete post {title}... ?
+                    {t("DeleteText")} {title}... ?
                 </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                 <Button onClick={handleClose} color="primary">
-                    Cancel
+                    {t("Cancel")}
                 </Button>
                 <Button onClick={() => test()} color="primary" autoFocus>
-                    Accept
+                    {t("Accept")}
                 </Button>
                 </DialogActions>
             </Dialog>

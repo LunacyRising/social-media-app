@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {getNotifications} from "../../actions/notificationsActions/getNotifications";
 import NotificationsMenu from "./NotificationsMenu";
-import { IconButton, Badge, Menu, Fade, Box} from "@material-ui/core";
+import { IconButton, Badge, Menu, Fade } from "@material-ui/core";
 import NotificationsNoneIcon from '@material-ui/icons/NotificationsNone';
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -29,7 +29,7 @@ const Notifications = () => {
   }));
   const classes = useStyles();
 
-  const { menu, notiContainer, notiIcon, btn} = classes;
+  const { notiContainer, notiIcon, btn} = classes;
 
   const { notifications} = useSelector(state => state.notificationsReducer);
 
@@ -37,7 +37,7 @@ const Notifications = () => {
 
   const [anchorEl, setAnchorEl] = useState(null);
 
-  const [open, setOpen] = useState(false);
+  //const [open, setOpen] = useState(false);
   
   const handleClick = event => {
     setAnchorEl(event.currentTarget);
@@ -61,15 +61,11 @@ const Notifications = () => {
       <Menu
           className={notiContainer}
           getContentAnchorEl={null}
-          anchorOrigin={{ vertical: "top", horizontal: "right" }}
-          transformOrigin={{ vertical: "bottom", horizontal: "center" }}
           MenuListProps={{ style: { padding: 4 } }}
-          className={menu}
           anchorEl={anchorEl}
           open={Boolean(anchorEl)}
           onClose={handleClose}
           TransitionComponent={Fade}
-          getContentAnchorEl={null}
           anchorOrigin={{
             vertical: "bottom",
             horizontal: "center"

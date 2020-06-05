@@ -1,6 +1,7 @@
 import {
   LOADING,
   FETCH_POSTS_SUCCESS,
+  FETCH_POSTS_BY_SEARCH,
   LOADING_MORE_POSTS,
   FETCH_POSTS_FAIL,
   POSTS_LOADING,
@@ -19,7 +20,8 @@ import {
   UPDATE_PROFILE_SUCCESS,
   UPLOAD_IMAGE_SUCESS,
   LOGIN_SUCCESS,
-  LOGOUT_SUCCESS
+  LOGOUT_SUCCESS,
+  QUERY_FORM
 } from "../actions/types";
 
 
@@ -31,7 +33,8 @@ const initialState = {
   limit: 2,
   amountOfPosts: 0, 
   posts: [],
-  postToEdit: []
+  post: {},
+  query: ""
 };
 
 const postsReducer = (state = initialState, action) => {
@@ -46,21 +49,50 @@ const postsReducer = (state = initialState, action) => {
         ...state,
         loadingMorePosts: true
       };
-    case LOADING_MORE_POSTS:
-      return {
-        ...state,
-        loadingMorePosts: true
-      };
     case FETCH_POSTS_SUCCESS:
     case FETCH_OLDEST_POSTS:
-    case FETCH_POST_MOST_LIKES:
+    case FETCH_POST_MOST_LIKES: 
       return {
         ...state,
         loadingMorePosts: false,
         posts: [...state.posts, ...action.payload.posts],
         skip: action.payload.skip,
         amountOfPosts: action.payload.amountOfPosts
+    };
+    case FETCH_POSTS_BY_SEARCH:
+      return {
+        ...state,
+        loadingMorePosts: false,
+        skip: action.payload.skip,
+        amountOfPosts: action.payload.amountOfPosts,
+        posts: state.skip === 0 ? action.payload.posts : [...state.posts,...action.payload.posts]
       };
+    case FETCH_POST_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        post: action.payload
+      };   
+    case LOADING_MORE_POSTS:
+      return {
+        ...state,
+        loadingMorePosts: true 
+      };
+    case QUERY_FORM : {
+      return {
+        ...state,
+        query: action.payload.query,
+        skip: action.payload.skip,
+        amountOfPosts: action.payload.amounOfPosts
+      }
+    }; 
+    case FETCH_POSTS_FAIL:
+    case FETCH_POST_FAIL:
+    case EDIT_POST_FAIL:
+      return {
+        ...state,
+        postsLoading: false
+      }; 
     case EDIT_POST_SUCCESS:
       return {
         ...state,
@@ -75,21 +107,7 @@ const postsReducer = (state = initialState, action) => {
       return {
         ...state,
         posts: action.payload.posts
-      }
-    case FETCH_POSTS_FAIL:
-    case FETCH_POST_FAIL:
-    case EDIT_POST_FAIL:
-      return {
-        ...state,
-        postsLoading: false
       };
-    case FETCH_POST_SUCCESS: {
-      return {
-        ...state,
-        ...action.payload,
-        postsLoading: false
-      };
-    }
     case CREATE_POST_SUCCESS:
       return {
         ...state,

@@ -29,7 +29,7 @@ const EmailConfirmation = props => {
   const classes = useStyles();
   const { formContainer, spinner,title } = classes;
   /////////////////////////////////////////////////////////////////////
-  const { messageCode } = useSelector(state => state.messagesReducer);
+  //const { messageCode } = useSelector(state => state.messagesReducer);
   const { verificarMail, isLoading, email,verifyCaptcha } = useSelector(state => state.authReducer);
   const dispatch = useDispatch();
   //////////////////////////////////////////////////////////////////////////////

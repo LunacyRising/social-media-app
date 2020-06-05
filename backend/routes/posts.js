@@ -29,15 +29,38 @@ router.post("/createPost", verify, async (req, res) => {
   }
 });
 
-// GET ONE POST
-router.get("/posts/:postId", verify, async (req, res) => {
-  const { postId } = req.params;
-  try {
-    const post = await Post.findById(postId);
-    const likes = post.likes;
-    res.status(200).send({ code: 235, post, likes });
+
+// GET ALL POSTS
+router.post("/posts/", async (req, res) => { 
+
+  const { skip, limit, query, order} = req.body
+
+  console.log(query, skip, limit, order) 
+
+  let start = parseInt(skip);
+
+  let maxPosts = parseInt(limit); 
+ 
+  try { 
+      const posts = !query ||  query === undefined ?
+      await Post
+      .find()
+      .skip(start)
+      .limit(maxPosts)
+      .sort({ date: -1 }):
+      await Post
+      //.find({$text: {$search: query}})
+      .find({$or: [{title: {$regex: query, $options: "mgix"}},{post:{$regex: query, $options: "mgix"}}]})
+      .skip(start)
+      .limit(maxPosts)
+      .sort({ date: -1 })
+      res.status(200).send({ code: 236, posts, amountOfPosts: posts.length }); 
+    
   } catch (err) {
+
     res.status(400).send({ code: 500 });
+
+    console.log("error no se que pasa con la busqueda")
   }
 });
 
@@ -47,21 +70,30 @@ router.get("/posts/user/:userId", verify, async(req,res) => {
   try{
     const postsByUser = await Post.find({userId})
     res.status(200).send(postsByUser)
-    console.log(postsByUser)
   }catch(err){
 
   }
 })
 
-//GET POST BY POSTID
-router.get("/posts/:postId", async(req,res) => {
-  const {postId} = req.params;
+//GET  ONE POST BY POSTID
+router.get("/posts/:postId/", async(req,res) => {
+  const { postId } = req.params;
   try{
-    const postsById = await Post.find({postId})
-    res.status(200).send(postsById)
-    console.log(postsById)
+    const post = await Post.findOne({_id: postId})
+    res.status(200).send(post)
   }catch(err){
     res.status(500).send({code:9999})
+  }
+})
+
+//GET POSTS BY POSTID
+router.get("/posts/:postId/favs", async(req,res) => {
+  const { postId } = req.params;
+  try{
+    const post = await Post.find({_id: postId})
+    res.status(200).send(post)
+  }catch(err){
+    res.status(500).send({code:999})
   }
 })
 
@@ -86,25 +118,6 @@ router.post("/posts/:postId/edit", verify, async (req,res) => {
     res.status(400).send({ code: 500 });
   }
 })
-// GET ALL POSTS
-router.post("/posts/", async (req, res) => { 
-
-  const { skip, limit} = req.body
-
-  let start = skip ? parseInt(skip): 0;
-
-  let maxPosts = limit ? parseInt(limit): 2;
-
-  try { 
-    const amountOfPosts = await Post.find()
-    const posts = await Post.find().skip(start).limit(maxPosts).sort({ date: -1 });
-    res.status(200).send({ code: 236, posts, amountOfPosts: amountOfPosts.length }); 
-  } catch (err) {
-    res.status(400).send({ code: 500 });
-    console.log("error")
-  }
-});
-
 
 // GET OLDEST POSTS
 router.get("/posts/oldest/asd", async (req, res) => {

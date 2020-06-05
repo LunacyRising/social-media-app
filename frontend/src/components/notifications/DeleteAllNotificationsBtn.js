@@ -1,7 +1,8 @@
 import React from "react";
-import {useDispatch} from "react-redux";
-import {deleteAllNotifications} from "../../actions/notificationsActions/deleteAllNotifications";
-import {Button, Box} from "@material-ui/core";
+import { useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
+import { deleteAllNotifications } from "../../actions/notificationsActions/deleteAllNotifications";
+import { Button, Box } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 const DeleteAllNotificationsBtn = () => {
@@ -18,13 +19,17 @@ const DeleteAllNotificationsBtn = () => {
         }
       }));
       const classes = useStyles();
+
       const {btn, btnContainer} = classes;
-      ////////////////////////////////////////
+
+      const { t } = useTranslation();
+
       const dispatch = useDispatch()
+
     return(
         <> 
             <Box className={btnContainer}>
-                <Button className={btn} onClick={() => dispatch(deleteAllNotifications())}>Delete all notifications</Button>
+                <Button className={btn} onClick={() => dispatch(deleteAllNotifications())}>{t("DeleteAllNotifications")}</Button>
             </Box>
         </>
     )

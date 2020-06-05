@@ -14,12 +14,13 @@ export const fetchFavorites = () => async (dispatch, getState) => {
       headers: { "auth-token": token }
     }
   );
-    let data = response.data
+      const data = response.data
+      console.log(data)
       let promisesArray = [];
       promisesArray = data.map( async item => {
-      const postId = item.postId
-      //console.log(item._id)
-       return await axios.get(`http://localhost:5001/posts/${postId}`,{headers: { "auth-token": token }})
+      let postId = item.postId
+      console.log(postId)
+       return await axios.get(`http://localhost:5001/posts/${postId}/favs`,{headers: { "auth-token": token }})
     })
     
    Promise.all(promisesArray)
@@ -27,7 +28,7 @@ export const fetchFavorites = () => async (dispatch, getState) => {
       console.log(values)
       let arr = []
       values.map(value => {
-       arr.push (value.data.post)
+        return arr.push (value.data[0])
       });
       console.log(arr)
       dispatch({

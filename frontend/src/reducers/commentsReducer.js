@@ -43,7 +43,6 @@ const commentsReducer = (state = initialState, action) => {
       };
     case FETCH_COMMENTS:
       return {
-        commentsLoading: false,
         ...state,
         //comments: [action.payload.comments, ...state.comments],
         //amountOfPosts: state.amountOfPosts + action.payload.amountOfPosts,
@@ -52,8 +51,8 @@ const commentsReducer = (state = initialState, action) => {
     case FETCH_COMMENTS_BY_POST:
       return {
         ...state,
-        comments : [...action.payload.comments, ...state.comments],
-        amountOfComments: action.payload.amountOfComments,
+        comments : [...action.payload.comments, ...state.comments], 
+        amountOfComments: state.amountOfComments + action.payload.amountOfComments,
         commentsLoading: false
       };
     case FAIL_FETCH_COMMENTS:

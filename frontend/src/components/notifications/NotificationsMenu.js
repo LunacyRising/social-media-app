@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { TransitionGroup, CSSTransition } from 'react-transition-group';   
 import { deleteNotification } from "../../actions/notificationsActions/deleteNotification";
-import { Typography, Divider, Box, IconButton} from "@material-ui/core";
+import { Typography, Divider, IconButton} from "@material-ui/core";
 import HighlightOffOutlinedIcon from '@material-ui/icons/HighlightOffOutlined';
 import { makeStyles } from "@material-ui/core/styles";
 import DeleteAllNotificationsBtn from "./DeleteAllNotificationsBtn";
@@ -44,7 +44,7 @@ const NotificationsMenu = () => {
   })); 
   const classes = useStyles();
 
-  const {menuItem, noNotifications, noti, createdAt, deleteBtn,deleteIcon} = classes; 
+  const { noNotifications, noti, createdAt, deleteBtn, deleteIcon } = classes; 
 
   let { notifications} = useSelector(state => state.notificationsReducer);
  
@@ -78,23 +78,7 @@ const NotificationsMenu = () => {
                 </> 
                 </CSSTransition>
              ))   
-        }
-            {/*testAnimation.map(test => (
-                <CSSTransition
-                key={test.id}
-                timeout={500}
-                classNames="item"
-                >
-                <>
-                  <Notifications>
-                      <Typography className={noti} variant="caption">{test.message}</Typography>
-                      <Typography  className={createdAt} variant="caption">{test.date}</Typography>
-                      <iconButton className={deleteBtn} onClick={() => deleteNoti( test.id)}><HighlightOffOutlinedIcon className={deleteIcon}/></iconButton>
-                      <Divider />
-                  </Notifications>
-                </> 
-                </CSSTransition>
-            ))*/} 
+         }
             {notifications.length > 0  && <DeleteAllNotificationsBtn/>}
         </TransitionGroup>
     </>

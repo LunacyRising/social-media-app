@@ -7,6 +7,8 @@ import {
   IconButton,
   Paper,
   Modal,
+  Backdrop,
+  Zoom 
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Redirect, useHistory } from "react-router-dom";
@@ -27,8 +29,6 @@ const Register = () => {
       justifyContent: "center",
       alignItems: "center",
       textAlign: "center",
-     // animation: "expand 0.3s ease",
-      position: "relative",
       backgroundImage: `url(${violetBackground})`,
       "@media(min-width: 320px) and (max-width: 768px)" : {
         width: "100%",
@@ -69,29 +69,36 @@ const Register = () => {
 
   const { formContainer, modal,closeBtn } = classes;
 
-  const { token } = useSelector(state => state.authReducer);
+  const { isAuthenticated } = useSelector(state => state.authReducer);
 
   const { messageCode } = useSelector(state => state.messagesReducer);
 
-  const {openRegister} = useSelector(state => state.modalsReducer);
+  const { openRegister } = useSelector(state => state.modalsReducer);
 
   const dispatch = useDispatch();
 
-  return token ? (
+  return isAuthenticated ? (
     <Redirect to="/" />
   ) : (
     <>
     <Modal className={modal}
       open={openRegister}
       onClose={() => dispatch(registerModalClose())}
-      closeAfterTransition>
-        <Paper className={formContainer}>
-          <IconButton onClick={() => dispatch(registerModalClose())} className={closeBtn}>
-              <CloseIcon/>
-          </IconButton>
-          <RegisterForm/>
-          <Captcha/>
-        </Paper>
+      closeAfterTransition
+      BackdropComponent={Backdrop}
+      BackdropProps={{
+      timeout: 500,
+      }}
+      >
+        <Zoom in={openRegister}>
+          <Paper className={formContainer}>
+            <IconButton onClick={() => dispatch(registerModalClose())} className={closeBtn}>
+                <CloseIcon/>
+            </IconButton>
+            <RegisterForm/>
+            <Captcha/>
+          </Paper>
+        </Zoom>
       </Modal>
       {messageCode === 500 && useHistory.push("/error")}
     </>

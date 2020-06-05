@@ -1,20 +1,24 @@
 import React from "react";
-import { AppBar, Avatar, Box, Button, IconButton, } from "@material-ui/core";
+import { useTranslation } from "react-i18next";
+import { AppBar, Avatar, Box, Button, IconButton } from "@material-ui/core";
 import MenuIcon from '@material-ui/icons/Menu';
 import { makeStyles } from "@material-ui/core/styles";
-import { Link, useHistory} from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { logoutAction } from "../../actions/authActions/logoutAction";
 import { openDrawer } from "../../actions/modalsActions/drawer";
 import DarkModeSwich from "./darkMode/DarkModeSwich";
 import Notifications from "../notifications/Notifications";
-import LoginBtn from "./navLinks/authBtns/LoginBtn";
+import LoginBtn from "./navLinks/authBtns/LoginBtn"; 
 import RegisterBtn from "./navLinks/authBtns/RegisterBtn";
+import EsBtn from "./navLinks/translationBtns/EsBtn";
+import EngBtn from "./navLinks/translationBtns/EngBtn";
+import PortBtn from "./navLinks/translationBtns/PortBtn";
 import Drawer from "./Drawer";
 import SearchBar from "./SearchBar";
 
 const Navbar = () => {
-  const useStyles = makeStyles(() => ({
+  
+  const useStyles = makeStyles((theme) => ({
 
     navBar: {
       background: "#3b4248",
@@ -38,7 +42,8 @@ const Navbar = () => {
     },
     homeLink: {
       marginTop: 5,
-      animation: "aside 1.3s ease-in" 
+      animation: "aside 1.3s ease-in",
+      fontFamily: theme.typography.fontFamily 
     },
     btn: {
       display:"flex",
@@ -98,14 +103,13 @@ const Navbar = () => {
 
   const { role, isAuthenticated, userName, avatar} = useSelector(store => store.authReducer);
 
-  const history = useHistory();
+  const { t, i18n } = useTranslation();
+
+    const changeLang = (language) => {
+    i18n.changeLanguage(language);
+  }
 
   const dispatch = useDispatch();
-
-  const logoutDispatch = () => {
-    dispatch(logoutAction());
-    history.push("/logingOut");
-  }
 
   const drawerDispatch = () => {
     dispatch(openDrawer())
@@ -121,7 +125,7 @@ const Navbar = () => {
   const loggedInBtns = 
     <Box className={loggedInBtnsContainer}>
       <Avatar src={avatar} alt="profile pic"/>
-      <Button style={{color: "white", fontWeight: "bold"}} onClick={() => dispatch(openDrawer())}>
+      <Button style={{color: "white", fontWeight: "bold"}} onClick={() => drawerDispatch()}>
         {userName}
       </Button>
       <Notifications/>
@@ -132,8 +136,13 @@ const Navbar = () => {
       <nav>
         <AppBar className={navBar} position="fixed">
             <Link className={`${links} ${homeLink}`} to="/"> 
-              Home
+            {t("Home")} 
             </Link>
+            <Box>
+              <EsBtn changeLang={changeLang}/>
+              <EngBtn changeLang={changeLang}/>
+              <PortBtn changeLang={changeLang}/>
+            </Box>
             <SearchBar/>
             <Box>
             {!isAuthenticated && auth}

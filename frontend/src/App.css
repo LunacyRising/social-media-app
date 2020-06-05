@@ -80,6 +80,25 @@ a:hover {
   opacity: 0;
   transform: scale(0);
   transition: 0.3s all;
+};
+
+
+.comment-enter {
+  opacity: 0;
+  transform: translateX(-40rem);
+}
+.comment-enter-active {
+  opacity: 1;
+  transform: translateX(0rem);
+  transition: 0.5s ease;
+}
+.comment-exit {
+  opacity: 1
+}
+.comment-exit-active {
+  opacity: 0;
+  transform: translateX(20rem);
+  transition: 0.5s ease;
 }
 
 
@@ -166,22 +185,6 @@ a:hover {
     transform: translateY(0px);
   }
 }
-
-@keyframes expand {
-  0% {
-    opacity: 0.5;
-    transform: scale(0);
-  }
-
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-
-
-
 
 .updateProfileFields-enter {
   opacity: 0;

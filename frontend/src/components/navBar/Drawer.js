@@ -1,7 +1,7 @@
 import React  from "react";
 import {useDispatch, useSelector} from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
-import { List, ListItem , ListItemIcon, Divider} from "@material-ui/core";
+import { List, ListItem } from "@material-ui/core";
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import LoginBtn from "./navLinks/authBtns/LoginBtn";
 import RegisterBtn from "./navLinks/authBtns/RegisterBtn";
@@ -9,6 +9,7 @@ import LogoutBtn from "./navLinks/authBtns/LogoutBtn";
 import DarkModeSwich from "./darkMode/DarkModeSwich";
 import FavoritesBtn from "./navLinks/userBtns/FavoritesBtn";
 import EditProfileBtn from "./navLinks/userBtns/EditProfileBtn";
+import GalleryBtn from "./navLinks/userBtns/GalleryBtn";
 import { closeDrawer } from "../../actions/modalsActions/drawer";
 
 const Drawer = ({ role }) => {
@@ -56,6 +57,9 @@ const Drawer = ({ role }) => {
         {
             item: isAuthenticated && <LogoutBtn/>
         },
+        {
+            item: isAuthenticated && <GalleryBtn/>
+        },
     ]
  
 
@@ -71,8 +75,8 @@ const Drawer = ({ role }) => {
                 disableDiscovery={iOS}
                 >
                     <List component="nav" aria-label="links">
-                        {arr.map(item =>(
-                            <ListItem>
+                        {arr.map((item, index) =>(
+                            <ListItem key={index}>
                                 {item.item}
                             </ListItem>
                         ))}

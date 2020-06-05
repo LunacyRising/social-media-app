@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Button,
   Menu,
@@ -14,7 +15,7 @@ import { fetchPostMostLikes } from "../../actions/postsActions/fetchPostMostLike
 
 
 const SortPosts = () => {
-  /////////////////////////////////////////////////////////////
+
   const useStyles = makeStyles(() => ({
     sortMenu: {
       "&:hover": {
@@ -35,26 +36,22 @@ const SortPosts = () => {
     }
   }));
   const classes = useStyles();
-  const {
-    menu,
-    sortMenu,
-    sortBtnsContainer,
-    sortBtns,
-  } = classes;
-  //////////////////////////////////////////////////////////////////
-  const [anchorEl, setAnchorEl] = useState(false);
+
+  const { menu, sortMenu, sortBtns, } = classes;
+
+  const { t } = useTranslation();
+
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = event => {
     setAnchorEl(event.currentTarget);
   };
 
   const handleClose = () => {
-    setAnchorEl(!anchorEl);
+    setAnchorEl(null);
   };
 
-  //////////////////////////////////////////////////////////////////
   const dispatch = useDispatch()
-  //////////////////////////////////////////////////////////////////
 
   const oldestSort = () => { 
     dispatch(fetchOldestPosts());
@@ -70,12 +67,12 @@ const SortPosts = () => {
     dispatch(fetchPostMostLikes());
     handleClose();
   };
-////////////////////////////////////////////////////////////////////
+
   return (
     <>
         <Box className={sortMenu}> 
           <Button color="primary" onClick={handleClick} className={sortMenu}>
-              SORT BY
+              {t("SortBy")}
               <SortRoundedIcon fontSize="large" />
           </Button>
           <Menu
@@ -89,17 +86,17 @@ const SortPosts = () => {
               >
               <MenuItem className={menu}>
                   <Button className={sortBtns} onClick={() => mostLikes()}>
-                      Most Favorite
+                      {t("MostFavorite")}
                   </Button>
               </MenuItem>
               <MenuItem className={menu}>
                   <Button className={sortBtns} onClick={() => newestSort()}>
-                      Newest
+                      {t("Newest")}
                   </Button>
                   </MenuItem>
               <MenuItem className={menu}>
                   <Button className={sortBtns} onClick={() => oldestSort()}>
-                      Oldest
+                      {t("Oldest")}
                   </Button>
               </MenuItem>
           </Menu>

@@ -1,7 +1,9 @@
 import React from "react";
-import { Link, useHistory} from "react-router-dom";
+import { useHistory} from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
 import { makeStyles } from "@material-ui/core/styles";
+import { Button } from "@material-ui/core";
 import { logoutAction } from "../../../../actions/authActions/logoutAction";
 import { closeDrawer } from "../../../../actions/modalsActions/drawer";
 
@@ -26,8 +28,10 @@ const LogoutBtn = () => {
     }
   }));
   const classes = useStyles();
+  
   const { btn } = classes;
 
+  const { t } = useTranslation();
 
   const history = useHistory(); 
 
@@ -42,9 +46,9 @@ const LogoutBtn = () => {
 
     return (
             <>
-                <Link className={btn} onClick={() => logoutDispatch()}>
-                    Logout
-                </Link>
+                <Button className={btn} onClick={() => logoutDispatch()}>
+                    {t("Logout")}
+                </Button>
             </>
         )
     }

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useForm} from "react-hook-form";
 import {
+  Box,
   TextField,
   Button,
   Typography,
@@ -15,10 +16,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { loginAction } from "../../actions/authActions/loginAction";
 import { clearMessages } from "../../actions/messagesActions";
 import {registerModalOpen} from "../../actions/modalsActions/register";
-import { loginModalOpen } from "../../actions/modalsActions/login"; 
 
 const LoginForm = () => {
-  /////////////////////////////////////////////////////////////
+ 
   const useStyles = makeStyles(() => ({
     closeBtn: {
       position: "absolute",
@@ -26,21 +26,26 @@ const LoginForm = () => {
       right: 0,
       color: "white" 
     },
+    textFieldsContainer: {
+      display: "flex",
+      justifyContent: "center",
+      flexDirection: "column",
+      marginTop: 30,
+    },
     input: {
       color: "white"
     },
-    buttons: {
+    btnsContainer: {
+      marginTop: 30
+    },
+    btn: {
       border: "solid 2px #8b70d2",
-      marginRight: "5px",
+      marginRight: 15,
       color: "#8b70d2",
       "&:hover": {
         backgroundColor: "#8b70d2 !important",
         border: "solid 2px white",
         color: "white"
-      },
-      title: {
-        color: "red",
-        fontFamily: "Righteous"
       },
       disable: {
         cursor: "not-allowed !important",
@@ -50,26 +55,31 @@ const LoginForm = () => {
     }
   }));
   const classes = useStyles();
-  const { input, buttons, title,} = classes;
-  ///////////////////////////////////////////////////////////////////
+
+  const { textFieldsContainer, input, btnsContainer, btn } = classes;
+
   const { register, handleSubmit, errors, clearError } = useForm();
-  ///////////////////////////////////////////////////////////////////
+
   const { isLoading } =  useSelector(state => state.authReducer);
+
   const { messageCode, message } = useSelector(state => state.messagesReducer);
+
   const { openLogin } = useSelector(state => state.modalsReducer);
-  //////////////////////////////////////////////////////////////////
+
   const dispatch = useDispatch();
+
   const loginDispatch = () => dispatch(loginAction({ email, password }));
+
   const clearMessagesDispatch = () => dispatch(clearMessages());
-  ///////////////////////////////////////////////////////////////////
+
   const formDefaultValues = {
     email: "",
     password: ""
   };
   const [formValues, setFormValues] = useState(formDefaultValues);
-  const { email, password } = formValues;
-  //////////////////////////////////////////////////////////////////////
 
+  const { email, password } = formValues;
+  
   const handleChange = e => {
     const target = e.target;
     setFormValues(prevState => ({
@@ -86,9 +96,10 @@ const LoginForm = () => {
   return ( 
     <>
         <form onSubmit={handleSubmit(loginDispatch)}>
-          <Typography className={title} variant="h6">
+          <Typography variant="h6">
             Login to your account
           </Typography>
+          <Box className={textFieldsContainer}>
             <TextField
               color="secondary"
               inputRef={register({
@@ -106,7 +117,7 @@ const LoginForm = () => {
               placeholder="Enter your email"
               type="email"
               name="email"
-              onFocus={() => clearAllErrors()}
+              onFocus={errors ? () => clearAllErrors() : null}
               error={messageCode === 462 || errors.email}
               helperText={
                 (messageCode === 462 && message) || errors?.email?.message
@@ -114,7 +125,6 @@ const LoginForm = () => {
               margin="normal"
               value={email}
             ></TextField>
-          <div>
             <TextField
               color="secondary"
               inputRef={register({
@@ -129,7 +139,7 @@ const LoginForm = () => {
               }}
               label="Password"
               onChange={handleChange}
-              onFocus={() => clearAllErrors()}
+              onFocus={errors ? () => clearAllErrors() : null}
               error={messageCode === 462 || errors.password}
               type="password"
               name="password"
@@ -139,20 +149,16 @@ const LoginForm = () => {
               margin="normal"
               value={password}
             ></TextField>
-          </div>
-          <div className="paddingTop">
-            <Button className={buttons} type="submit">
+           </Box> 
+          <Box className={btnsContainer}>
+            <Button className={btn} type="submit">
               Log In
-              {isLoading && (
-                <div className="spinnerMarginLeft">
-                  <CircularProgress size={15} />
-                </div>
-              )}
+              {isLoading && <CircularProgress size={15}/>}
             </Button>
-            <Button onClick={() => dispatch(registerModalOpen())} className={buttons}> 
+            <Button onClick={() => dispatch(registerModalOpen())} className={btn}> 
               Register
             </Button>
-          </div>
+          </Box>
         </form>
       {messageCode === 500 && useHistory.push("/error")}
     </>

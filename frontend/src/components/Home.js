@@ -8,7 +8,7 @@ import Register from "./auth/Register";
 import Posts from "./posts/Posts";
 import PostTextArea from "./posts/PostTextArea";
 import SnackbarMessages from "./SnackbarMessages";
-import FriendMenu from "./friends/FriendMenu";
+//import FriendMenu from "./friends/FriendMenu";
 import LoadMoreBtn from "./posts/buttons/LoadMoreBtn";
 import { fetchPosts } from "../actions/postsActions/fetchPostsAction";
 
@@ -44,7 +44,7 @@ const Home = () => {
 
   const { messageCode } = useSelector(state => state.messagesReducer);
 
-  const { posts, amountOfPosts, skip ,} = useSelector(state => state.postReducer);
+  const { amountOfPosts, skip } = useSelector(state => state.postReducer);
 
   const history = useHistory();
 
@@ -53,7 +53,7 @@ const Home = () => {
   const dispatch = useDispatch()
 
   const getPosts = () => {
-    amountOfPosts >= skip &&
+    amountOfPosts < 2 &&
     dispatch(fetchPosts()) 
   }
 
@@ -74,7 +74,7 @@ const Home = () => {
           <PostTextArea />
             <section className={postsContainer}>
               <SortPosts/>
-              <Posts posts={posts}/>
+              <Posts/>
               <Login/>
               <Register/>
             </section>

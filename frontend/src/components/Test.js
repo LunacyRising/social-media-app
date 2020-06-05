@@ -1,10 +1,9 @@
 import React, {useState} from "react";
 import { TransitionGroup, CSSTransition } from 'react-transition-group' 
-import { Typography,Divider,Box} from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 import HighlightOffOutlinedIcon from '@material-ui/icons/HighlightOffOutlined';
 import { makeStyles } from "@material-ui/core/styles";
-import styled from 'styled-components';
-import {Notification} from "../styledComponents/Notification";
+import { Notification } from "../styledComponents/Notification";
 
 const Test = () => {
 
@@ -45,7 +44,7 @@ const Test = () => {
   })); 
 
   const classes = useStyles();
-  const {menuItem, noNotifications, noti, createdAt, deleteBtn,deleteIcon} = classes; 
+  const { noti, createdAt, deleteBtn,deleteIcon} = classes; 
   /////////////////////////////////////////////////////////
  
   const [testAnimation, setTestAnimation] = useState([
