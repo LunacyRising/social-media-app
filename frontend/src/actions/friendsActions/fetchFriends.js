@@ -9,7 +9,7 @@ export const fetchFriends = () => async (dispatch, getState) => {
   dispatch({type: FRIENDS_LOADING});
 
   try {
-    let response = await axios.get(
+    const response = await axios.get(
       `http://localhost:5001/${userId}/friends`,
       {
         headers: { "auth-token": token } 
@@ -19,8 +19,8 @@ export const fetchFriends = () => async (dispatch, getState) => {
       type: FRIENDS_LOADED,
       payload: response.data.friends
     });
-    let message = response.data.message;
-    let messageCode = response.data.code;
+    const message = response.data.message;
+    const messageCode = response.data.code;
     dispatch(returnMessages(messageCode, message));
   } catch (err) {
     let errorCode = err.response ? err.response.data.code : 500;

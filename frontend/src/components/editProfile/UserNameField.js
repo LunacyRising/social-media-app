@@ -3,7 +3,7 @@ import {TextField} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 
-const UserNameField = ({handleChange, editedUserName}) => {
+const UserNameField = ({ handleChange, editedUserName }) => {
 
   const useStyles = makeStyles(() => ({
 
@@ -23,16 +23,16 @@ const UserNameField = ({handleChange, editedUserName}) => {
     <>
      
         <TextField 
-                  style={{position:"absolute", left:0}}
-                  InputProps={{
-                    className: textArea
-                  }}
-                  onChange={handleChange}
-                  type="text"
-                  name="editedUserName"
-                  value={editedUserName}
-                  fullWidth="true"
-                >
+          style={{position:"absolute", left:0}}
+          InputProps={{
+            className: textArea
+          }}
+          onChange={handleChange}
+          type="text"
+          name="editedUserName"
+          value={editedUserName}
+          fullWidth="true"
+        >
         </TextField>
     </>
   );

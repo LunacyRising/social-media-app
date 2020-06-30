@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { useSelector, useDispatch } from "react-redux";
+import useCustomForm from "../auth/useCustomForm";
 import {
   Box,
   TextField,
@@ -12,7 +13,7 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import { createComment } from "../../actions/commentsActions/createComment";
 
-const CommentModal = ({ postId, postCreator,title, amountOfComments, setCommentsNumber, comentModalOpen, handleCommentModal}) => {
+const CommentModal = ({ postId, postCreator,title, amountOfComments, comentModalOpen, handleCommentModal }) => {
 
   const { loading } = useSelector(state => state.commentsReducer);
 
@@ -51,20 +52,20 @@ const CommentModal = ({ postId, postCreator,title, amountOfComments, setComments
   }));
   const classes = useStyles();
 
-  const { modalContent, modal, textArea, btn} = classes;
+  const { modalContent, modal, textArea, btn } = classes;
 
   const dispatch = useDispatch();
 
-  const [comment, setComment] = useState(""); 
-
-  const handleChange = e => {
-    e.preventDefault();
-    setComment(e.target.value);
+  const formDefaultValues = { 
+    comment: ""
   };
 
+  const { values, handleChange } = useCustomForm(formDefaultValues)
+
+  const { comment } = values
+
   const commentDispatch = () => {
-    dispatch(createComment({comment, postId, postCreator,title}));
-    setCommentsNumber(amountOfComments +1);
+    dispatch(createComment({ comment, postId, postCreator, title, amountOfComments }));
     handleCommentModal();
   };
 
@@ -87,7 +88,7 @@ const CommentModal = ({ postId, postCreator,title, amountOfComments, setComments
                 placeholder="Your Comment..."
                 rows="4"
                 variant="outlined"
-                name="post"
+                name="comment"
                 value={comment}
                 onChange={handleChange}
               />

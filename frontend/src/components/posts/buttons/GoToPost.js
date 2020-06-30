@@ -19,7 +19,7 @@ const GoToPost = ({ postId }) => {
   
   const classes = useStyles();
 
-  const { btn } = classes;
+  const { btn, icon } = classes;
 
   const { t } = useTranslation();
 
@@ -27,7 +27,7 @@ const GoToPost = ({ postId }) => {
       <>
           <Tooltip title={t("GoToPost")}>
               <IconButton component={Link} to={`/posts/${postId}`} target="_blank" className={btn}>
-                <ReplyRoundedIcon />
+                <ReplyRoundedIcon/>
               </IconButton>
           </Tooltip>
       </>

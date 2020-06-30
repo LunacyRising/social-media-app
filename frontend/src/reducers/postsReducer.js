@@ -1,18 +1,23 @@
 import {
   LOADING,
+  FETCH_INITIAL_POSTS_SUCCESS,
   FETCH_POSTS_SUCCESS,
-  FETCH_POSTS_BY_SEARCH,
-  LOADING_MORE_POSTS,
   FETCH_POSTS_FAIL,
   POSTS_LOADING,
+  POST_IMAGE_PREVIEW_SUCCESS,
   CREATE_POST_SUCCESS,
   CREATE_POST_FAIL,
   EDIT_POST_FAIL,
   EDIT_POST_SUCCESS,
   DELETE_POST,
   FAIL_DELETE_POST,
+  LIKE_LOADING,
   LIKE_SUCCESS,
+  LIKE_COMMENT_SUCCESSS,
+  DISLIKE_COMMENT_SUCCESS,
+  DISLIKE_LOADING,
   DISLIKE_SUCCESS,
+  SUCCESS_COMMENT,
   FETCH_POST_SUCCESS,
   FETCH_POST_FAIL,
   FETCH_OLDEST_POSTS,
@@ -21,83 +26,123 @@ import {
   UPLOAD_IMAGE_SUCESS,
   LOGIN_SUCCESS,
   LOGOUT_SUCCESS,
-  QUERY_FORM
-} from "../actions/types";
+  QUERY_FORM,
+} from "../actions/types"; 
 
 
 const initialState = {
-  loading: false,
-  postsLoading: false,
+  loading: false, 
   loadingMorePosts: false,
+  postsLoading : false,
+  likeLoading: false,
+  dislikeLoading: false,
   skip: 0, 
   limit: 2,
-  amountOfPosts: 0, 
+  maxResults: 0,  
+  allLikes: [],
+  allDislikes: [],
   posts: [],
   post: {},
-  query: ""
+  query: null,
+  preview: null
 };
 
 const postsReducer = (state = initialState, action) => {
 
   switch (action.type) {
-    case LOADING:
-      return {
-        ...state
-      };
-    case POSTS_LOADING:
+
+    case POSTS_LOADING: 
       return {
         ...state,
-        loadingMorePosts: true
+        postsLoading: true
+      };
+    case FETCH_INITIAL_POSTS_SUCCESS:
+      return {
+        ...state,
+        posts: action.payload.posts,
+        skip: action.payload.skip,
+        maxResults: action.payload.maxResults,
+        postsLoading: false
       };
     case FETCH_POSTS_SUCCESS:
-    case FETCH_OLDEST_POSTS:
-    case FETCH_POST_MOST_LIKES: 
       return {
         ...state,
-        loadingMorePosts: false,
         posts: [...state.posts, ...action.payload.posts],
         skip: action.payload.skip,
-        amountOfPosts: action.payload.amountOfPosts
-    };
-    case FETCH_POSTS_BY_SEARCH:
+        maxResults: action.payload.maxResults,
+        postsLoading: false
+      }; 
+    case FETCH_POST_SUCCESS: 
       return {
         ...state,
-        loadingMorePosts: false,
-        skip: action.payload.skip,
-        amountOfPosts: action.payload.amountOfPosts,
-        posts: state.skip === 0 ? action.payload.posts : [...state.posts,...action.payload.posts]
-      };
-    case FETCH_POST_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        post: action.payload
-      };   
-    case LOADING_MORE_POSTS:
-      return {
-        ...state,
-        loadingMorePosts: true 
-      };
+        post: action.payload,
+        loading: false
+      };  
     case QUERY_FORM : {
       return {
         ...state,
         query: action.payload.query,
         skip: action.payload.skip,
-        amountOfPosts: action.payload.amounOfPosts
+        amountOfPosts: action.payload.amounOfPosts,
+        posts: action.payload.cleanPosts
       }
     }; 
-    case FETCH_POSTS_FAIL:
+    case FETCH_POSTS_FAIL: 
     case FETCH_POST_FAIL:
     case EDIT_POST_FAIL:
       return {
         ...state,
-        postsLoading: false
+        postsLoading: false,
+        loadingMorePosts: false
       }; 
     case EDIT_POST_SUCCESS:
       return {
         ...state,
-        ...action.payload
+        posts: action.payload
     };
+    case LIKE_LOADING: 
+      return {
+        ...state,
+        likeLoading: true
+      };
+    case LIKE_SUCCESS:
+        return {
+          ...state,
+          posts: action.payload.posts,
+          allLikes: [action.payload.like, ...state.allLikes], 
+          allDislikes: action.payload.filteredDislikes,
+          likeLoading: false
+        };
+    case LIKE_COMMENT_SUCCESSS:
+        return {
+          ...state,
+          allLikes: [...state.allLikes, action.payload.like],
+          allDislikes: action.payload.filteredDislikes
+        };
+    case DISLIKE_COMMENT_SUCCESS:
+      return {
+        ...state,
+        allDislikes: [...state.allDislikes, action.payload.dislike], 
+        allLikes: action.payload.filteredLikes
+      }
+    case SUCCESS_COMMENT:
+      return {
+        ...state, 
+        posts: action.payload.posts
+      }
+    case DISLIKE_LOADING:
+      return {
+        ...state,
+        dislikeLoading: true
+      }
+    case DISLIKE_SUCCESS:
+        return {
+          ...state,
+          posts: action.payload.posts,
+          allDislikes: [action.payload.savedDislike, ...state.allDislikes], 
+          allLikes: action.payload.filteredLikes, 
+          dislikeLoading: false
+        }
     case UPLOAD_IMAGE_SUCESS:
       return {
         ...state,
@@ -108,18 +153,24 @@ const postsReducer = (state = initialState, action) => {
         ...state,
         posts: action.payload.posts
       };
+    case POST_IMAGE_PREVIEW_SUCCESS:
+      return {
+        ...state,
+        preview: action.payload
+      }
     case CREATE_POST_SUCCESS:
       return {
         ...state,
         posts: [action.payload, ...state.posts],
         loading: false,
-        postsLoading: false
+        postsLoading: false,
+        loadingMorePosts: false
       };
     case DELETE_POST:
       return {
         ...state,
         postsLoading: false,
-        posts: state.posts.filter(post => post._id !== action.payload)
+        posts: action.payload
       };
     case FAIL_DELETE_POST:
       return {
@@ -131,26 +182,20 @@ const postsReducer = (state = initialState, action) => {
         ...state,
         postsLoading: false
       };
-    case LIKE_SUCCESS: {
-      return {
-        ...state,
-      };
-    } 
-    case DISLIKE_SUCCESS: {
-      return {
-        ...state
-      };
-    }
     case LOGOUT_SUCCESS: {
       return {
         ...state,
-        posts: action.payload
+        posts: action.payload,
+        allLikes: null,
+        allDislikes: null
       }
     };
     case LOGIN_SUCCESS: {
       return {
         ...state,
-        posts: action.payload.posts
+        posts: action.payload.posts,
+        allLikes: action.payload.likes,
+        allDislikes: action.payload.dislikes
       }
     }
     default:

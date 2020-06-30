@@ -1,82 +1,122 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import useCustomForm from "../auth/useCustomForm";
 import { useTranslation } from "react-i18next";
+import { makeStyles } from "@material-ui/core/styles";
+import { TextField, Button, Box, LinearProgress} from "@material-ui/core";
+import UploadImageBtn from "../posts/mediaBtns/UploadImageBtn";
+import SearchEmoji from "../posts/mediaBtns/SearchEmoji";
+import SearchGif from "../posts/mediaBtns/SearchGif";
+import GifsMenu from "./GifsMenu";
 import { createPost } from "../../actions/postsActions/createPostAction";
 import { loginModalOpen } from "../../actions/modalsActions/login";
-import { TextField, Button } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import QuillEditor from "./editor/QuillEditor";
 
 const PostTextArea = () => {
 
-  const { isAuthenticated } = useSelector(state => state.authReducer);
+  const { isAuthenticated, avatar, userId, amountOfPosts, userName } = useSelector(state => state.authReducer);
+
+  const creatorAmountOfPosts = amountOfPosts
 
   const { darkMode } = useSelector(state => state.darkModeReducer);
 
-  const useStyles = makeStyles(() => ({
+  
+  let [ borderFocus ,setBorderFocus ] = useState(false)
+
+  const useStyles = makeStyles((theme) => ({
     TextAreaContainer: {
       position: "relative",
-      margin: "20vh auto",
+      margin: "20vh auto 20px",
       width: 400,
       animation: "drop2 1.8s ease-in",
       display: "flex",
       flexDirection: "column",
       "@media(min-width: 320px) and (max-width: 480px)" : {
-        margin: "20vh auto",
        width: "100%"
       }
     },
-    buttons: {
-     width: "50%",
-     margin: "15px auto",
-      border:  darkMode ? "solid 2px #8b70d2" : "solid 2px #8b70d2",
-      backgroundColor: darkMode ? "#424242" : "white", 
-      "&:hover": {
-        backgroundColor: darkMode ? "#3b4248 !important" : "#8b70d2",
-        color: "white",
-        border: "solid 2px #5d6972",
-        borderColor: darkMode && "white"
-      }
+    previewStyle: {
+      position: "absolute", 
+      left: "50%",
+      top: 120,
+      transform: "translateX(-50%)" 
+    },
+    textFieldAndPreview: {
+     display: "flex",
+     flexDirection: "row"
+    },
+    submitBtn: {
+      width: "50%",
+      margin: "35px auto",
+      color: !darkMode ? theme.palette.primary.main : "white",
+      border: !darkMode ? `solid 2px ${theme.palette.primary.main}` : "solid 2px white",
+      backgroundColor:  theme.palette.background.paper
+    },
+    mediaBtnsContainer: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginTop: 40
     },
     textArea: {
-      marginTop: 10,
+      width: "100%",
       backgroundColor: darkMode ? "#424242" : "white" 
     },
+    quillWrapper: {
+      backgroundColor: theme.palette.background.paper,
+      marginTop: 20,
+      width: "100%",
+      minHeight: 150
+    }
   }));
   const classes = useStyles();
 
-  const { TextAreaContainer, buttons, textArea } = classes; 
+  const { TextAreaContainer, textFieldAndPreview, submitBtn, mediaBtnsContainer, textArea, quillWrapper } = classes; 
 
   const { t } = useTranslation();
 
   const dispatch = useDispatch();
+
+  const reactQuillRef = useRef()
+
+  const [ previewLoading, setPreviewLoading ] = useState(false)
 
   const formDefaultValues = {
     title: "",
     post: ""
   };
 
-  const [formValues, setFormValues] = useState(formDefaultValues);
+  const { values, setValues, handleChange } = useCustomForm(formDefaultValues);
 
-  const { title, post } = formValues;
+  const { title, post, image, gif } = values;
 
-  const handleChange = e => {
-    const target = e.target;
-    setFormValues(prevState => ({
-      ...prevState, 
-      [target.name]: target.value
-    }));
-  };
+  const [ gifstMenuOpen, setGifstMenuOpen ] = useState(false)
 
   const createNewPost = () => {
-    dispatch(createPost({post,title}));
-    setFormValues({
+    const data = new FormData(); 
+    data.append("title", title);
+    data.append("post", post);
+    data.append("avatar", avatar);
+    data.append("creatorAmountOfPosts", creatorAmountOfPosts);
+    data.append("userId", userId);
+    data.append("userName", userName);
+    image && data.append("image", image);
+    gif && data.append("gif", gif);
+    dispatch(createPost(data)); 
+    /*setValues({
       title: "",
       post: ""
-    })
-  };
-  
+    })*/
+  }
+
+  const handleChangePost = (e) => {
+    setValues({...values, post: e})
+    console.log(values)
+  }
+
   const submit = () => {
     isAuthenticated ? createNewPost() : dispatch(loginModalOpen());
+    setValues({title: "", post : ""})
   };
 
   return (
@@ -90,22 +130,24 @@ const PostTextArea = () => {
           value={title}
           onChange={handleChange}
         />
-        <TextField
-          className={textArea}
-          placeholder={t("YourPost")}
-          multiline
-          rows="4"
-          variant="outlined"
-          name="post"
-          value={post}
-          onChange={handleChange}
-        />
-        <Button color="primary" className={buttons} onClick={() => submit()}>
+        <Box className={textFieldAndPreview}>
+          <QuillEditor referencia={reactQuillRef} handleChangePost={handleChangePost} value={post} quill={quillWrapper}/>  
+        </Box>
+        {previewLoading && <LinearProgress style={{width: "100%"}}/>}
+        {gifstMenuOpen && <GifsMenu setGifstMenuOpen={setGifstMenuOpen} values={values} setValues={setValues} referencia={reactQuillRef}/>}
+        <div className={mediaBtnsContainer}>
+          <UploadImageBtn values={values} setValues={setValues} referencia={reactQuillRef} setPreviewLoading={setPreviewLoading}/>
+          <SearchGif setGifstMenuOpen={setGifstMenuOpen}/>
+          <SearchEmoji/>
+        </div>
+        <Button color="primary" className={submitBtn} onClick={() => submit()}>
           {t("PostIt")}
         </Button>
       </div>
     </>
   );
+  
 };
+
 
 export default PostTextArea;

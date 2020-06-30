@@ -5,24 +5,30 @@ import { returnMessages } from "../messagesActions";
 
 export const fetchPosts = () => async (dispatch, getState) => {
   
-  let { skip, limit, amountOfPosts, query } = getState().postReducer;
+  let { skip, limit, amountOfPosts, query } = getState().postReducer;  
+
+  console.log(query) 
  
-  dispatch({ type: POSTS_LOADING }); 
+  dispatch({ type: POSTS_LOADING })
+
   try {
-    let response = await axios.post(`http://localhost:5001/posts/`,
-     {skip, limit, query}
+    const response = await axios.post(`http://localhost:5001/posts/`, 
+     {skip, limit, query }
     );
 
-    let posts = response.data.posts; 
+    const postsResponse = response.data.posts;   
 
-    dispatch({
-      type: query === undefined || "" ? FETCH_POSTS_SUCCESS : FETCH_POSTS_BY_SEARCH, 
+    console.log(response)
+
+    dispatch({ 
+      type: FETCH_POSTS_SUCCESS,
       payload: {
-        posts,
+        posts : postsResponse, 
         skip:  skip + limit,
-        amountOfPosts : amountOfPosts + response.data.amountOfPosts
+        maxResults : response.data.maxResults
       }
     });
+    dispatch(returnMessages(response.data.code))
   } catch (err) {
     let errorCode = err.response ? err.response.data.code : 500;
     let error = err.response && err.response.data.error;

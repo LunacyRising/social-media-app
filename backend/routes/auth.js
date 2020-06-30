@@ -1,9 +1,11 @@
 const router = require("express").Router();
 const User = require("../schemas/user");
 const Post = require("../schemas/post");
+const Like = require("../schemas/Like")
+const Dislike = require("../schemas/Dislike")
+const Favorite = require("../schemas/Favorite");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const verify = require("./verifyToken");
 
 //register normal
 router.post("/register", async (req, res) => {
@@ -63,6 +65,12 @@ router.post("/login", async (req, res) => {
   const validEmail = await user.isAuthenticated;
   !validEmail &&
     res.status(400).send({ code: 463, error: "email is not confirmed", user });
+  
+  // find user likes and dislikes
+  const likes = await Like.find({userId: user._id});
+  const dislikes = await Dislike.find({userId: user._id})
+  // find favorites
+  const favorites = await Favorite.find({userId: user._id})
 
   // crear y asignar jwt
   try {
@@ -74,12 +82,15 @@ router.post("/login", async (req, res) => {
         token,
         message: "logged in", 
         code: 231,
-        user
+        user,
+        likes,
+        dislikes,
+        favorites
       });
   } catch (err) {
     res.status(500).send({ code: 500 });
   }
-    await Post.updateMany({email}, {$set:{userIsOnline: true}})
+    await Post.updateMany({email}, {$set:{userIsOnline: true}}) 
 });
 
 // authenticate email

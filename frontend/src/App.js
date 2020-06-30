@@ -14,6 +14,7 @@ import EmailConmirmation from "./components/EmailConfirmation";
 import SpecificUserInfoPage from "./components/SpecificUserInfoPage";
 import SinglePostPage from "./components/posts/SinglePostPage";
 import Favorites from "./components/favorites/Favorites";
+import Galleries from "./components/galleries/Galleries";
 import Gallery from "./components/gallery/Gallery";
 import LogingOut from "./components/auth/LogingOut";
 import Test from "./components/Test";
@@ -56,27 +57,29 @@ function App() {
     <Router>
       <MuiThemeProvider theme={theme}>
         <div className="App">
-          <Navbar />
+          <Navbar/>
           <Switch>
-            <Route path="/" exact component={Home} />
-            <Route path="/login" exact component={Login} />
+            <Route path="/" exact component={Home}/>
+            <Route path="/login" exact component={Login}/>
             <Route path="/register" exact component={Register}/>
             <Route
               path="/emailConfirmation"
               exact
               component={EmailConmirmation}
             />
-            <Route path="/editProfile" exact component={EditProfile} />
+            <Route path="/editProfile" exact component={EditProfile}/>
             <Route path="/admin" exact component={Admin} />
-            <Route path="/admin/users" exact component={UsersInformation} />
-            <Route path="/users/user/:userId" exact component={SpecificUserInfoPage} />
+            <Route path="/admin/users" exact component={UsersInformation}/>
+            <Route path="/users/user/:userId" exact component={SpecificUserInfoPage}/>
             <Route path="/favorites" exact component={Favorites} />
             <Route path="/posts/:postId" exact component={SinglePostPage}/>
+            <Route path="/galleries" exact component={Galleries}/>
             <Route path="/gallery/:userId" exact component={Gallery}/>
+            <Route path="/gallery/:userId/:pageNumber" exact component={Gallery}/>
             <Route path="/logingOut" exact component={LogingOut}/>
             <Route path="/test" exact component={Test}/>
-            <Route path="/error" exact component={ServerDown} />
-            <Route component={ErrorPage} />
+            <Route path="/error" exact component={ServerDown}/>
+            <Route component={ErrorPage}/>
           </Switch>
         </div>
       </MuiThemeProvider>

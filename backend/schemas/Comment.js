@@ -13,10 +13,17 @@ const commentSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  replies: {
+    type: Number,
+    default: 0
+  },
   postId: { 
     type: String
   },
   userId: {
+    type: String
+  },
+  commentId: {
     type: String
   },
   likes: {

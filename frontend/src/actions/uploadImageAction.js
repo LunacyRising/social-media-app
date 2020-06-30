@@ -1,31 +1,34 @@
 import axios from "axios";
 import { returnMessages, snackOpen } from "./messagesActions";
 import { UPLOAD_IMAGE_SUCESS, UPLOAD_IMAGE_FAIL, DATA_LOADING } from "./types";
+import { editKeyValueUser } from "./editKeyValue";
 
 export const changeAvatar = ({ userAvatar }) => async (dispatch,getState) => {
   
   const { userId } = getState().authReducer;
 
-  const { posts } = getState().postReducer;
+  const { posts } = getState().postReducer; 
 
   dispatch({ type: DATA_LOADING });
   try {
     const response = await axios.post(
-      `http://localhost:5001/uploadFileTest/${userId}`, 
+      `http://localhost:5001/uploadFileTest/${userId}`,   
       userAvatar, 
       {
         headers: { "Content-Type": "multipart/form-data" }
       }
     );
 
-    const newAvatar = response.data.result.secure_url;
+    const newAvatar = response.data.result.secure_url; 
+
+    const keyValue = { avatar: newAvatar }
 
     dispatch({
       type: UPLOAD_IMAGE_SUCESS,
       payload: {
         avatar: newAvatar,
         userId,
-        posts: posts.map(post => post.userId === userId ? {...post, avatar: newAvatar}: post) 
+        posts: editKeyValueUser(posts, userId, keyValue)
       }
     });
     dispatch(snackOpen());

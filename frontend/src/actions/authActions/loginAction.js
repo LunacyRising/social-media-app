@@ -1,83 +1,49 @@
 import axios from "axios";
 import { returnMessages, snackOpen } from "../messagesActions";
-import {loginModalClose} from "../modalsActions/login"
-
+import { loginModalClose } from "../modalsActions/login";
 import { USER_LOADING, LOGIN_SUCCESS, LOGIN_FAIL } from "../types";
+import { editKeyValueUser } from "../editKeyValue";
 
-export const loginAction = ({ email, password }) => (dispatch, getState) => {
+export const loginAction = ({ email, password }) => async (dispatch, getState) => {
 
   const { posts } = getState().postReducer;
 
-  dispatch({ type: USER_LOADING });
-  axios
-    .post("http://localhost:5001/login", {
-      email,
-      password
-    })
-    .then(res => {
-      dispatch({
-        type: LOGIN_SUCCESS,
-        payload: {
-          token: res.data.token,
-          userName: res.data.user.userName,
-          role: res.data.user.role,
-          amountOfPosts: res.data.user.amountOfPosts,
-          userId: res.data.user._id,
-          email: res.data.user.email,
-          avatar: res.data.user.avatar,
-          posts: posts.map(post => post.userId === res.data.user._id ? {...post, userIsOnline: true}: post) 
-        }
-      });
+  const keyValue = {userIsOnline : true}
 
-      dispatch(loginModalClose())
-
-      let message = res.data.message;
-
-      let messageCode = res.data.code;
-
-      dispatch(returnMessages(messageCode, message));
-
-      console.log(res, message, messageCode);
-
-      dispatch(snackOpen());
-    })
-    .catch(err => {
-      let errorCode = err.response ? err.response.data.code : 500;
-      let error = err.response && err.response.data.error;
-
-      dispatch(returnMessages(errorCode, error));
-      
-      dispatch({
-        type: LOGIN_FAIL
-      });
-      errorCode === 500 && dispatch(snackOpen());
-    });
-};
-
-/*export const loginAction = ({ email, password, props }) => async dispatch => {
   try {
     dispatch({ type: USER_LOADING });
-    let response = await axios.post("http://localhost:5001/login", {
-      email,
-      password
-    });
+    const response = await axios.post("http://localhost:5001/login",  
+    { email,password });
+
+    console.log(response);
 
     dispatch({
       type: LOGIN_SUCCESS,
       payload: {
-        token: response.data.token,
-        name: response.data.user.name,
-        userName: response.data.user.userName,
-        role: response.data.user.role,
-        id: response.data.user._id,
-        email: response.data.user.email
+          token: response.data.token,
+          userName: response.data.user.userName,
+          role: response.data.user.role,
+          amountOfPosts: response.data.user.amountOfPosts,
+          userId: response.data.user._id,
+          email: response.data.user.email,
+          avatar: response.data.user.avatar,
+          likes: response.data.likes,
+          dislikes: response.data.dislikes,
+          favorites: response.data.favorites,
+          posts: editKeyValueUser(posts, response.data.user._id, keyValue) 
       }
     });
-    console.log(response);
-    let message = response.data.message;
-    let messageCode = response.data.code;
+
+    dispatch(loginModalClose())
+
+    dispatch(snackOpen());
+
+    const message = response.data.message;
+
+    const messageCode = response.data.code;
+
     dispatch(returnMessages(messageCode, message));
-    console.log(response, message, messageCode);
+
   } catch (err) {
     console.log(err.response);
     let errorCode = err.response ? err.response.data.code : 500;
@@ -87,4 +53,4 @@ export const loginAction = ({ email, password }) => (dispatch, getState) => {
       type: LOGIN_FAIL
     });
   }
-};*/
+};

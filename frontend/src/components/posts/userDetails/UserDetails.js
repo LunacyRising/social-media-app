@@ -6,7 +6,7 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 import HighlightOffOutlinedIcon from '@material-ui/icons/HighlightOffOutlined';
 
 
-const UserDetails = ({ avatar, creatorUserName, setShowDetails }) => {
+const UserDetails = ({ avatar, creatorUserName }) => {
 
     const useStyles = makeStyles((theme) => ({
         wholeCont: {
@@ -65,7 +65,7 @@ const UserDetails = ({ avatar, creatorUserName, setShowDetails }) => {
     return (
         <>
             <Card className={wholeCont}>
-                <IconButton className={btn} onClick={() => setShowDetails(prev => prev)}>
+                <IconButton className={btn}>
                     <HighlightOffOutlinedIcon/>
                 </IconButton>
                 <Box className={avatarContainer}>

@@ -6,6 +6,8 @@ const Admin = () => {
 
   const { role } = useSelector(state => state.authReducer);
 
+  
+
   ////////////////////////////////////////////////////////////////////////
   return role !== "admin" ? (
     <Redirect to="/user" />

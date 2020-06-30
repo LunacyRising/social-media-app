@@ -7,7 +7,7 @@ import {
 import { returnMessages } from "../messagesActions";
 
 export const fetchPostsByUser = ({token,userId}) => dispatch => {
-  dispatch({ type: POSTS_LOADING });
+  //dispatch({ type: POSTS_LOADING });
   axios
     .get(`http://localhost:5001/posts/user/${userId}`, {
         headers: { "auth-token": token }

@@ -19,10 +19,10 @@ const LogingOut = () => {
       )
     );
       const classes = useStyles();
+
       const { logOut } = classes;
 
-    const {isLogingOut} = useSelector(state => state.authReducer)
-
+      const { isLogingOut } = useSelector(state => state.authReducer)
 
     return(
         <>  

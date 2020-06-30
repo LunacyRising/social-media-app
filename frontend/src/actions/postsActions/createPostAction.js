@@ -1,37 +1,38 @@
 import axios from "axios";
 import { returnMessages, snackOpen } from "../messagesActions";
-
-
 import { CREATE_POST_SUCCESS, CREATE_POST_FAIL,POSTS_LOADING } from "../types";
 
-export const createPost = ({title, post}) => async (dispatch, getState) => {
-  const {userName,email,avatar,token,userId, amountOfPosts} = getState().authReducer;
+export const createPost = (data) => async (dispatch, getState) => {
+
+  const { token } = getState().authReducer;
+
   dispatch({ type: POSTS_LOADING });
+
   try {
-    let response = await axios.post(
+    const response = await axios.post(
       "http://localhost:5001/createPost", 
+      
+        data
+      , 
       {
-        userName,
-        title,
-        email,
-        post,
-        userId,
-        creatorAmountOfPosts: amountOfPosts,
-        avatar
-      }, 
-      {
-        headers: { "auth-token": token }
+        headers: { "auth-token": token, "Content-Type": "multipart/form-data" } 
       }
     );
     dispatch({ 
       type: CREATE_POST_SUCCESS,
       payload: response.data.savedPost
     });
+
     console.log(response.data.savedPost)
-    let message = response.data.message;
-    let messageCode = response.data.code;
+
+    const message = response.data.message;
+
+    const messageCode = response.data.code;
+
     dispatch(returnMessages(messageCode, message));
+
     dispatch(snackOpen());
+
   } catch (err) {
     let errorCode = err.response ? err.response.data.code : 500;
     let error = err.response && err.response.data.error;

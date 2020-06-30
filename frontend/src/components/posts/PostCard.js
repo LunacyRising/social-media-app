@@ -7,15 +7,15 @@ import {  CSSTransition } from 'react-transition-group'
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import CommentSection from "../comments/CommentSection";
-import LikeBtn from "./buttons/LikeBtn";
-import DislikeBtn from "./buttons/DislikeBtn";
-import AddFavorite from "./buttons/AddFavorite";
+//testing
+import LikeDislikeBtns from "./buttons/LikeDislikeBtns";
+import FavoriteBtn from "./buttons/FavoriteBtn";
 import AddComment from "./buttons/AddComment";
 import EditPost from "./buttons/EditPost";
 import DeletePost from "./buttons/DeletePost";
 import GoToPost from "./buttons/GoToPost";
 import CommentModal from "../comments/CommentModal"; 
-import EditPostModal from "../EditPostModal";
+import EditPostModal from "./EditPostModal";
 import UserDetails from "./userDetails/UserDetails";
 import PulsingGreenBall from "../PulsingGreenBall";
 import UserRanking from "./UserRanking";
@@ -29,6 +29,8 @@ const PostCard = ({
   creatorAmountOfPosts, 
   title,
   post,
+  image,
+  gif,
   date,
   amountOfComments, 
   likes,
@@ -40,49 +42,119 @@ const PostCard = ({
   const useStyles = makeStyles((theme) => ({
 
     card: {
-      display: "flex",
-      flexDirection: "column",
-      marginBottom: 30,
+      margin: "0px auto 30px",
       animation: "drop 1s ease",
       overflow:"visible",
-      width: "100%"
+      width: "100%",
+      "@media(min-width: 481px) and (max-width: 768px)" : {
+        width: "75%",
+      },
+      "@media(min-width: 1025px) and (max-width: 1200px)" : {
+        width: "85%",
+      }
     },
-    avatarAndText: {
+    wrapper: {
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      flexDirection: "column",
+      width: "95%",
+      margin: "auto",
+      "@media(min-width: 769px)" : {
+        justifyContent: "flex-start",
+      }
+    },
+    leftAndRightWrapper: {
+      display: "flex",
+      justifyContent: "center",
+      flexDirection: "column",
+      width: "100%",
+      marginTop: 20,
+      "@media(min-width: 769px)" : {
+         flexDirection: "row",
+         justifyContent: "flex-start",
+       }
+    },  
+    textAndMedia: {
       position: "relative",
       display: "flex",
       alignItems:"center",
       flexDirection: "column",
+      justifyContent: "center",
+      width: "100%",
       marginTop: 10,
+    },
+    rankingAndAvatar: {
+      position: "relative",
+      display: "flex",
+      alignItems: "center",
+      flexDirection: "column",
+      width: "50%",
+      margin: "auto",
       "@media(min-width: 769px)" : {
-        flexDirection: "row"
+        margin: "initial",
+        width: "auto",
       }
     },
+    userAvatarAndGreenBall: {
+      position: "relative"
+    },  
     userAvatar: {
       padding: 10,
-      height: 75,
-      width: 75,
-      borderRadius: "50%"
+      height: 80,
+      width: 80,
+      borderRadius: "50%",
+      "@media(min-width: 769px)" : {
+        height: 100,
+        width: 100,
+      }
     },
     postTitle: {
-        fontSize: 18
+        fontSize: 18,
+        "@media(min-width: 769px)" : {
+          fontSize: 22,
+        }
+    },
+    postText: {
+        "@media(min-width: 769px)" : {
+          fontSize: 18,
+        }
     },
     postInfo: {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        paddingLeft: 13,
+        width: "100%",
         marginTop: 15,
       "@media(min-width: 769px)" : {
-        alignItems: "flex-start"
+        alignItems: "flex-start",
+        width: "80%",
+        marginTop: 0,
+        paddingBottom: 20,
       }
     },
+    mediaContainer: {
+      width: "80%",
+      marginTop: 10
+    },  
+    media: {
+      width: "100%",
+      height: "100%",
+      borderRadius: 5,
+      "@media(min-width: 769px)" : {
+        width: "80%",
+      }
+    },  
     creatorAndDate: {
         display: "flex",
-        marginTop: 22
+        marginTop: 20
     },
     creator: {
       fontSize: 12,
       cursor: "pointer",
+      "@media(min-width: 769px)" : {
+        fontSize: 14,
+      },
       '&::after': {
         content: `'|'`,
         marginLeft: 15
@@ -91,10 +163,14 @@ const PostCard = ({
     createdAt: {
       marginLeft: 15,
       fontSize: 12,
+      "@media(min-width: 769px)" : {
+        fontSize: 14,
+      },
     },
     btns: {
       display: "flex",
       justifyContent: "space-between",
+      width: "100%",
       paddingTop: 25,
       paddingBottom: 10,
       marginLeft: 8
@@ -113,23 +189,21 @@ const PostCard = ({
       display: "flex",
     },
     friendBtnContainer: {
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "space-between",
-      width: "100%",
-      paddingTop: 10,
-      marginLeft: 10,
+      //display: "flex",
+      //alignItems: "center",
+      //justifyContent: "space-between",
+      //width: "100%",
+      marginTop: 15,
+     // marginLeft: 10,
     },
   }));
   const classes = useStyles();
   
-  const {card, avatarAndText, userAvatar, postInfo, postTitle, creatorAndDate, creator, createdAt, btns, editAndDeletePostHidden, editAndDeletePostVisible, likeDislikeBtns,restOfBtns, friendBtnContainer } = classes;
+  const {card, wrapper, rankingAndAvatar, leftAndRightWrapper, textAndMedia, userAvatarAndGreenBall, userAvatar, postInfo, mediaContainer, media, postTitle, postText, creatorAndDate, creator, createdAt, btns, editAndDeletePostHidden, editAndDeletePostVisible, likeDislikeBtns,restOfBtns, friendBtnContainer } = classes;
 
   dayjs.extend(relativeTime); 
 
   const { userName, isAuthenticated } = useSelector(state => state.authReducer);
- 
-  const [commentsNumber, setCommentsNumber] = useState(amountOfComments); 
 
   const [showDetails, setShowDetails] = useState(false);
 
@@ -145,78 +219,95 @@ const PostCard = ({
     setOpenEditPostModal(prev => !prev);
   };
 
-
   const dispatch = useDispatch(); 
+    
+  function createMarkup() {
+    return {__html: post};
+  }
 
   return ( 
     <>  
         <EditPostModal postToEdit={post} postId={postId} openEditPostModal={openEditPostModal} editPostModal={editPostModal} />
-        <CommentModal  postId={postId} postCreator={userId} title={title} amountOfComments={commentsNumber} setCommentsNumber={setCommentsNumber} comentModalOpen={comentModalOpen} handleCommentModal={handleCommentModal}/>   
+        <CommentModal  postId={postId} postCreator={userId} title={title} amountOfComments={amountOfComments} comentModalOpen={comentModalOpen} handleCommentModal={handleCommentModal}/>   
         <Card className={card}>
-          <Box className={avatarAndText}>
-            <Box style={{ position:"relative", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"space-between"}}>
-              {userIsOnline && <PulsingGreenBall/>}
-              <img
-                className={userAvatar}
-                src={avatar}
-                alt="avatar"
-              />
-              <UserRanking creatorAmountOfPosts={creatorAmountOfPosts}/>
-              <Box className={friendBtnContainer}>
-                <AddFriend creatorUserName={creatorUserName} avatar={avatar}/>
-                <AddFriend creatorUserName={creatorUserName} avatar={avatar}/>
-                <AddFriend creatorUserName={creatorUserName} avatar={avatar}/>
-              </Box>
-            </Box>
-            <Box className={postInfo}> 
-              <CSSTransition in={showDetails} timeout={500} unmountOnExit={true} classNames="userInfo">
-                <UserDetails avatar={avatar} creatorUserName={creatorUserName} setShowDetails={setShowDetails}/> 
-              </CSSTransition>
-              <Typography
-                  className={postTitle}
-                  paragraph={true}
-                  target="_blank"
-                  variant="h6"
-                  color="primary"
-                >
-                  {title}
-              </Typography>
-              <Typography  variant="body2">{post}</Typography>
-              <Box className={creatorAndDate}>
-                <ClickAwayListener onClickAway={() => setShowDetails(false)}>
+          <Box className={wrapper}>
+            <Box className={leftAndRightWrapper}>
+              <Box className={rankingAndAvatar}>
+                  <Box className={userAvatarAndGreenBall}>
+                    <img
+                      className={userAvatar}
+                      src={avatar}
+                      alt="avatar"
+                    />
+                    {userIsOnline && <PulsingGreenBall/>}
+                  </Box>
+                  <UserRanking creatorAmountOfPosts={creatorAmountOfPosts}/>
+                  <Box className={friendBtnContainer}>
+                    <AddFriend creatorUserName={creatorUserName} avatar={avatar}/>
+                    <AddFriend creatorUserName={creatorUserName} avatar={avatar}/>
+                    <AddFriend creatorUserName={creatorUserName} avatar={avatar}/>
+                  </Box>
+                </Box>
+              <Box className={textAndMedia}>
+                <Box className={postInfo}> 
+                  <CSSTransition in={showDetails} timeout={500} unmountOnExit={true} classNames="userInfo">
+                    <UserDetails avatar={avatar} creatorUserName={creatorUserName}/> 
+                  </CSSTransition>
                   <Typography
-                    className={creator}
-                    onClick={() => setShowDetails(true)}
-                    color="primary"
+                      className={postTitle}
+                      paragraph={true}
+                      target="_blank"
+                      variant="h6"
+                      color="primary"
                     >
-                    {creatorUserName}
-                  </Typography> 
-                </ClickAwayListener>
-                <time>
-                  <Typography className={createdAt}>
-                    {dayjs(date).fromNow()}
+                      {title}
                   </Typography>
-                </time>
+                  {/*<Typography variant="body2">{post}</Typography>*/}
+                  <Typography className={postText} variant="body2" dangerouslySetInnerHTML={createMarkup()}/>
+                  {<Box className={mediaContainer}>
+                    {image && <img className={media} loading="lazy" src={image} alt="image"/>}
+                    {gif && <img className={media} loading="lazy" src={gif} alt="gif"/>}
+                  </Box>}
+                  <Box className={creatorAndDate}>
+                    <ClickAwayListener onClickAway={() => setShowDetails(false)}>
+                      <Typography
+                        className={creator}
+                        onClick={() => setShowDetails(true)}
+                        color="primary"
+                        >
+                        {creatorUserName}
+                      </Typography> 
+                    </ClickAwayListener>
+                    <time>
+                      <Typography className={createdAt}>
+                        {dayjs(date).fromNow()}
+                      </Typography>
+                    </time>
+                  </Box>
+                  </Box>
+                </Box>
               </Box>
+            <Box className={btns}>
+              <Box className={likeDislikeBtns}>
+                <LikeDislikeBtns postBtn postId={postId} likes={likes} dislikes={dislikes} title={title} postCreator={userId} creatorUserName={creatorUserName}/> 
+              </Box>
+              <Box className={restOfBtns}>
+                  {!singlePost && <GoToPost postId={postId}/>}
+                  {isAuthenticated &&
+                  <>
+                  <AddComment postId={postId} handleCommentModal={handleCommentModal}/> 
+                  <FavoriteBtn postId={postId}/>
+                  </>
+                  }
+                <Box className={userName !== creatorUserName ? editAndDeletePostHidden : editAndDeletePostVisible}>
+                  <EditPost postId={postId} editPostModal={editPostModal} />
+                  <DeletePost postId={postId} title={title}/>
+                </Box>   
               </Box>
             </Box>
-          <Box className={btns}>
-            <Box className={likeDislikeBtns}>
-              <LikeBtn postId={postId} title={title} postCreator={userId} creatorUserName={creatorUserName} likes={likes}/>
-              <DislikeBtn postId={postId} dislikes={dislikes}/>
-            </Box>
-            <Box className={restOfBtns}>
-                {!singlePost && <GoToPost postId={postId}/>}
-                <AddComment postId={postId} handleCommentModal={handleCommentModal}/> 
-                <AddFavorite postId={postId} userId={userId} title={title} post={post} userName={userName} amountOfComments={amountOfComments} date={date} />
-              <Box className={userName !== creatorUserName ? editAndDeletePostHidden : editAndDeletePostVisible}>
-                <EditPost postId={postId} editPostModal={editPostModal} />
-                <DeletePost postId={postId} title={title}/>
-              </Box>   
-            </Box>
+            <Divider/>
+            <CommentSection postId={postId} commentsCount={amountOfComments}/>
           </Box>
-          <Divider/>
-          <CommentSection postId={postId} commentsCount={commentsNumber}/>
         </Card>
     </>
   );

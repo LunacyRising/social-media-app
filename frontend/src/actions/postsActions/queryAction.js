@@ -1,13 +1,19 @@
 import { QUERY_FORM } from "../types";
 
 
-export const handleQuery = ({skip, query, amounOfPosts}) => {
+export const handleQuery = ({ skip, trimQuery, amounOfPosts }) => {
+
+    const cleanPosts = []
+
+    console.log(trimQuery)
+
     return {
       type: QUERY_FORM,
       payload: {
         skip,
-        query,
-        amounOfPosts
+        query: trimQuery,
+        amounOfPosts,
+        cleanPosts
       }
     };
   };

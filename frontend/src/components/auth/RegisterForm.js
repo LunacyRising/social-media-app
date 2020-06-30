@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
+import useCustomForm from "./useCustomForm";
+import { useTranslation } from "react-i18next";
 import {
   Box,
   TextField,
@@ -7,7 +9,6 @@ import {
   Typography,
   CircularProgress
 } from "@material-ui/core";
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -15,9 +16,9 @@ import { registerAction } from "../../actions/authActions/registerAction";
 import { snackOpen } from "../../actions/messagesActions";
 import { clearMessages } from "../../actions/messagesActions";
 
-const RegisterForm = ({ openRegister }) => {
+const RegisterForm = () => {
 
-  const useStyles = makeStyles(() => ({
+  const useStyles = makeStyles((theme) => ({
     
     textFieldsContainer: {
       display: "flex",
@@ -33,13 +34,11 @@ const RegisterForm = ({ openRegister }) => {
       marginBottom: 30
     },
     btns: {
-      border: "solid 2px #8b70d2",
-      marginRight: "5px",
-      color: "#8b70d2",
+      border: "solid 2px white",
+      marginRight: 15,
+      color: "white",
       "&:hover": {
-        backgroundColor: "#8b70d2 !important",
-        border: "solid 2px white",
-        color: "white"
+        backgroundColor: theme.palette.primary.main
       }
     },
     title: {
@@ -53,6 +52,14 @@ const RegisterForm = ({ openRegister }) => {
 
   const { textFieldsContainer , input, btnsContainer , btns, title } = classes;
 
+  const { isLoading, verifyCaptcha } = useSelector(state => state.authReducer);
+
+  const { messageCode, message } = useSelector(state => state.messagesReducer);
+
+  const dispatch = useDispatch();
+
+  const { handleSubmit, register,  errors} = useForm();
+
   const FormDefaultValues = {
     name: "",
     lastName: "",
@@ -60,27 +67,12 @@ const RegisterForm = ({ openRegister }) => {
     email: "",
     password: ""
   };
-  const [formValues, setFormValues] = useState(FormDefaultValues);
 
-  let { name, lastName, userName, email, password } = formValues;
+  const { values, handleChange,  clearError, clearAllErrors } = useCustomForm(FormDefaultValues)
 
-  const handleChange = e => {
-    const target = e.target;
-    setFormValues(prevState => ({
-      ...prevState,
-      [target.name]: target.value
-    }));
-  };
+  const { name, lastName, userName, email, password } = values
 
-  const { isLoading, verifyCaptcha } = useSelector(state => state.authReducer);
-
-  const { messageCode, message } = useSelector(state => state.messagesReducer);
-
-  const dispatch = useDispatch();
-
-  const clearMessagesDispatch = () => dispatch(clearMessages());
-
-  const { register, handleSubmit, errors, clearError } = useForm();
+  const { t } = useTranslation();
 
   const registerSubmit = () => {
     !verifyCaptcha
@@ -91,16 +83,11 @@ const RegisterForm = ({ openRegister }) => {
     useHistory.push("/emailConfirmation")
   }
 
-  const clearAllErrors = () => {
-    clearError();
-    clearMessagesDispatch();
-  };
-
   return (
     <>
       <form onSubmit={handleSubmit(registerSubmit)}>
         <Typography className={title} variant="h6">
-          Register a new account
+          {t("RegisterMsg")}
         </Typography>
         <Box className={textFieldsContainer}>
         <TextField
@@ -117,11 +104,11 @@ const RegisterForm = ({ openRegister }) => {
             InputLabelProps={{
             className: input
             }}
-            label="Name"
+            label={t("Name")}
             onChange={handleChange}
             type="text"
             name="name"
-            value={name}
+            value={values.name}
             margin="normal"
             onFocus={() => clearAllErrors()}
             error={messageCode === 461 || errors.name}
@@ -143,11 +130,11 @@ const RegisterForm = ({ openRegister }) => {
             InputLabelProps={{
             className: input
             }}
-            label="Lastname"
+            label={t("LastName")}
             onChange={handleChange}
             type="text"
             name="lastName"
-            value={lastName}
+            value={values.lastName}
             margin="normal"
             onFocus={() => clearAllErrors()}
             error={messageCode === 461 || errors.lastName}
@@ -169,11 +156,11 @@ const RegisterForm = ({ openRegister }) => {
             InputLabelProps={{
             className: input
             }}
-            label="Username"
+            label={t("UserName")}
             onChange={handleChange}
             type="text"
             name="userName"
-            value={userName}
+            value={values.userName}
             margin="normal"
             onFocus={() => clearAllErrors()}
             error={messageCode === 461 || errors.userName}
@@ -197,10 +184,10 @@ const RegisterForm = ({ openRegister }) => {
             }}
             onChange={handleChange}
             type="email"
-            label="Email"
+            label={t("Email")}
             name="email"
             margin="normal"
-            value={email}
+            value={values.email}
             error={messageCode === 460 || errors.email}
             onFocus={() => clearAllErrors()}
             helperText={
@@ -225,19 +212,19 @@ const RegisterForm = ({ openRegister }) => {
             className: input
             }}
             onChange={handleChange}
-            label="Password"
+            label={t("Password")}
             type="password"
             name="password"
             margin="normal"
             error={errors.password}
             onFocus={() => clearAllErrors()}
-            value={password}
+            value={values.password}
             helperText={errors?.password?.message}
           />
         </Box>
         <Box className={btnsContainer}>
         <Button color="primary" className={btns} type="submit">
-            Register
+            {(t("Register"))}
             {isLoading && (
             <Box className="spinnerMarginLeft">
                 <CircularProgress size={15} />

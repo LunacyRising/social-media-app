@@ -36,13 +36,12 @@ import {
 export const emailConfirmedAction = ({ email }) => async dispatch => {
   dispatch({ type: WAITING_MAILCONFIRMATION });
   try {
-    let response = await axios.put(`http://localhost:5001/${email}`, {});
+    const response = await axios.put(`http://localhost:5001/${email}`, {});
     dispatch({
       type: MAIL_CONFIRMED
     });
-    let message = response.data.message;
-    let messageCode = response.data.code;
-    dispatch(returnMessages(messageCode, message));
+    const messageCode = response.data.code;
+    dispatch(returnMessages(messageCode));
     dispatch(snackOpen());
   } catch (err) {
     let errorCode = err.response ? err.response.data.code : 500;

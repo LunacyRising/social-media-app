@@ -1,4 +1,4 @@
-import React  from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { makeStyles } from "@material-ui/core/styles";
 import { IconButton, Tooltip, Box} from "@material-ui/core";
@@ -23,7 +23,7 @@ const DeletePost = ({ postId, title }) => {
 
     const { t } = useTranslation();
 
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
 
     const handleClickOpen = () => {
       setOpen(true);

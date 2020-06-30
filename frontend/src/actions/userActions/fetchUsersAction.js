@@ -16,8 +16,8 @@ export const fetchUsers = ({ token }) => dispatch => {
           users: res.data.users
         }
       });
-      let message = res.data.message;
-      let messageCode = res.data.code;
+      const message = res.data.message;
+      const messageCode = res.data.code;
       dispatch(returnMessages(messageCode, message));
       console.log(res, message, messageCode, res.data.users);
     })

@@ -16,7 +16,7 @@ const Favorites = () => {
     const useStyles = makeStyles(() => ({
 
         cardsContainer: {
-            marginTop: 200
+            marginTop: 50
         },
         spinner: {
             display: "flex",
@@ -53,13 +53,14 @@ const Favorites = () => {
                         unmountOnExit={true}
                         >
                         <Favorite
-                            key={favorite._id}
-                            favoriteId={favorite._id}
-                            postId={favorite.postId}
-                            title={favorite.title}  
-                            userName={favorite.userName}
-                            amountOfComments={favorite.amountOfComments}
-                            date={favorite.date}
+                        key={favorite._id}
+                        favoriteId={favorite._id}
+                        gif={favorite.gif}
+                        image={favorite.image}
+                        title={favorite.title}  
+                        userName={favorite.userName}
+                        amountOfComments={favorite.amountOfComments}
+                        date={favorite.date}
                         />
                         </CSSTransition>)) : <NoFavorites/>}
                 </TransitionGroup>}   

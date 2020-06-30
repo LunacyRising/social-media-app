@@ -67,9 +67,9 @@ const Register = () => {
   }));
   const classes = useStyles();
 
-  const { formContainer, modal,closeBtn } = classes;
+  const { formContainer, modal, closeBtn } = classes;
 
-  const { isAuthenticated } = useSelector(state => state.authReducer);
+  const { isAuthenticated } = useSelector(state => state.authReducer); 
 
   const { messageCode } = useSelector(state => state.messagesReducer);
 
@@ -105,4 +105,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default React.memo(Register);

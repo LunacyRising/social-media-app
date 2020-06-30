@@ -3,31 +3,25 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { makeStyles } from "@material-ui/core/styles";
-import { Button } from "@material-ui/core";
+import { NavBtn } from "../../../../styledComponents/MyBtn";
 import { closeDrawer } from "../../../../actions/modalsActions/drawer";
 
 const GalleryBtn = () => {
 
 
-  const useStyles = makeStyles((theme) => ({
-    btn: {
-        color: "white",
-        fontWeight: "bold",
-        fontSize: 16,
-        textTransform: "uppercase",
-        fontFamily: theme.typography.fontFamily,
-        transition: ".2s ease all",
-        marginRight: 10,
-        "&:hover": {
-          textDecoration: "none",
-          color: "#8b70d2",
-          backgroundColor: "transparent"
-        },
+  const useStyles = makeStyles(() => ({
+
+    link: {
+      color: "white",
+      "&:hover": { 
+        textDecoration: "none",
+        color: "white"
       }
+    }
   }));
   const classes = useStyles();
 
-  const { btn } = classes;
+  const { link } = classes;
 
   const { t } = useTranslation();
 
@@ -37,7 +31,9 @@ const GalleryBtn = () => {
 
     return (
             <>
-                <Button component={Link} to={`gallery/${userId}`} className={btn} onClick={() =>dispatch(closeDrawer())}>Gallery</Button>
+                <NavBtn>
+                  <Link className={link} to={`gallery/${userId}`} onClick={() =>dispatch(closeDrawer())}>{t("MyGallery")}</Link>
+                </NavBtn>
             </>
         )
     }

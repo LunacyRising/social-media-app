@@ -1,42 +1,34 @@
 import React from "react";
-import { useDispatch } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
-import { IconButton } from "@material-ui/core";
 import englishicon from "../../../../../src/utils/images/englishicon.svg";
+import useTranslate from "../../useTranslate";
+import { NavBtn } from "../../../../styledComponents/MyBtn";
 
-const LoginBtn = ( {changeLang }) => {
+const LoginBtn = () => {
 
 
   const useStyles = makeStyles(() => ({
-    
-    btn: {
-        color: "white",
-        fontWeight: "bold",
-        fontSize: 16,
-        textTransform: "uppercase",
-        transition: ".2s ease all",
-        width: 40,
-        height: 40,
-        backgroundImage: `url(${englishicon})`,
-        "&:hover": {
-          textDecoration: "none",
-          color: "#8b70d2",
-          backgroundColor: "transparent"
-        },
-      }
+
+    span: {
+        width: 25,
+        height: 25,
+        backgroundImage: `url(${englishicon})`
+      },
+    noMargin: {
+        marginRight: 0
+    }
   }));
   const classes = useStyles();
-  const { btn } = classes;
 
+  const { span, noMargin } = classes;
 
-  const dispatch = useDispatch()
-
+  const { changeLang } = useTranslate()
 
     return (
             <>
-                <IconButton onClick={() => changeLang("en")}>
-                    <span className={btn}/>
-                </IconButton>
+                <NavBtn className={noMargin} onClick={() => changeLang("en")}> 
+                    <span className={span}/>
+                </NavBtn>
             </>
         )
     }

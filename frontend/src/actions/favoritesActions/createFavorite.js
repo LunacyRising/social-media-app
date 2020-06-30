@@ -2,11 +2,11 @@ import axios from "axios";
 import { returnMessages, snackOpen } from "../messagesActions";
 import {  FAVORITE_ADDED, FAVORITE_FAIL } from "../types"; 
 
-export const createFavorite = ({ postId }) => async (dispatch, getState) => {
+export const createFavorite = (postId) => async (dispatch, getState) => {
   const {token, userId} = getState().authReducer;
   
   try {
-    let response = await axios.post(
+    const response = await axios.post(  
       `http://localhost:5001/favorites`,
       {
         postId,
@@ -17,10 +17,12 @@ export const createFavorite = ({ postId }) => async (dispatch, getState) => {
       }
     );
     dispatch({
-      type: FAVORITE_ADDED
+      type: FAVORITE_ADDED,
+      payload: response.data.favorite
     });
-    let message = response.data.message;
-    let messageCode = response.data.code;
+    console.log(response)
+    const message = response.data.message;
+    const messageCode = response.data.code;
     dispatch(returnMessages(messageCode, message));
     dispatch(snackOpen())
   } catch (err) {

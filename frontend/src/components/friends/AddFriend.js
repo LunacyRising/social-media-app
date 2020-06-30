@@ -11,9 +11,9 @@ const AddFriend = ({ creatorUserName, avatar}) => {
     const useStyles = makeStyles(() => ({
 
         btn: {
-          width: 30,
-          height: 30,
-          marginRight: 5
+          width: 20,
+          height: 20,
+          //marginRight: 5
         }
       })); 
 

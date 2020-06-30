@@ -15,15 +15,15 @@ const Notifications = () => {
     notiContainer: {
      // position: "absolute",
      // right: 0,
-      //transition: "0.6s ease all"
+      transition: "ease"
 
     },
     notiIcon: {
         color: "white",  
     },
     btn: {
-      width: 40,
-      height: 40,
+      width: 25,
+      height: 25,
       marginLeft: 10
     }
   }));

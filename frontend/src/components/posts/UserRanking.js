@@ -12,9 +12,12 @@ const UserRanking = ({creatorAmountOfPosts}) => {
         position:"relative",
         textAlign:"center",
         backgroundColor: "#82e0aa",
-        width: "80%",
-        margin: " -5px auto",
+        width: "50%",
+        margin: "-13px auto",
         borderRadius: "5%",
+        "@media(min-width: 769px)" : {
+          width: "100%",
+        },
         '&::before': {
           position: 'absolute',
           bottom: "5px",

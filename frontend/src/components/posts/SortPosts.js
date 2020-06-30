@@ -17,7 +17,12 @@ import { fetchPostMostLikes } from "../../actions/postsActions/fetchPostMostLike
 const SortPosts = () => {
 
   const useStyles = makeStyles(() => ({
+
     sortMenu: {
+      position: "absolute",
+      top: -50
+    },
+    noHover: {
       "&:hover": {
         backgroundColor: "transparent"
       }
@@ -31,13 +36,13 @@ const SortPosts = () => {
         color: "#8b70d2"
       }
     },
-    menu: {
+    menuItem: {
       backgroundColor: "#3b4248"
     }
   }));
   const classes = useStyles();
 
-  const { menu, sortMenu, sortBtns, } = classes;
+  const {sortMenu, menuItem, noHover, sortBtns, } = classes;
 
   const { t } = useTranslation();
 
@@ -71,7 +76,7 @@ const SortPosts = () => {
   return (
     <>
         <Box className={sortMenu}> 
-          <Button color="primary" onClick={handleClick} className={sortMenu}>
+          <Button color="primary" onClick={handleClick} className={noHover}>
               {t("SortBy")}
               <SortRoundedIcon fontSize="large" />
           </Button>
@@ -84,17 +89,17 @@ const SortPosts = () => {
               onClose={handleClose}
               anchorEl={anchorEl}
               >
-              <MenuItem className={menu}>
+              <MenuItem className={menuItem}>
                   <Button className={sortBtns} onClick={() => mostLikes()}>
                       {t("MostFavorite")}
                   </Button>
               </MenuItem>
-              <MenuItem className={menu}>
+              <MenuItem className={menuItem}>
                   <Button className={sortBtns} onClick={() => newestSort()}>
                       {t("Newest")}
                   </Button>
                   </MenuItem>
-              <MenuItem className={menu}>
+              <MenuItem className={menuItem}>
                   <Button className={sortBtns} onClick={() => oldestSort()}>
                       {t("Oldest")}
                   </Button>

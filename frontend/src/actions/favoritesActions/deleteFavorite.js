@@ -1,22 +1,30 @@
 import axios from "axios";
 import { returnMessages, snackOpen } from "../messagesActions";
 import {  FAVORITE_DELETED, FAVORITE_DELETED_FAIL } from "../types"; 
+import { removeFavoriteSqueleton } from "../../helperFunctions/removeFavoriteSqueleton";
+import { removeFavorite } from "../../helperFunctions/removeFavorite";
 
-export const deleteFavorite = ({favoriteId}) => async (dispatch, getState)=> {
-  const {token, userId} = getState().authReducer;
+export const deleteFavorite = ( favoriteId ) => async (dispatch, getState)=> { 
+
+  const { token, userId } = getState().authReducer;
+
+  const { favoritesSqueleton , favorites } = getState().favoritesReducer;
   try {
-    let response = await axios.delete(`http://localhost:5001/favorites/delete/${userId}/${favoriteId}`,
+    const response = await axios.delete(`http://localhost:5001/favorites/delete/${userId}/${favoriteId}`,
     {
       headers: { "auth-token": token }
     }
     );
     dispatch({
       type: FAVORITE_DELETED,
-      payload: favoriteId
+      payload: {
+        squeletons: removeFavoriteSqueleton(favoritesSqueleton, favoriteId),
+        favorites: removeFavorite(favorites, favoriteId)
+      }
     });
-    console.log(favoriteId)
-    let message = response.data.message;
-    let messageCode = response.data.code;
+    console.log(favoriteId) 
+    const message = response.data.message;
+    const messageCode = response.data.code;
     dispatch(returnMessages(messageCode, message));
     dispatch(snackOpen())
   } catch (err) {

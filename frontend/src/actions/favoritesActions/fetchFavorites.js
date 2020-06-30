@@ -9,7 +9,7 @@ export const fetchFavorites = () => async (dispatch, getState) => {
   dispatch({ type: FAVORITES_LOADING }); 
 
   try {
-    let response = await axios.get(`http://localhost:5001/favorites/${userId}`,
+    const response = await axios.get(`http://localhost:5001/favorites/${userId}`,
     {
       headers: { "auth-token": token }
     }
@@ -18,7 +18,7 @@ export const fetchFavorites = () => async (dispatch, getState) => {
       console.log(data)
       let promisesArray = [];
       promisesArray = data.map( async item => {
-      let postId = item.postId
+      const postId = item.postId
       console.log(postId)
        return await axios.get(`http://localhost:5001/posts/${postId}/favs`,{headers: { "auth-token": token }})
     })

@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 5001; 
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -23,6 +23,7 @@ const userRoute = require("./routes/user");
 const commentRoute = require("./routes/comments");
 const notificationsRoute = require("./routes/notifications");
 const favoritesRoute = require("./routes/favorites");
+const gifsRoute = require("./routes/gifs");
 
 dotenv.config();
 
@@ -48,5 +49,6 @@ app.use("/", userRoute);
 app.use("/", commentRoute);
 app.use("/", notificationsRoute);
 app.use("/", favoritesRoute);
+app.use("/", gifsRoute);
 
 app.listen(PORT, () => console.log(`server is up and running on port ${PORT}`)); 

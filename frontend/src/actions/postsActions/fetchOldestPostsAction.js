@@ -3,7 +3,7 @@ import { FETCH_OLDEST_POSTS, FETCH_POSTS_FAIL, POSTS_LOADING } from "../types";
 import { returnMessages } from "../messagesActions";
 
 export const fetchOldestPosts = () => dispatch => {
-  dispatch({ type: POSTS_LOADING });
+  //dispatch({ type: POSTS_LOADING });
   axios
     .get("http://localhost:5001/posts/oldest/asd")
     .then(res => {

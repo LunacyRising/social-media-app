@@ -1,42 +1,29 @@
 import React from "react";
-import { useDispatch } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
-import { IconButton } from "@material-ui/core";
 import spanishicon from "../../../../../src/utils/images/spanishicon.svg";
+import useTranslate from "../../useTranslate";
+import { NavBtn } from "../../../../styledComponents/MyBtn";
 
-const LoginBtn = ({ changeLang }) => {
+const LoginBtn = () => {
 
 
   const useStyles = makeStyles(() => ({
-    
-    btn: {
-        color: "white",
-        fontWeight: "bold",
-        fontSize: 16,
-        textTransform: "uppercase",
-        transition: ".2s ease all",
-        width: 40,
-        height: 40,
-        backgroundImage: `url(${spanishicon})`,
-        "&:hover": {
-          textDecoration: "none",
-          color: "#8b70d2",
-          backgroundColor: "transparent"
-        },
-      }
+
+    noMargin: {
+        marginRight: 0
+    }
   }));
   const classes = useStyles();
-  const { btn } = classes;
 
+  const { noMargin } = classes;
 
-  const dispatch = useDispatch()
-
+  const { changeLang } = useTranslate()
 
     return (
             <>
-                <IconButton onClick={() => changeLang("es")}>
-                    <span className={btn}/>
-                </IconButton>
+                <NavBtn className={noMargin} onClick={() => changeLang("es")}>
+                    <img src={spanishicon} width={25} height={25} alt="icon"/>
+                </NavBtn>
             </>
         )
     }

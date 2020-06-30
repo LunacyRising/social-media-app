@@ -18,7 +18,7 @@ const SinglePostPage = ({ match }) => {
             justifyContent:"center",
             margin: "50vh auto 0",
             transform: "translateY(-50%)",
-            width: "80%",
+            width: "60%",
             height: "100%"
         }
       })); 
@@ -37,7 +37,7 @@ const SinglePostPage = ({ match }) => {
 
   const { post } = useSelector(state => state.postReducer);
 
-  const { isAuthenticated } = useSelector(state => state.authReducer);
+  const { isAuthenticated } = useSelector(state => state.authReducer); 
 
   return (
     <>  
@@ -46,22 +46,22 @@ const SinglePostPage = ({ match }) => {
             singlePost
             avatar={post.avatar} 
             post={post.post} 
-            creatorUserName={post.userName} 
+            image={post.image}
+            gif={post.gif} 
+            creatorUserName={post.userName}  
             creatorAmountOfPosts={post.creatorAmountOfPosts} 
             title={post.title} 
             date={post.date}  
-            amounOfComments={post.amounOfComments}
+            amountOfComments={post.amountOfComments}  
             postCreator={post.userId}
             postId={post._id}
-            likes={post.likes}
+            likes={post.likes} 
             dislikes={post.dislikes}
             userIsOnline={post.userIsOnline}
             postToEdit={post.post}
             />
         </Box>
         {<SnackbarMessages/>}
-        { !isAuthenticated && <Login/> }
-        { !isAuthenticated && <Register/> }
     </>
   );
 };

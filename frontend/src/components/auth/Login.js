@@ -72,7 +72,7 @@ const Login = () => {
       }
     }
   }));
-  const classes = useStyles();
+  const classes = useStyles(); 
 
   const { formContainer, modal,closeBtn} = classes;
 
@@ -81,7 +81,7 @@ const Login = () => {
   const { messageCode} = useSelector(state => state.messagesReducer);
 
   const { openLogin } = useSelector(state => state.modalsReducer);
-
+ 
   const dispatch = useDispatch();
 
   return isAuthenticated ? (
@@ -112,4 +112,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default React.memo(Login);

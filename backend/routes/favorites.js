@@ -13,12 +13,12 @@ router.post("/favorites", verify, async (req, res) => {
   const favoriteExists = await Favorite.find({postId , userId:{$eq:userId}}) 
   if(favoriteExists.length === 1)return res.status(400).send({code:256});
   
-  const favorite = new Favorite({
+  const data = new Favorite({
     userId,
     postId
   });
   try {
-    const savedFavorite = await favorite.save();
+    const favorite = await data.save();
     res.status(200).send({ code: 255, favorite});  
   } catch (err) { 
     res.status(400).send({code: 500 }); 
@@ -27,7 +27,7 @@ router.post("/favorites", verify, async (req, res) => {
 
 // get favorites 
 
-router.get("/favorites/:userId", verify, async (req, res) => { 
+router.get("/favorites/:userId", verify, async (req, res) => {  
     const { userId }  = req.params
 
   try { 
@@ -42,11 +42,10 @@ router.get("/favorites/:userId", verify, async (req, res) => {
 // delete favorite  
 
 router.delete("/favorites/delete/:userId/:favoriteId", async (req,res) => {
-  const { userId, favoriteId } = req.params
+  const { userId, postId, favoriteId } = req.params
   
   try{
-    //const deletedFavorite = await Favorite.findOneAndDelete({postId: favoriteId});
-    const deletedFavorite = await Favorite.findOneAndDelete({postId: favoriteId, userId: userId})
+    await Favorite.findOneAndDelete({postId: favoriteId, userId: userId})
     res.status(200).send({code: 257});
    // console.log(deletedFavorite)
   }catch(err){

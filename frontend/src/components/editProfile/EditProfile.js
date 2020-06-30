@@ -5,6 +5,7 @@ import { useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { CSSTransition } from 'react-transition-group' 
 import { useForm } from "react-hook-form";
+import useCustomForm from "../auth/useCustomForm";
 import { makeStyles } from "@material-ui/core/styles";
 import { Button, Typography, IconButton, Avatar, Box, Tooltip } from "@material-ui/core";
 import PermIdentityIcon from '@material-ui/icons/PermIdentity';
@@ -14,11 +15,11 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import {CircularProgress} from "@material-ui/core";
 import FaceIcon from '@material-ui/icons/Face';
 import SendIcon from '@material-ui/icons/Send';
-import { editProfile } from "../../actions/userActions/editProfileAction";
-import { changeAvatar } from "../../actions/uploadImageAction";
 import UserNameField from "./UserNameField";
 import EmailField from "./EmailField";
 import SnackbarMessages from "../SnackbarMessages";
+import { editProfile } from "../../actions/userActions/editProfileAction";
+import { changeAvatar } from "../../actions/uploadImageAction";
 
 const EditProfile = () => {
 
@@ -93,7 +94,7 @@ const EditProfile = () => {
     },
     fieldText: {
       fontSize: 14,
-      paddingLeft: 8,
+      padding: 7
     },
     paddingRight: {
       paddingRight: 7
@@ -124,17 +125,18 @@ const EditProfile = () => {
   const { t } = useTranslation();
 
   const formDefaultValues = {
-    editedUserName: "",
-    editedEmail: ""
+    editedUserName: userName,
+    editedEmail: email
   };
 
-  const [formValues, setFormValues] = useState(formDefaultValues);
+  const { values, setValues, handleChange } = useCustomForm(formDefaultValues);
+
+  const { editedUserName, editedEmail } = values
 
   const [editUserName, seteditUserName] = useState(false);
 
   const [editEmail, setEditEmail] = useState(false);
 
-  const { editedUserName, editedEmail } = formValues;
   
   const { messageCode } = useSelector(state => state.messagesReducer);
 
@@ -147,23 +149,13 @@ const EditProfile = () => {
   let userWord = editUserName ? "Cancel" : "Edit";
 
   useEffect(() => {
-    setFormValues({ editedUserName: userName, editedEmail: email });
+    setValues({ editedUserName: userName, editedEmail: email });
   }, [userName || email]);
-
-
-  const handleChange = e => {
-    const target = e.target;
-    setFormValues(prevState => ({
-      ...prevState,
-      [target.name]: target.value
-    }));
-  };
-
   
   const editProfileDispatch = () => {
     if(!editedUserName || !editedEmail) return;
-    dispatch(editProfile({formValues}));
-    //setFormValues({ editedUserName: "", editedEmail: "" });
+    dispatch(editProfile({values})); 
+    setValues({ editedUserName: "", editedEmail: "" });
     seteditUserName(false);
     setEditEmail(false);
   };
@@ -181,7 +173,7 @@ const EditProfile = () => {
     fileInput.click();
   };
 
-  return !isAuthenticated ? (
+  return !isAuthenticated ? ( 
     <Redirect to="/" />
   ) : (
     <>
@@ -210,13 +202,13 @@ const EditProfile = () => {
                   <CSSTransition in={editUserName} timeout={1000} unmountOnExit={true} classNames="updateProfileFields">
                     <UserNameField handleChange={handleChange} editedUserName={editedUserName}/>
                   </CSSTransition>
-                  <Typography className={fieldTitle} variant="caption" color="primary">{t("UserName")}</Typography>
+                  <Typography className={fieldTitle} variant="caption" color="primary">{t("UserName")}</Typography> 
                   <Box className={uniqueField}>
                     <Typography className={fieldText}>{userName}</Typography>
-                      <IconButton onClick={() => seteditUserName(!editUserName)} color="primary">
+                      <Button onClick={() => seteditUserName(!editUserName)} color="primary">
                         <Typography className={`${fieldText} ${paddingRight }`}>{userWord}</Typography>
                         <PermIdentityIcon />
-                      </IconButton>
+                      </Button>
                   </Box>
               </Box>
               <Box className={uniqueFieldContainer}>
@@ -226,10 +218,10 @@ const EditProfile = () => {
                   <Typography className={fieldTitle} variant="caption" color="primary">{t("Email")}</Typography>
                   <Box className={uniqueField}>
                     <Typography className={fieldText}>{email}</Typography>
-                      <IconButton  onClick={() => setEditEmail(!editEmail)} color="primary">
+                      <Button  onClick={() => setEditEmail(!editEmail)} color="primary">
                         <Typography className={`${fieldText} ${paddingRight }`}>{emailWord}</Typography>
-                        <MailOutlineIcon />
-                      </IconButton>
+                        <MailOutlineIcon /> 
+                      </Button>
                   </Box>
               </Box>
             </Box>
@@ -245,7 +237,8 @@ const EditProfile = () => {
               id="imageInput"
               hidden="hidden"
               onChange={e => changeProfilePic(e)}
-            ></input>
+            >
+            </input>
         </form>
         </Box>
       {messageCode === 500 && history.push("/error")}

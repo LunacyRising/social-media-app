@@ -1,25 +1,25 @@
-import React, { useState } from "react";
+import React from "react";
 import { useHistory } from "react-router-dom";
-import { useForm} from "react-hook-form";
+import useCustomForm from "./useCustomForm";
+import { useTranslation } from "react-i18next";
 import {
   Box,
   TextField,
   Button,
   Typography,
   CircularProgress,
-  InputAdornment,
+  InputAdornment, 
 } from "@material-ui/core";
 import EmailOutlinedIcon from '@material-ui/icons/EmailOutlined';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { makeStyles } from "@material-ui/core/styles";
 import { useSelector, useDispatch } from "react-redux";
 import { loginAction } from "../../actions/authActions/loginAction";
-import { clearMessages } from "../../actions/messagesActions";
 import {registerModalOpen} from "../../actions/modalsActions/register";
 
 const LoginForm = () => {
  
-  const useStyles = makeStyles(() => ({
+  const useStyles = makeStyles((theme) => ({
     closeBtn: {
       position: "absolute",
       top: 0,
@@ -39,65 +39,45 @@ const LoginForm = () => {
       marginTop: 30
     },
     btn: {
-      border: "solid 2px #8b70d2",
+      border: "solid 2px white",
       marginRight: 15,
-      color: "#8b70d2",
+      color: "white",
       "&:hover": {
-        backgroundColor: "#8b70d2 !important",
-        border: "solid 2px white",
-        color: "white"
+        backgroundColor: theme.palette.primary.main
       },
-      disable: {
-        cursor: "not-allowed !important",
-        opacity: 0.5,
-        backgroundColor: "red"
-      },
-    }
+    disable: {
+      cursor: "not-allowed !important",
+      opacity: 0.5,
+      backgroundColor: "red"
+    },
+  }
   }));
   const classes = useStyles();
 
   const { textFieldsContainer, input, btnsContainer, btn } = classes;
 
-  const { register, handleSubmit, errors, clearError } = useForm();
+  const { t } = useTranslation();
 
-  const { isLoading } =  useSelector(state => state.authReducer);
+  const { isLoading } =  useSelector(state => state.authReducer); 
 
   const { messageCode, message } = useSelector(state => state.messagesReducer);
 
-  const { openLogin } = useSelector(state => state.modalsReducer);
-
   const dispatch = useDispatch();
 
-  const loginDispatch = () => dispatch(loginAction({ email, password }));
-
-  const clearMessagesDispatch = () => dispatch(clearMessages());
-
-  const formDefaultValues = {
+  const formDefaultValues = {  
     email: "",
     password: ""
   };
-  const [formValues, setFormValues] = useState(formDefaultValues);
 
-  const { email, password } = formValues;
-  
-  const handleChange = e => {
-    const target = e.target;
-    setFormValues(prevState => ({
-      ...prevState, 
-      [target.name]: target.value
-    }));
-  };
-  ////////////////////////////////////////////////////////////
-  const clearAllErrors = () => {
-    clearError();
-    clearMessagesDispatch();
-  };
-  /////////////////////////////////////////////////////////////////
+  const { values, handleChange, register, handleSubmit, errors, clearAllErrors } = useCustomForm(formDefaultValues)
+
+  const { password, email } = values
+
   return ( 
     <>
-        <form onSubmit={handleSubmit(loginDispatch)}>
+        <form onSubmit={handleSubmit(() => dispatch(loginAction({ email , password})))}> 
           <Typography variant="h6">
-            Login to your account
+            {t("LoginMsg")}
           </Typography>
           <Box className={textFieldsContainer}>
             <TextField
@@ -113,7 +93,7 @@ const LoginForm = () => {
                 className: input    
               }}
               onChange={handleChange}
-              label="Email"
+              label={t("Email")}
               placeholder="Enter your email"
               type="email"
               name="email"
@@ -137,7 +117,7 @@ const LoginForm = () => {
               InputLabelProps={{
                 className: input
               }}
-              label="Password"
+              label={t("Password")}
               onChange={handleChange}
               onFocus={errors ? () => clearAllErrors() : null}
               error={messageCode === 462 || errors.password}
@@ -152,11 +132,11 @@ const LoginForm = () => {
            </Box> 
           <Box className={btnsContainer}>
             <Button className={btn} type="submit">
-              Log In
+              {t("Login")}
               {isLoading && <CircularProgress size={15}/>}
             </Button>
             <Button onClick={() => dispatch(registerModalOpen())} className={btn}> 
-              Register
+            {t("Register")}
             </Button>
           </Box>
         </form>

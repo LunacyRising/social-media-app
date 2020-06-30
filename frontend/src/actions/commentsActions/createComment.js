@@ -1,18 +1,20 @@
 import axios from "axios";
 import { returnMessages, snackOpen } from "../messagesActions";
-import { LOADING, SUCCESS_COMMENT, FAIL_COMMENT } from "../types"; 
+import { LOADING, SUCCESS_COMMENT, FAIL_COMMENT } from "../types";
+import { editKeyValue2 } from "../editKeyValue"; 
 
-export const createComment = ({
-  comment,
-  postId,
-  postCreator,
-  title,
-}) => async (dispatch, getState) => {
-  const{userId, userName, avatar, token} = getState().authReducer
-  dispatch({ type: LOADING });
+export const createComment = ({ comment, postId, postCreator, title, amountOfComments }) => async (dispatch, getState) => {
+
+  const { userId, userName, avatar, token } = getState().authReducer 
+
+  const { posts } = getState().postReducer
+
+  let keyValue = {amountOfComments: amountOfComments +1};
+
+  dispatch({ type: LOADING }); 
   try {
-    let response = await axios.post(
-      `http://localhost:5001/post/${postId}/comments`, 
+    const response = await axios.post(
+      `http://localhost:5001/post/${postId}/comments`,  
       {
         userName,
         comment,
@@ -26,12 +28,15 @@ export const createComment = ({
         headers: { "auth-token": token } 
       }
     );
-    dispatch({
+    dispatch({ 
       type: SUCCESS_COMMENT,
-      payload: response.data.savedComment
+      payload: {
+        comment: response.data.savedComment,
+        posts: editKeyValue2(posts, postId, keyValue)   
+      }
     });
-    let message = response.data.message;
-    let messageCode = response.data.code;
+    const message = response.data.message;
+    const messageCode = response.data.code;
     dispatch(returnMessages(messageCode, message));
     dispatch(snackOpen());
   } catch (err) {

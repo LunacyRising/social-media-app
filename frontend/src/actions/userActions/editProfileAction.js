@@ -8,7 +8,7 @@ import {
 } from "../types";
 
 
-export const editProfile = ({formValues}) => async (dispatch, getState )=> {
+export const editProfile = ({values}) => async (dispatch, getState )=> {
 
   const { token, userId } = getState().authReducer;
 
@@ -17,15 +17,10 @@ export const editProfile = ({formValues}) => async (dispatch, getState )=> {
   const { comments } = getState().commentsReducer; 
 
   dispatch({ type: PROFILE_UPDATING});
-  try {
-    const response = await axios.post(
-      `http://localhost:5001/user/${userId}`,
-      {
-        formValues
-      },
-      {
-        headers: { "auth-token": token }
-      }
+  try { 
+    const response = await axios.post(`http://localhost:5001/user/${userId}`,
+    { values },
+    { headers: { "auth-token": token }}
     );
     const userName = response.data.user.userName;
 
@@ -41,9 +36,9 @@ export const editProfile = ({formValues}) => async (dispatch, getState )=> {
 
     dispatch(snackOpen());
 
-    let message = response.data.message;
+    const message = response.data.message;
 
-    let messageCode = response.data.code;
+    const messageCode = response.data.code;
 
     dispatch(returnMessages(messageCode, message));
 

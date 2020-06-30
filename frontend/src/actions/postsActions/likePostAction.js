@@ -1,12 +1,28 @@
 import axios from "axios";
 import { returnMessages, snackOpen } from "../messagesActions";
-import { LIKE_SUCCESS, LIKE_FAIL } from "../types";
+import { LIKE_SUCCESS, LIKE_FAIL, LIKE_LOADING } from "../types";
+import { editKeyValue2 } from "../editKeyValue";
+import { filterPostsLikesDislikes }  from "../../components/posts/buttons/filterItems"
 
-export const likePost = ({  postId, creatorUserName, title}) => async (dispatch,getState) => {
-  const{token,userId,userName} = getState().authReducer
+export const likePost = ({  postId, creatorUserName, title, likes, dislikes, removeItem}) => async (dispatch,getState) => {
+
+
+
+  console.log(removeItem, dislikes)
+
+  const{ token, userId, userName } = getState().authReducer 
+
+  const { posts, allDislikes } = getState(). postReducer; 
+
+  let keyValue = { likes : likes +1 };
+
+  let keyValue2 = { ...keyValue, dislikes : dislikes -1}
+  
+  dispatch({type: LIKE_LOADING})
+
   try {
-    let response = await axios.post(
-      `http://localhost:5001/posts/${postId}/likes`,
+    const response = await axios.post(
+      `http://localhost:5001/posts/${postId}/likes`,     
       {
         postId,
         userId,
@@ -15,16 +31,21 @@ export const likePost = ({  postId, creatorUserName, title}) => async (dispatch,
         userName
       },
       {
-        headers: { "auth-token": token } 
+        headers: { "auth-token": token }  
       }
     );
     dispatch({
-      type: LIKE_SUCCESS
+      type: LIKE_SUCCESS, 
+      payload: {
+        like : response.data.savedLike,
+        posts: removeItem ? editKeyValue2(posts, postId, keyValue, keyValue2) : editKeyValue2(posts, postId, keyValue), 
+        filteredDislikes: removeItem ? filterPostsLikesDislikes(allDislikes, postId) : allDislikes 
+      } 
     });
-    let message = response.data.message;
-    let messageCode = response.data.code;
-    dispatch(returnMessages(messageCode, message));
-    dispatch(snackOpen());
+    const message = response.data.message;
+    const messageCode = response.data.code;
+   // dispatch(returnMessages(messageCode, message));
+   // dispatch(snackOpen());
     console.log(response.data.message, response.data.likes);
   } catch (err) {
     console.log(err.response) 

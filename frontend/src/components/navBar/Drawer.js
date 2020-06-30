@@ -1,15 +1,20 @@
 import React  from "react";
 import {useDispatch, useSelector} from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
-import { List, ListItem } from "@material-ui/core";
+import { List, ListItem, Box } from "@material-ui/core";
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
+import AdminPanel from "./navLinks/adminBtn/AdminPanel";
 import LoginBtn from "./navLinks/authBtns/LoginBtn";
 import RegisterBtn from "./navLinks/authBtns/RegisterBtn";
 import LogoutBtn from "./navLinks/authBtns/LogoutBtn";
 import DarkModeSwich from "./darkMode/DarkModeSwich";
 import FavoritesBtn from "./navLinks/userBtns/FavoritesBtn";
 import EditProfileBtn from "./navLinks/userBtns/EditProfileBtn";
+import GalleriesBtn from "./navLinks/userBtns/GalleriesBtn";
 import GalleryBtn from "./navLinks/userBtns/GalleryBtn";
+import EngBtn from "./navLinks/translationBtns/EngBtn";
+import EsBtn from "./navLinks/translationBtns/EsBtn";
+import PortBtn from "./navLinks/translationBtns/PortBtn";
 import { closeDrawer } from "../../actions/modalsActions/drawer";
 
 const Drawer = ({ role }) => {
@@ -49,17 +54,31 @@ const Drawer = ({ role }) => {
             item: <DarkModeSwich/>
         },
         {
+            item:  role === "admin" && <AdminPanel/>
+        },
+        {
             item: isAuthenticated && <FavoritesBtn/>
         },
         {
             item: isAuthenticated && <EditProfileBtn/>
         },
         {
-            item: isAuthenticated && <LogoutBtn/>
-        },
-        {
             item: isAuthenticated && <GalleryBtn/>
         },
+        {
+            item: <GalleriesBtn/>
+        },
+        {
+            item: 
+            <Box>
+                <EngBtn/>
+                <EsBtn/>
+                <PortBtn/>
+            </Box>
+        },
+        {
+            item: isAuthenticated && <LogoutBtn/>
+        }
     ]
  
 

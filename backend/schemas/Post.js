@@ -5,17 +5,18 @@ const postSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  email: {
-    type: String,
-    required: true
-  },
   title: {
     type: String,
     required: true
   },
   post: {
-    type: String,
-    required: true
+    type: String
+  },
+  image: {
+    type: String
+  },
+  gif: {
+    type: String
   },
   userId: {
     type: String,
@@ -50,15 +51,5 @@ const postSchema = new mongoose.Schema({
     default: Date.now
   }
 });
-
-/*postSchema.index({
-  title: "text",
-  post: "text"
-},{
-  weights: {
-    title: 10,
-    posts: 5
-  }
-})*/
 
 module.exports = mongoose.model("Post", postSchema);

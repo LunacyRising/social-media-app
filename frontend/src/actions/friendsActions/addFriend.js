@@ -9,7 +9,7 @@ export const addFriends = ({ userName, avatar }) => async (dispatch, getState) =
   dispatch({type: ADDING_FRIEND});
 
   try {
-    let response = await axios.post(
+    const response = await axios.post(
       `http://localhost:5001/addFriend`,
       {
         userName,
@@ -23,8 +23,8 @@ export const addFriends = ({ userName, avatar }) => async (dispatch, getState) =
     dispatch({
       type: FRIEND_ADDED
     });
-    let message = response.data.message;
-    let messageCode = response.data.code;
+    const message = response.data.message;
+    const messageCode = response.data.code;
     dispatch(returnMessages(messageCode, message));
     dispatch(snackOpen())
   } catch (err) {

@@ -14,6 +14,7 @@ const Captcha = () => {
     const test = await response;
     test && captchaDispatch();
   };
+
   return (
     <div className="captcha">
       <Recaptcha

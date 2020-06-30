@@ -50,14 +50,14 @@ export const registerAction = ({
   dispatch({ type: USER_LOADING });
 
   try {
-    let response = await axios.post("http://localhost:5001/register", {
+    const response = await axios.post("http://localhost:5001/register", {
       name,
       lastName,
       userName,
       email,
       password
     });
-    let data = response.data.user.email;
+    const data = response.data.user.email;
     dispatch({
       type: REGISTER_SUCCESS,
       payload: { email: data }

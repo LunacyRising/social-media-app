@@ -1,4 +1,5 @@
 import {
+    LOGIN_SUCCESS,
     FAVORITES_LOADING,
     FAVORITE_ADDED,
     FAVORITE_FAIL,
@@ -9,11 +10,17 @@ import {
   
   const initialState = {
     favoritesLoading : false,
+    favoritesSqueleton: [],
     favorites: []
   };
   
   const favoritesReducer = (state = initialState, action) => {
     switch (action.type) {
+      case LOGIN_SUCCESS: 
+        return {
+          ...state,
+          favoritesSqueleton : action.payload.favorites
+        };
       case FAVORITES_LOADING:
         return {
           ...state,
@@ -22,6 +29,7 @@ import {
       case FAVORITE_ADDED:
         return {
           ...state,
+          favoritesSqueleton: [action.payload, ...state.favoritesSqueleton],
           favoritesLoading: false
         };
       case FAVORITE_FAIL:
@@ -43,7 +51,8 @@ import {
         case FAVORITE_DELETED:
           return {
             ...state,
-            favorites: state.favorites.filter(fav => fav._id !== action.payload)
+            favorites: action.payload.favorites,
+            favoritesSqueleton: action.payload.squeletons,
           }
       default:
         return state;

@@ -10,7 +10,7 @@ import {
   const initialState = {
     openLogin: false,
     openRegister: false,
-    openDrawer: false
+    openDrawer: false 
   };
   
   const modalsReducer = (state = initialState, action) => {

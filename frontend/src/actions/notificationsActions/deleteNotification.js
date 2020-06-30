@@ -3,15 +3,18 @@ import { DELETE_NOTIFICATION, FAIL_DELETE_NOTIFICATION} from "../types";
 import { returnMessages } from "../messagesActions";
 
 
-export const deleteNotification = ({notificationId,notifications}) => async (dispatch, getState) => {
-    const{userId, token} = getState().authReducer;
+export const deleteNotification = ({ notificationId }) => async (dispatch, getState) => {
+
+    const{ token } = getState().authReducer;
+
+    const { notifications } = getState().notificationsReducer;
   try { 
-    let response = await axios.delete(`http://localhost:5001/notifications/${notificationId}`,{
+    const response = await axios.delete(`http://localhost:5001/notifications/${notificationId}`,{
       headers: { "auth-token": token }  
     });
     dispatch({
       type: DELETE_NOTIFICATION,
-      payload: notifications 
+      payload: notifications.filter(noti =>  noti._id !== notificationId) 
     });
   } catch (err) {
     let errorCode = err.response ? err.response.data.code : 500;

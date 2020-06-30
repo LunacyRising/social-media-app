@@ -4,6 +4,8 @@ const User = require("../schemas/user");
 const Post = require("../schemas/post");
 const Comment = require("../schemas/comment");
 const Friend = require("../schemas/friend");
+const Gallery = require("../schemas/Gallery");
+const galleryImg = require("../schemas/GalleryImg");
 const verify = require("./verifyToken");
 const dotenv = require("dotenv");
 const cloudinary = require("cloudinary").v2; 
@@ -18,10 +20,10 @@ cloudinary.config({
 });
 
 // edit profile
-router.post("/user/:userId", verify, async (req, res) => {
+router.post("/user/:userId", verify, async (req, res) => { 
   try { 
     const { userId } = req.params;
-    const {editedUserName, editedEmail} = req.body.formValues
+    const {editedUserName, editedEmail} = req.body.values
 
     // reescribir la info de la base de datos
     const updatedProfile = await User.updateOne(
@@ -42,26 +44,88 @@ router.post("/user/:userId", verify, async (req, res) => {
   }
 });
 
-// test upload image to cloudinary
-router.post("/uploadFileTest/:userId", (req, res, next) => { 
+// change user avatar
+router.post("/uploadFileTest/:userId", async (req, res ) => {  
+
     const file = req.files.userAvatar
 
-    const {userId} = req.params
-    
+    const { userId } = req.params
+
     try{
-      cloudinary.uploader.upload(file.tempFilePath,
+      await cloudinary.uploader.upload(file.tempFilePath,
         {public_id: userId, folder: "Avatars"},
-         async (err, result) => {
-          res.status(200).send({code: 235, result});
-          const updatePostAvatar = await Post.updateMany({userId}, {$set:{avatar: result.secure_url}})
-          const updateUserAvatar = await User.updateOne({_id: userId}, {$set:{avatar: result.secure_url}})
-          const updateCommentAvatar = await Comment.updateMany({userId},{$set:{avatar: result.secure_url}})
+          async (err,result) => {
+          res.status(200).send({code: 235, result});  
+          await Post.updateMany({userId}, {$set:{avatar: result.secure_url}})
+          await User.updateOne({_id: userId}, {$set:{avatar: result.secure_url}})
+          await Comment.updateMany({userId},{$set:{avatar: result.secure_url}})
         }
       );
     }catch(err){
       res.status(400).send({code: 500});   
     }
   })
+
+  // upload image to the gallery
+router.post("/gallery/upload/:userName",  async (req, res ) => { 
+
+  const { userName } = req.params;
+
+  //const description = req.body.galleryImage[0];
+  
+  //const userId = req.body.galleryImage[1];
+
+  const { userId , description} = req.body;
+
+  const file = req.files.galleryImage; 
+
+  //console.log(req.body)
+
+ // console.log(userId, description)
+  
+  try{
+    // check si el usuario ya tiene una galeria
+      const galleryExists = await Gallery.findOne({userId}) 
+      if(!galleryExists)
+      new Gallery({userName, userId}).save();
+
+      await cloudinary.uploader.upload(file.tempFilePath,
+      {use_filename: true, folder: userName},
+       async (err, result) => {
+        const data = new galleryImg({ userName , userId, image : result.secure_url, description});
+        await data.save()  
+        //console.log(data)
+        res.status(200).send({code: 260, data});
+      }
+    );
+  }catch(err){
+    res.status(400).send({code: 500});   
+  }
+})
+
+ // find specific user gallery images
+ router.post("/gallery/:userName", async (req, res ) => {   
+ 
+  const { userName } = req.params;
+
+  const { skip, limit } = req.body;
+  console.log( skip, limit)
+
+  let start = parseInt(skip);
+
+  let maxImages = parseInt(limit); 
+
+  try{
+      const galleryLength = await galleryImg.find({userName: userName});
+      const images = await galleryImg
+      .find({userName: userName})
+      .skip(start)
+      .limit(maxImages)
+      res.status(200).send({images, amountOfImages: galleryImg.length, galleryLength: galleryLength.length})
+  }catch(err){
+    res.status(400).send({code: 500});   
+  }
+})
 
 // addfriend
 router.post("/addFriend", verify, async (req, res) => {

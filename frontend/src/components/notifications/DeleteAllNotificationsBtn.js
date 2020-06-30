@@ -8,19 +8,15 @@ import { makeStyles } from "@material-ui/core/styles";
 const DeleteAllNotificationsBtn = () => {
 
     const useStyles = makeStyles(() => ({
-       btnContainer: {
-            width: "80%",
-            margin: "10px auto",
-            textAlign: "center",
-            fontSize: 10
-        },
        btn: {
-            fontSize: 10
+            fontSize: 10,
+            padding: 10,
+            width: "100%"
         }
       }));
       const classes = useStyles();
 
-      const {btn, btnContainer} = classes;
+      const { btn } = classes;
 
       const { t } = useTranslation();
 
@@ -28,9 +24,7 @@ const DeleteAllNotificationsBtn = () => {
 
     return(
         <> 
-            <Box className={btnContainer}>
-                <Button className={btn} onClick={() => dispatch(deleteAllNotifications())}>{t("DeleteAllNotifications")}</Button>
-            </Box>
+            <Button className={btn} onClick={() => dispatch(deleteAllNotifications())}>{t("DeleteAllNotifications")}</Button>
         </>
     )
 }

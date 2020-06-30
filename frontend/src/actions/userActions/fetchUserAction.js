@@ -16,8 +16,8 @@ export const fetchUserAction = ({ token, userId }) => dispatch => {
           user: res.data.user
         }
       });
-      let message = res.data.message;
-      let messageCode = res.data.code;
+      const message = res.data.message;
+      const messageCode = res.data.code;
       dispatch(returnMessages(messageCode, message));
       console.log(res);
     })

@@ -10,18 +10,17 @@ const PulsingGreenBall = () => {
         badge: {
             position:"absolute",
             top: 15,
-            left: 34,
+            left: 12,
             backgroundColor: '#44b700',
             color: '#44b700',
-            width: 5,
-            height: 5,
+            width: 8,
+            height: 8,
             borderRadius: "50%",
             boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
             "@media(min-width: 769px)" : {
-                top: 13,
-                left: 32,
-                width: 8,
-                height: 8,
+                width: 10,
+                height: 10,
+                left: 15,
               },
             '&::after': {
               position: 'absolute',
@@ -45,16 +44,15 @@ const PulsingGreenBall = () => {
     return (
         <>
             <Tooltip title={t("Online")} placement="top">
-            <Badge
-            className={badge}
-            overlap="circle"
-            anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'right',
-            }}
-            variant="dot"
-            >  
-            </Badge>
+              <Badge
+              className={badge}
+              overlap="circle"
+              anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'right',
+              }}
+              variant="dot"
+              />  
             </Tooltip>
         </>
     );

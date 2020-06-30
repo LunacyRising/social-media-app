@@ -6,44 +6,47 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { openDrawer } from "../../actions/modalsActions/drawer";
+import purple from "../../utils/images/purple.svg";
 import DarkModeSwich from "./darkMode/DarkModeSwich";
 import Notifications from "../notifications/Notifications";
 import LoginBtn from "./navLinks/authBtns/LoginBtn"; 
 import RegisterBtn from "./navLinks/authBtns/RegisterBtn";
-import EsBtn from "./navLinks/translationBtns/EsBtn";
-import EngBtn from "./navLinks/translationBtns/EngBtn";
-import PortBtn from "./navLinks/translationBtns/PortBtn";
 import Drawer from "./Drawer";
 import SearchBar from "./SearchBar";
 
 const Navbar = () => {
   
-  const useStyles = makeStyles((theme) => ({
+  const useStyles = makeStyles(() => ({ 
 
     navBar: {
+      position: "relative",
       background: "#3b4248",
       boxShadow: "0 3px 5px 2px #8b70d2",
       display: "flex",
       flexDirection: "row", 
       height: "10vh",
-      justifyContent: "space-around",
-      alignItems: "center"
+      justifyContent: "space-between",
+      alignItems: "center",
+      "@media(min-width: 768px)" : {
+        justifyContent: "space-around"
+     }
     },
     links: {
       color: "white",
       fontWeight: "bold",
       textTransform: "uppercase",
       transition: "0.1s ease all",
-      paddingBottom: 5,
       "&:hover": {
         textDecoration: "none",
         color: "#8b70d2",
       }
     },
     homeLink: {
-      marginTop: 5,
-      animation: "aside 1.3s ease-in",
-      fontFamily: theme.typography.fontFamily 
+      animation: "aside 1.3s ease-out",
+      cursor: "pointer",
+      width: 45,
+      height: 45,
+      marginLeft: 15
     },
     btn: {
       display:"flex",
@@ -52,7 +55,7 @@ const Navbar = () => {
       fontWeight: "bold",
       fontSize: 16,
       textTransform: "uppercase",
-      transition: ".2s ease all",
+      transition: ".2s ease-out",
       marginRight: 10,
       "&:hover": {
         textDecoration: "none",
@@ -63,13 +66,13 @@ const Navbar = () => {
     authBtnsContainer: {
       display: "flex",
       alignItems: "center",
-      animation: "aside2 1.3s ease-in",
+      animation: "aside2 1.3s ease-out",
       "@media(max-width: 768px)" : {
         display: "none"
      }
     },
     hamburger: {
-      animation: "aside2 1.3s ease-in",
+      animation: "aside2 1.3s ease-out",
       "@media(min-width: 769px)" : {
        display: "none"
     }
@@ -135,14 +138,9 @@ const Navbar = () => {
     <>
       <nav>
         <AppBar className={navBar} position="fixed">
-            <Link className={`${links} ${homeLink}`} to="/"> 
-            {t("Home")} 
-            </Link>
-            <Box>
-              <EsBtn changeLang={changeLang}/>
-              <EngBtn changeLang={changeLang}/>
-              <PortBtn changeLang={changeLang}/>
-            </Box>
+            <IconButton className={`${links} ${homeLink}`} component={Link} to="/">
+             <img src={purple} width={40} height={40} alt="logo"/>
+            </IconButton>
             <SearchBar/>
             <Box>
             {!isAuthenticated && auth}
@@ -152,13 +150,13 @@ const Navbar = () => {
                   <MenuIcon/>
                 </IconButton>
                 :
-                <IconButton onClick={() => drawerDispatch()}>
+                <IconButton style={{width: 40, height: 40}} onClick={() => drawerDispatch()}> 
                   <Avatar src={avatar} alt="profile pic"/>
                 </IconButton>}
                 {isAuthenticated && <Notifications/>}
               </Box>
               {isAuthenticated && loggedInBtns}
-              {<Drawer role={role}/>}
+              <Drawer role={role}/>
             </Box>
         </AppBar>
       </nav>

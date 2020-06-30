@@ -11,7 +11,7 @@ const DeletePostDialog = ({ open, handleClose, postId, title}) => {
 
     const dispatch = useDispatch()
 
-    const test = () => {
+    const deletePostAction = () => {
         dispatch(deletePost({postId}));
         handleClose()
     }
@@ -24,7 +24,7 @@ const DeletePostDialog = ({ open, handleClose, postId, title}) => {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle id="alert-dialog-title">{t("ConfirmationDeletePost")}</DialogTitle>
+                <DialogTitle >{t("ConfirmationDeletePost")}</DialogTitle>
                 <DialogContent> 
                 <DialogContentText id="alert-dialog-description">
                     {t("DeleteText")} {title}... ?
@@ -34,7 +34,7 @@ const DeletePostDialog = ({ open, handleClose, postId, title}) => {
                 <Button onClick={handleClose} color="primary">
                     {t("Cancel")}
                 </Button>
-                <Button onClick={() => test()} color="primary" autoFocus>
+                <Button onClick={() => deletePostAction()} color="primary" autoFocus>
                     {t("Accept")}
                 </Button>
                 </DialogActions>

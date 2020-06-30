@@ -19,6 +19,26 @@ a:hover {
   text-decoration: none;
 }
 
+/*testeando estilo para el quill*/
+ 
+.ql-editor:focus {
+  border: solid 2px;
+  border-color: #8b70d2;
+}
+.quill > .ql-container > .ql-editor.ql-blank::before{
+  font-family: "Saira";
+  font-size: 16px;
+  color: #bfbaba;
+}
+ .ql-editor {
+  overflow-y: scroll;
+  resize: vertical;
+  border: solid 1px grey;
+  border-radius: 5px;
+};
+
+
+/*********************************************/
 .captcha {
   padding: 20px 20px
 }
@@ -120,6 +140,17 @@ a:hover {
   }
 }
 
+@keyframes expand {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 @keyframes ripple  {
   0% {
     transform: scale(0.8);
@@ -199,21 +230,6 @@ a:hover {
   opacity: 1;
 }
 .updateProfileFields-exit-active {
-  transform: translateY(8rem) rotateZ(20deg);
-  opacity: 0;
-  transition: 0.8s all;
-};
-
-.notification-enter {
-  opacity: 0;
-}
-.notification-enter-active {
-  opacity: 1;
-}
-.notification-exit {
-  opacity: 1;
-}
-.notification-exit-active {
   transform: translateY(8rem) rotateZ(20deg);
   opacity: 0;
   transition: 0.8s all;

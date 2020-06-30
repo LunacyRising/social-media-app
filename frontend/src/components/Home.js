@@ -2,22 +2,21 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
-import SortPosts from "./posts/SortPosts";
+import { CircularProgress } from "@material-ui/core";
 import Login from "./auth/Login";
 import Register from "./auth/Register";
 import Posts from "./posts/Posts";
 import PostTextArea from "./posts/PostTextArea";
+import NoPostFound from "./posts/NoPostFound";
 import SnackbarMessages from "./SnackbarMessages";
 //import FriendMenu from "./friends/FriendMenu";
-import LoadMoreBtn from "./posts/buttons/LoadMoreBtn";
-import { fetchPosts } from "../actions/postsActions/fetchPostsAction";
+import { fetchInitialPosts } from "../actions/postsActions/fetchInitialPosts";
 
 const Home = () => {
 
   const useStyles = makeStyles(() => ({
 
     main: {
-      position: "relative",
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
@@ -34,17 +33,21 @@ const Home = () => {
     postsContainer: {
       width: "100%"
     },
-    spinner: { 
+    noResults: { 
       textAlign: "center"
+    },
+    spinner: {
+      position: "absolute",
+      left: "49%"
     }
   }));
   const classes = useStyles();
 
-  const { main, postsContainer } = classes;
+  const { main, postsContainer, noResults, spinner } = classes;
 
   const { messageCode } = useSelector(state => state.messagesReducer);
 
-  const { amountOfPosts, skip } = useSelector(state => state.postReducer);
+  const { amountOfPosts, postsLoading } = useSelector(state => state.postReducer);
 
   const history = useHistory();
 
@@ -52,34 +55,23 @@ const Home = () => {
 
   const dispatch = useDispatch()
 
-  const getPosts = () => {
-    amountOfPosts < 2 &&
-    dispatch(fetchPosts()) 
-  }
-
+ 
   useEffect(() => {
-    getPosts();
-  }, []);
-
-
-  /*useEffect(() => {
-    dispatch(fetchFriends())
-  },[])*/
-
+    dispatch(fetchInitialPosts()); 
+  },[]);
   
-
+  
   return (
     <>
       <main className={main}>
           <PostTextArea />
             <section className={postsContainer}>
-              <SortPosts/>
-              <Posts/>
+              {messageCode === 300 && !postsLoading? <NoPostFound/> : <Posts/>}
+              {postsLoading && <CircularProgress className={spinner} size={50}/>}
               <Login/>
               <Register/>
             </section>
-          {/* isAuthenticated && <FriendMenu/>*/}
-          { amountOfPosts >= skip && <LoadMoreBtn/>}
+          {/* isAuthenticated && <FriendMenu/>*/} 
       </main>
       {<SnackbarMessages />}
       {messageCode === 500 && history.push("/error")}
