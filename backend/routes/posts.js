@@ -16,55 +16,41 @@ cloudinary.config({
 });
 
 
+const uploadMedia = (media, options) => {
+  return new Promise((resolve, reject) => {
+   cloudinary.uploader.upload(media, options, (err, result) => {
+     if(result) {
+       resolve(result)
+     }else{
+       reject(err)
+     }
+   })
+ })
+}
+
+
 
 //CREATE POST
-router.post("/createPost", verify, async (req, res) => {
+router.post("/createPost", verify, async (req, res) => { 
+ 
+  const { userId } = req.body; 
+  const image = req.files !== null && req.files.media;
 
-  const { userName, post, avatar, userId, title, creatorAmountOfPosts, gif } = req.body; 
-  
-  const image = req.files !== null && req.files.image;
+  console.log(req.body)
 
-  if(image){
-      cloudinary.uploader.upload(image.tempFilePath,
-      {public_id: image.name, folder: "Posts Images"},
-        async (err,result) => { 
-        const data = new Post({
-          userName,
-          title,
-          post,
-          avatar,
-          userId,
-          creatorAmountOfPosts,
-          image: result.secure_url
-        })
-        try { 
-          const savedPost = await data.save();
-          await User.findOneAndUpdate({_id: userId},{$inc: { amountOfPosts : 1 }});
-          res.status(201).send({ code: 234, message: "Post Created!", savedPost });
-        } catch (err) {
-          res.status(400).send({ code: 500 });
-        } 
-      }  
-    );
-  } else {
-    const data = new Post({ 
-      userName,
-      title,
-      post,
-      gif,
-      avatar,
-      userId,
-      creatorAmountOfPosts
-    });
-    try { 
-      const savedPost = await data.save();
-      await User.findOneAndUpdate({_id: userId},{$inc: { amountOfPosts : 1 }});
-      res.status(201).send({ code: 234, message: "Post Created!", savedPost });
-    } catch (err) {
+  const cloudinaryResponse =  image && await uploadMedia(image.tempFilePath, {public_id: image.name, folder: "Post Images"}); 
+  const postImage =  cloudinaryResponse && cloudinaryResponse.secure_url;
+  const newPostContent = image ? {...req.body, media: postImage} : {...req.body}; 
+  console.log(newPostContent)
+
+  try{
+    const newPost = await new Post(newPostContent).save();
+    await User.findOneAndUpdate({_id: userId},{$inc: { amountOfPosts : 1 }});
+    res.status(201).send({ code: 234, message: "Post Created!", newPost });
+  }catch(err){
+      console.log(err)
       res.status(400).send({ code: 500 });
-    } 
-  }
-  
+    }
 });
 
 
@@ -319,14 +305,14 @@ router.post("/posts/imagePreview", verify, async (req, res) => {
 
   const { image } = req.files;
 
-  //console.log(req.files)
- 
-    cloudinary.uploader.upload(image.tempFilePath,
-    { public_id: image.name, folder: "Posts Images"}, (err,result) => {
-      res.status(200).send({preview: result.secure_url});  
-    }
-  );
- 
+  try{
+    const cloudinaryResponse = await uploadMedia(image.tempFilePath,{public_id: image.name, folder: "Posts Images"});
+    const previewImagePost = cloudinaryResponse.secure_url;
+    res.status(200).send({preview: previewImagePost});  
+  }catch(err){
+    console.log(err)
+    res.status(400).send({code:500})
+  }
 })
 
 module.exports = router;
