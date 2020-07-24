@@ -60,7 +60,8 @@ const PostTextArea = () => {
     },
     titleArea: {
       width: "100%",
-      backgroundColor: darkMode ? "#424242" : "white" 
+      backgroundColor: darkMode ? "#424242" : "white",
+      borderRadius: 4
     }
   }));
   const classes = useStyles();
@@ -120,9 +121,9 @@ const PostTextArea = () => {
             value={title}
             onChange={handleChange} 
           />
-          <Box className={textFieldAndPreview}>
+          
             <QuillEditor referencia={reactQuillRef} handleChangePost={handleChangePost} value={post}/>  
-          </Box>
+          
           {previewLoading && <LinearProgress style={{width: "100%"}}/>}
           {gifstMenuOpen && <GifsMenu setGifstMenuOpen={setGifstMenuOpen} values={values} setValues={setValues} referencia={reactQuillRef}/>}
           <Box className={mediaBtnsContainer}>
