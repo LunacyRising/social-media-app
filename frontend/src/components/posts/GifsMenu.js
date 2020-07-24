@@ -55,21 +55,24 @@ const GifsMenu = ({ setGifstMenuOpen, values, setValues, referencia }) => {
       maxHeight: 350,
       overflow: "hidden auto"
     },
-    singleGif: {
-      width: 75,
-      height: 75,
+    gifBox: {
+      width: "28%",
       margin: 5,
       backgroundColor: colorsArr[Math.floor(Math.random() * colorsArr.length)],
       cursor: "pointer"
+    },  
+    singleGif: {
+      width: "100%",
+      height: "100%"
     },
-    spinner: {
+    alignCenter: {
         margin: "auto"
     }
   })); 
 
   const classes = useStyles();
 
-  const { contentWrapper, menuContainer, exitAndTextField, exitBtn, field, gifsContainer, singleGif, spinner } = classes;
+  const { contentWrapper, menuContainer, exitAndTextField, exitBtn, field, gifsContainer, gifBox, singleGif, alignCenter } = classes;
 
   const { gifs, maxResults , gifsLoading, gifOffset, gifQuery } = useSelector(state => state.gifsReducer);
 
@@ -86,6 +89,7 @@ const GifsMenu = ({ setGifstMenuOpen, values, setValues, referencia }) => {
   },[])
 
   const targetOneGif = (title, gif) => {
+    console.log(gif)
     const quill = referencia.current.getEditor();
     quill.focus();
     let range = quill.getSelection();
@@ -130,11 +134,13 @@ const GifsMenu = ({ setGifstMenuOpen, values, setValues, referencia }) => {
                   />
                 </Box>
                 <Box className={gifsContainer}>
-                      { maxResults === 0 ? <p style={{margin:"auto"}}>no se encontro nada</p> : 
+                      { maxResults === 0 ? <p className={alignCenter}>no se encontro nada</p> : 
                       gifs && gifs.map((gif, index) => (
-                          <img key={index} ref={ gifs.length === index + 1 ? lastElement : null} className={singleGif} loading="lazy" onClick={ () => targetOneGif(gif.title, gif.images.downsized_small.mp4)} src={gif.images.downsized_large.url} alt={gif.userName}/>
+                      <Box className={gifBox}>
+                        <img key={index} ref={ gifs.length === index + 1 ? lastElement : null} className={singleGif} loading="lazy" onClick={ () => targetOneGif(gif.title, gif.images.downsized_large.url)} src={gif.images.preview_gif.url} alt={gif.userName}/>
+                      </Box>
                       ))}
-                  {gifsLoading && <img src={dots} alt="loading"/>}
+                  {gifsLoading && <img className={alignCenter} src={dots} alt="loading"/>}
                 </Box>
               </Box>
           </Card>   
