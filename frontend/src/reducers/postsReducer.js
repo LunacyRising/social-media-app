@@ -1,5 +1,4 @@
 import {
-  LOADING,
   FETCH_INITIAL_POSTS_SUCCESS,
   FETCH_POSTS_SUCCESS,
   FETCH_POSTS_FAIL,
@@ -20,10 +19,8 @@ import {
   SUCCESS_COMMENT,
   FETCH_POST_SUCCESS,
   FETCH_POST_FAIL,
-  FETCH_OLDEST_POSTS,
-  FETCH_POST_MOST_LIKES,
   UPDATE_PROFILE_SUCCESS,
-  UPLOAD_IMAGE_SUCESS,
+  CHANGE_AVATAR_SUCESS,
   LOGIN_SUCCESS,
   LOGOUT_SUCCESS,
   QUERY_FORM,
@@ -143,7 +140,7 @@ const postsReducer = (state = initialState, action) => {
           allLikes: action.payload.filteredLikes, 
           dislikeLoading: false
         }
-    case UPLOAD_IMAGE_SUCESS:
+    case CHANGE_AVATAR_SUCESS:
       return {
         ...state,
         posts: action.payload.posts

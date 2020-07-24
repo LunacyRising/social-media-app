@@ -22,11 +22,7 @@ export const fetchCommentsByPost = ({ postId, skip, limit }) => async (dispatch,
     });
   } catch (err) {
     let errorCode = err.response ? err.response.data.code : 500;
-
-    let error = err.response && err.response.data.error;
-
-    dispatch(returnMessages(errorCode, error));
-
+    dispatch(returnMessages(errorCode));
     dispatch({
       type: FETCH_POSTS_FAIL
     });

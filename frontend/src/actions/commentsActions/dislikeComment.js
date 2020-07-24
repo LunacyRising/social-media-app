@@ -1,10 +1,10 @@
 import axios from "axios";
 import { returnMessages, snackOpen } from "../messagesActions";
 import { DISLIKE_COMMENT_SUCCESS, DISLIKE_COMMENT_FAILED } from "../types";
-import { editKeyValue2 } from "../editKeyValue";
-import { filterCommentsLikesDislikes }  from "../../components/posts/buttons/filterItems" 
+import { editKeyValue } from "../../helperFunctions/editKeyValue";
+import { removeItem } from "../../helperFunctions/removeItem";
 
-export const dislikeComment = ({ replyComponent, postId, commentId, removeItem, likes, dislikes }) => async (dispatch,getState) => { 
+export const dislikeComment = ({ replyComponent, postId, commentId, deleteItem, likes, dislikes }) => async (dispatch,getState) => { 
 
   const{ token, userId } = getState().authReducer;
 
@@ -16,7 +16,7 @@ export const dislikeComment = ({ replyComponent, postId, commentId, removeItem, 
 
   let keyValue2 = { ...keyValue, likes : likes -1}
 
-  console.log(`id de comentario desde el action: ${commentId} removeItem: ${removeItem}`)
+  console.log(`id de comentario desde el action: ${commentId} removeItem: ${deleteItem}`)
 
   try {
     const response = await axios.post(
@@ -31,19 +31,17 @@ export const dislikeComment = ({ replyComponent, postId, commentId, removeItem, 
       type: DISLIKE_COMMENT_SUCCESS, 
       payload: {
         dislike: response.data.savedDislike, 
-        filteredLikes: removeItem  ? filterCommentsLikesDislikes(allLikes, commentId) : allLikes,  
-        comments: removeItem ? editKeyValue2(comments, commentId, keyValue, keyValue2) : editKeyValue2(comments, commentId, keyValue),
-        replies : removeItem && replyComponent ?  editKeyValue2(replies, commentId, keyValue, keyValue2) : editKeyValue2(replies, commentId, keyValue), 
+        filteredLikes: deleteItem  ? removeItem(allLikes, commentId, "commentId") : allLikes,    
+        comments: deleteItem ? editKeyValue(comments, commentId, "_id", keyValue, keyValue2) : editKeyValue(comments, commentId, "_id", keyValue),
+        replies : deleteItem && replyComponent ?  editKeyValue(replies, commentId, "_id", keyValue, keyValue2) : editKeyValue(replies, commentId, "_id", keyValue), 
       }
     });
-    const message = response.data.message;
     const messageCode = response.data.code;
-    dispatch(returnMessages(messageCode, message));
+    dispatch(returnMessages(messageCode));
     dispatch(snackOpen());
   } catch (err) {
     let errorCode = err.response ? err.response.data.code : 500;
-    let error = err.response && err.response.data.error;
-    dispatch(returnMessages(errorCode, error));
+    dispatch(returnMessages(errorCode));
     dispatch({
       type: DISLIKE_COMMENT_FAILED
     });

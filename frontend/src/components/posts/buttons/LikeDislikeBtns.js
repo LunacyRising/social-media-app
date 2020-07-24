@@ -50,9 +50,9 @@ const LikeDislikeBtns = (props) => {
   const { allLikes, allDislikes } = useSelector(state => state.postReducer);
 
   // el estado depende desde donde se esta usando el boton, post o comentario
-  const initialState =  {  ...props }
+  const initialState =  { ...props }
 
-  const { values, setValues, itemExists, itemExists2,  itemDoesntExist, itemDoesntExistButItemDoes, classColor, classColor2, likesState, dislikesState, likeColor, dislikeColor } = useLikeDislike(initialState); 
+  const { values, setValues, itemExists, itemDoesntExist, itemDoesntExistButItemDoes, classColor, likesState, dislikesState, likeColor, dislikeColor } = useLikeDislike(initialState); 
   //console.log(likeColor)
   
   
@@ -76,13 +76,13 @@ const LikeDislikeBtns = (props) => {
   //aplica color al icono y al contador de likes si el usuario da like
   // si el usuario da usa el like desde el boton del post cambia el color del like del post, si lo hace desde el comentario cambia el de comentario
  
-  const testForPostLikes = classColor(allLikes, postId);
+  const testForPostLikes = classColor(allLikes, postId, "postId");
 
-  const testForCommentLikes = classColor2(allLikes, commentId);
+  const testForCommentLikes = classColor(allLikes, commentId, "commentId"); 
   
-  const testForPostDislikes = classColor2(allDislikes, postId);
+  const testForPostDislikes = classColor(allDislikes, postId, "postId");
 
-  const testForCommentDislikes = classColor2(allDislikes, commentId)
+  const testForCommentDislikes = classColor(allDislikes, commentId, "commentId")
 
   const finalTest = !commentBtn ? testForPostLikes : testForCommentLikes;
 
@@ -97,14 +97,12 @@ const LikeDislikeBtns = (props) => {
 
   const testLike = () => {
     // checkea si ya hay un like, like de post o de comentario
-    const likeExiste = commentBtn === undefined ? itemExists(allLikes, postId) : itemExists2(allLikes, commentId); 
+    const likeExiste = commentBtn === undefined ? itemExists(allLikes, postId, "postId") : itemExists(allLikes, commentId, "commentId");
     // checkea si el usuario ya dio un dislike, para asi luego poder determinar si hay que editar el contador del post o no
-    const dislikeExiste = commentBtn === undefined ? itemExists(allDislikes, postId): itemExists2(allDislikes, commentId)
+    const dislikeExiste = commentBtn === undefined ? itemExists(allDislikes, postId, "postId"): itemExists(allDislikes, commentId, "commentId")
     // si no hay like o dislike del usuario, solo incrementa el contador de likes del post
     if(!likeExiste && !dislikeExiste ) { 
      itemDoesntExist(likeAction, testLikeState);
-     console.log(commentBtn)
-     //console.log(` likes desde likebtn:${likes}`)
      // si no hay like pero hay un dislike, primero va a borrar el dislike y va a editar el contador de likes y dislikes del post  
     }else if ( !likeExiste && dislikeExiste ) {
      itemDoesntExistButItemDoes(likeAction, testLikeState)
@@ -112,9 +110,11 @@ const LikeDislikeBtns = (props) => {
   }
 
   const testDislike = () => {
-    const dislikeExiste = !commentBtn ? itemExists(allDislikes, postId) : itemExists2(allDislikes, commentId);  
+    //const dislikeExiste = !commentBtn ? itemExists(allDislikes, postId) : itemExists2(allDislikes, commentId);  
+    const dislikeExiste = !commentBtn ? itemExists(allDislikes, postId, "postId") : itemExists(allDislikes, commentId, "commentId");
     
-    const likeExiste = !commentBtn ? itemExists(allLikes, postId): itemExists2(allLikes, commentId); 
+    //const likeExiste = !commentBtn ? itemExists(allLikes, postId): itemExists2(allLikes, commentId); 
+    const likeExiste = !commentBtn ? itemExists(allLikes, postId, "postId"): itemExists(allLikes, commentId, "commentId"); 
    
     if(!dislikeExiste && !likeExiste ) {
       itemDoesntExist(dislikeAction, testDislikeState)

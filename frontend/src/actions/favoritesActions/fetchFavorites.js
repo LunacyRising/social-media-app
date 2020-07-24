@@ -40,8 +40,7 @@ export const fetchFavorites = () => async (dispatch, getState) => {
     })
   } catch (err) {
     let errorCode = err.response ? err.response.data.code : 500;
-    let error = err.response && err.response.data.error;
-    dispatch(returnMessages(errorCode, error));
+    dispatch(returnMessages(errorCode));
     dispatch({
       type: GET_FAVORITES_FAIL
     });

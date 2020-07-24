@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
 
-const NoPostFound = () => {
+const NoResults = () => {
 
   const useStyles = makeStyles(() => ({
 
@@ -25,4 +25,4 @@ const NoPostFound = () => {
   );
 };
 
-export default NoPostFound;
+export default NoResults;

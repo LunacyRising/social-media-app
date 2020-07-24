@@ -1,8 +1,6 @@
 import {
-  LOADING,
   SUCCESS_COMMENT,
   REPLY_SUCCESS,
-  REPLY_FAILED,
   FETCH_REPLY_SUCCESS,
   FAIL_COMMENT,
   FETCH_COMMENTS,
@@ -10,9 +8,8 @@ import {
   FAIL_FETCH_COMMENTS,
   COMMENTS_LOADING,
   LIKE_COMMENT_SUCCESSS,
-  LIKE_COMMENT_FAILED,
   DISLIKE_COMMENT_SUCCESS,
-  DISLIKE_COMMENT_FAILED,
+  CHANGE_AVATAR_SUCESS,
   UPDATE_PROFILE_SUCCESS
 } from "../actions/types"; 
  
@@ -29,11 +26,6 @@ const initialState = {
 
 const commentsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case LOADING:
-      return {
-        ...state,
-        loading: true
-      };
     case COMMENTS_LOADING: 
       return {
         ...state,
@@ -88,6 +80,12 @@ const commentsReducer = (state = initialState, action) => {
         replies: action.payload.replies
       }
     case DISLIKE_COMMENT_SUCCESS:  
+      return {
+        ...state,
+        comments: action.payload.comments,
+        replies: action.payload.replies
+      }
+    case CHANGE_AVATAR_SUCESS: 
       return {
         ...state,
         comments: action.payload.comments,

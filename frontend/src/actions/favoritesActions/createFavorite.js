@@ -21,14 +21,12 @@ export const createFavorite = (postId) => async (dispatch, getState) => {
       payload: response.data.favorite
     });
     console.log(response)
-    const message = response.data.message;
     const messageCode = response.data.code;
-    dispatch(returnMessages(messageCode, message));
+    dispatch(returnMessages(messageCode));
     dispatch(snackOpen())
   } catch (err) {
     let errorCode = err.response ? err.response.data.code : 500;
-    let error = err.response && err.response.data.error;
-    dispatch(returnMessages(errorCode, error));
+    dispatch(returnMessages(errorCode));
     dispatch({
       type: FAVORITE_FAIL
     });

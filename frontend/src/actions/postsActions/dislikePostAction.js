@@ -1,13 +1,13 @@
 import axios from "axios";
 import { returnMessages, snackOpen } from "../messagesActions";
-import { editKeyValue2 } from "../editKeyValue";
-import { filterPostsLikesDislikes }  from "../../components/posts/buttons/filterItems"
+import { editKeyValue } from "../../helperFunctions/editKeyValue";
+import { removePostsLikesDislikes } from "../../helperFunctions/removePostsLikesDislikes";
 
 import { DISLIKE_SUCCESS, DISLIKE_FAIL, DISLIKE_LOADING } from "../types";
 
-export const dislikePost = ({ postId, dislikes, likes, removeItem }) => async (dispatch, getState) => { 
+export const dislikePost = ({ postId, dislikes, likes, deleteItem }) => async (dispatch, getState) => { 
 
-  console.log(removeItem, likes, dislikes )
+  console.log(deleteItem, likes, dislikes ) 
 
   let keyValue = { dislikes : dislikes +1 };
 
@@ -16,11 +16,7 @@ export const dislikePost = ({ postId, dislikes, likes, removeItem }) => async (d
   const { userId, token } = getState().authReducer;
 
   const { posts, allLikes } = getState().postReducer;
-
-  const testingFilter = filterPostsLikesDislikes(allLikes, postId);
-
-  console.log(testingFilter)
-  
+ 
   dispatch({type: DISLIKE_LOADING})
 
   try {
@@ -35,22 +31,20 @@ export const dislikePost = ({ postId, dislikes, likes, removeItem }) => async (d
       }
     );
     dispatch({
-      type: DISLIKE_SUCCESS,
+      type: DISLIKE_SUCCESS,  
       payload: {
         savedDislike: response.data.savedDislike,
-        posts: removeItem ? editKeyValue2(posts, postId, keyValue, keyValue2) : editKeyValue2(posts, postId, keyValue),  
-        filteredLikes: removeItem ? filterPostsLikesDislikes(allLikes, postId) : allLikes   
+        posts: deleteItem ? editKeyValue(posts, postId, "_id", keyValue, keyValue2) : editKeyValue(posts, postId,"_id", keyValue),  
+        filteredLikes: deleteItem ? removePostsLikesDislikes(allLikes, postId) : allLikes    
       } 
     });
-    const message = response.data.message;
     const messageCode = response.data.code;
-    dispatch(returnMessages(messageCode, message));
+    dispatch(returnMessages(messageCode));
     dispatch(snackOpen());
 
   } catch (err) {
     let errorCode = err.response ? err.response.data.code : 500;
-    let error = err.response && err.response.data.error;
-    dispatch(returnMessages(errorCode, error));
+    dispatch(returnMessages(errorCode));
     dispatch({
       type: DISLIKE_FAIL
     });

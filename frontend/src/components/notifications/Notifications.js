@@ -8,16 +8,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const Notifications = () => {
   const useStyles = makeStyles(() => ({
-    menu: {
-        //marginTop: 10,
-        //padding: "0px"
-    },
-    notiContainer: {
-     // position: "absolute",
-     // right: 0,
-      transition: "ease"
-
-    },
+ 
     notiIcon: {
         color: "white",  
     },
@@ -29,15 +20,13 @@ const Notifications = () => {
   }));
   const classes = useStyles();
 
-  const { notiContainer, notiIcon, btn} = classes;
+  const { notiIcon, btn} = classes;
 
   const { notifications} = useSelector(state => state.notificationsReducer);
 
   const dispatch = useDispatch();
 
   const [anchorEl, setAnchorEl] = useState(null);
-
-  //const [open, setOpen] = useState(false);
   
   const handleClick = event => {
     setAnchorEl(event.currentTarget);
@@ -59,7 +48,7 @@ const Notifications = () => {
             </Badge>
         </IconButton> 
       <Menu
-          className={notiContainer}
+          PaperProps={{ style: { width: 220}}}
           getContentAnchorEl={null}
           MenuListProps={{ style: { padding: 4 } }}
           anchorEl={anchorEl}

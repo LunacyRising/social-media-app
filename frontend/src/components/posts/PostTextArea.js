@@ -20,9 +20,6 @@ const PostTextArea = () => {
 
   const { darkMode } = useSelector(state => state.darkModeReducer);
 
-  
-  let [ borderFocus ,setBorderFocus ] = useState(false)
-
   const useStyles = makeStyles((theme) => ({
     TextAreaContainer: {
       position: "relative",
@@ -50,7 +47,10 @@ const PostTextArea = () => {
       margin: "35px auto",
       color: !darkMode ? theme.palette.primary.main : "white",
       border: !darkMode ? `solid 2px ${theme.palette.primary.main}` : "solid 2px white",
-      backgroundColor:  theme.palette.background.paper
+      backgroundColor:  theme.palette.background.paper,
+      '&:hover': {
+        backgroundColor: !darkMode ? "#f8eeff" : "#191919",
+      }
     },
     mediaBtnsContainer: {
       display: "flex",
@@ -58,20 +58,14 @@ const PostTextArea = () => {
       alignItems: "center",
       marginTop: 40
     },
-    textArea: {
+    titleArea: {
       width: "100%",
       backgroundColor: darkMode ? "#424242" : "white" 
-    },
-    quillWrapper: {
-      backgroundColor: theme.palette.background.paper,
-      marginTop: 20,
-      width: "100%",
-      minHeight: 150
     }
   }));
   const classes = useStyles();
 
-  const { TextAreaContainer, textFieldAndPreview, submitBtn, mediaBtnsContainer, textArea, quillWrapper } = classes; 
+  const { TextAreaContainer, textFieldAndPreview, submitBtn, mediaBtnsContainer, titleArea } = classes; 
 
   const { t } = useTranslation();
 
@@ -88,7 +82,7 @@ const PostTextArea = () => {
 
   const { values, setValues, handleChange } = useCustomForm(formDefaultValues);
 
-  const { title, post, image, gif } = values;
+  const { title, post, media, mediaAlt } = values;
 
   const [ gifstMenuOpen, setGifstMenuOpen ] = useState(false)
 
@@ -100,13 +94,9 @@ const PostTextArea = () => {
     data.append("creatorAmountOfPosts", creatorAmountOfPosts);
     data.append("userId", userId);
     data.append("userName", userName);
-    image && data.append("image", image);
-    gif && data.append("gif", gif);
+    media && data.append("media", media);
+    mediaAlt && data.append("mediaAlt", mediaAlt);
     dispatch(createPost(data)); 
-    /*setValues({
-      title: "",
-      post: ""
-    })*/
   }
 
   const handleChangePost = (e) => {
@@ -121,29 +111,29 @@ const PostTextArea = () => {
 
   return (
     <>
-      <div className={TextAreaContainer}>
-      <TextField
-          className={textArea}
-          placeholder={t("Title")}
-          variant="outlined"
-          name="title"
-          value={title}
-          onChange={handleChange}
-        />
-        <Box className={textFieldAndPreview}>
-          <QuillEditor referencia={reactQuillRef} handleChangePost={handleChangePost} value={post} quill={quillWrapper}/>  
-        </Box>
-        {previewLoading && <LinearProgress style={{width: "100%"}}/>}
-        {gifstMenuOpen && <GifsMenu setGifstMenuOpen={setGifstMenuOpen} values={values} setValues={setValues} referencia={reactQuillRef}/>}
-        <div className={mediaBtnsContainer}>
-          <UploadImageBtn values={values} setValues={setValues} referencia={reactQuillRef} setPreviewLoading={setPreviewLoading}/>
-          <SearchGif setGifstMenuOpen={setGifstMenuOpen}/>
-          <SearchEmoji/>
-        </div>
-        <Button color="primary" className={submitBtn} onClick={() => submit()}>
-          {t("PostIt")}
-        </Button>
-      </div>
+      <Box className={TextAreaContainer}>
+        <TextField
+            className={titleArea}
+            placeholder={t("Title")}
+            variant="outlined"
+            name="title"
+            value={title}
+            onChange={handleChange} 
+          />
+          <Box className={textFieldAndPreview}>
+            <QuillEditor referencia={reactQuillRef} handleChangePost={handleChangePost} value={post}/>  
+          </Box>
+          {previewLoading && <LinearProgress style={{width: "100%"}}/>}
+          {gifstMenuOpen && <GifsMenu setGifstMenuOpen={setGifstMenuOpen} values={values} setValues={setValues} referencia={reactQuillRef}/>}
+          <Box className={mediaBtnsContainer}>
+            <UploadImageBtn values={values} setValues={setValues} referencia={reactQuillRef} setPreviewLoading={setPreviewLoading}/>
+            <SearchGif setGifstMenuOpen={setGifstMenuOpen}/>
+            <SearchEmoji/>
+          </Box>
+          <Button color="primary" className={submitBtn} onClick={() => submit()}>
+            {t("PostIt")}
+          </Button>
+      </Box>
     </>
   );
   

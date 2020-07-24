@@ -29,8 +29,8 @@ const PostCard = ({
   creatorAmountOfPosts, 
   title,
   post,
-  image,
-  gif,
+  media,
+  mediaAlt,
   date,
   amountOfComments, 
   likes,
@@ -137,7 +137,7 @@ const PostCard = ({
       width: "80%",
       marginTop: 10
     },  
-    media: {
+    mediaStyle: {
       width: "100%",
       height: "100%",
       borderRadius: 5,
@@ -199,7 +199,7 @@ const PostCard = ({
   }));
   const classes = useStyles();
   
-  const {card, wrapper, rankingAndAvatar, leftAndRightWrapper, textAndMedia, userAvatarAndGreenBall, userAvatar, postInfo, mediaContainer, media, postTitle, postText, creatorAndDate, creator, createdAt, btns, editAndDeletePostHidden, editAndDeletePostVisible, likeDislikeBtns,restOfBtns, friendBtnContainer } = classes;
+  const {card, wrapper, rankingAndAvatar, leftAndRightWrapper, textAndMedia, userAvatarAndGreenBall, userAvatar, postInfo, mediaContainer, mediaStyle, postTitle, postText, creatorAndDate, creator, createdAt, btns, editAndDeletePostHidden, editAndDeletePostVisible, likeDislikeBtns,restOfBtns, friendBtnContainer } = classes;
 
   dayjs.extend(relativeTime); 
 
@@ -265,8 +265,7 @@ const PostCard = ({
                   {/*<Typography variant="body2">{post}</Typography>*/}
                   <Typography className={postText} variant="body2" dangerouslySetInnerHTML={createMarkup()}/>
                   {<Box className={mediaContainer}>
-                    {image && <img className={media} loading="lazy" src={image} alt="image"/>}
-                    {gif && <img className={media} loading="lazy" src={gif} alt="gif"/>}
+                    {media && <img className={mediaStyle} loading="lazy" src={media} alt={mediaAlt}/>}
                   </Box>}
                   <Box className={creatorAndDate}>
                     <ClickAwayListener onClickAway={() => setShowDetails(false)}>

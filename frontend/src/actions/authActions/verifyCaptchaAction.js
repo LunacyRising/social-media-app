@@ -1,7 +1,7 @@
-import { VERIFYCAPTCHA_SUCCESS } from "../types";
+import { VERIFY_CAPTCHA_SUCCESS } from "../types";
 
 export const verifyCaptchaAction = () => {
   return {
-    type: VERIFYCAPTCHA_SUCCESS
+    type: VERIFY_CAPTCHA_SUCCESS
   };
 };

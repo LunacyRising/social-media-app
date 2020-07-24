@@ -20,23 +20,29 @@ a:hover {
 }
 
 /*testeando estilo para el quill*/
- 
-.ql-editor:focus {
-  border: solid 2px;
-  border-color: #8b70d2;
+
+.quill {
+  margin-top: 20px;
+  width: 100%;
 }
+
+.quill > .ql-container{
+  min-height: 150px;
+  background-color: #424242;
+}
+
 .quill > .ql-container > .ql-editor.ql-blank::before{
-  font-family: "Saira";
-  font-size: 16px;
   color: #bfbaba;
 }
- .ql-editor {
-  overflow-y: scroll;
-  resize: vertical;
+
+.ql-editor {
   border: solid 1px grey;
   border-radius: 5px;
+  overflow-y: scroll;
+  font-family: "Saira";
+  font-size: 16px;
+  color: white
 };
-
 
 /*********************************************/
 .captcha {

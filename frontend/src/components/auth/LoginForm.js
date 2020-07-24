@@ -60,7 +60,7 @@ const LoginForm = () => {
 
   const { isLoading } =  useSelector(state => state.authReducer); 
 
-  const { messageCode, message } = useSelector(state => state.messagesReducer);
+  const { messageCode } = useSelector(state => state.messagesReducer);
 
   const dispatch = useDispatch();
 
@@ -100,7 +100,7 @@ const LoginForm = () => {
               onFocus={errors ? () => clearAllErrors() : null}
               error={messageCode === 462 || errors.email}
               helperText={
-                (messageCode === 462 && message) || errors?.email?.message
+                (messageCode === 462 && "invalid email or password") || errors?.email?.message
               }
               margin="normal"
               value={email}
@@ -124,7 +124,7 @@ const LoginForm = () => {
               type="password"
               name="password"
               helperText={
-                (messageCode === 462 && message) || errors?.password?.message
+                (messageCode === 462 && "invalid email or password") || errors?.password?.message
               }
               margin="normal"
               value={password}

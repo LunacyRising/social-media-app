@@ -2,7 +2,6 @@ import axios from "axios";
 import { FETCH_INITIAL_POSTS_SUCCESS, FETCH_POSTS_FAIL, POSTS_LOADING } from "../types";
 import { returnMessages } from "../messagesActions";
 
-
 export const fetchInitialPosts = () => async (dispatch, getState) => {
 
   let { limit, amountOfPosts } = getState().postReducer; 
@@ -18,14 +17,12 @@ export const fetchInitialPosts = () => async (dispatch, getState) => {
      {skip, limit }
     );
 
-    const postsResponse = response.data.posts;    
-
     console.log(response)
 
     dispatch({ 
       type: FETCH_INITIAL_POSTS_SUCCESS,
       payload: {
-        posts : postsResponse,
+        posts : response.data.posts, 
         skip : skip + limit,
         maxResults : response.data.maxResults
       }
@@ -33,10 +30,11 @@ export const fetchInitialPosts = () => async (dispatch, getState) => {
     dispatch(returnMessages(response.data.code))
   } catch (err) {
     let errorCode = err.response ? err.response.data.code : 500;
-    let error = err.response && err.response.data.error;
-    dispatch(returnMessages(errorCode, error));
+    dispatch(returnMessages(errorCode));
     dispatch({
       type: FETCH_POSTS_FAIL
     });
   }
 };
+
+

@@ -14,7 +14,6 @@ import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { registerAction } from "../../actions/authActions/registerAction";
 import { snackOpen } from "../../actions/messagesActions";
-import { clearMessages } from "../../actions/messagesActions";
 
 const RegisterForm = () => {
 
@@ -54,7 +53,7 @@ const RegisterForm = () => {
 
   const { isLoading, verifyCaptcha } = useSelector(state => state.authReducer);
 
-  const { messageCode, message } = useSelector(state => state.messagesReducer);
+  const { messageCode } = useSelector(state => state.messagesReducer);
 
   const dispatch = useDispatch();
 
@@ -68,7 +67,7 @@ const RegisterForm = () => {
     password: ""
   };
 
-  const { values, handleChange,  clearError, clearAllErrors } = useCustomForm(FormDefaultValues)
+  const { values, handleChange, clearAllErrors } = useCustomForm(FormDefaultValues)
 
   const { name, lastName, userName, email, password } = values
 
@@ -111,10 +110,8 @@ const RegisterForm = () => {
             value={values.name}
             margin="normal"
             onFocus={() => clearAllErrors()}
-            error={messageCode === 461 || errors.name}
-            helperText={
-            (messageCode === 461 && message) || errors?.name?.message
-            }
+            error={errors.name}
+            helperText={errors?.name?.message}
           />
         <TextField
             inputRef={register({
@@ -137,10 +134,8 @@ const RegisterForm = () => {
             value={values.lastName}
             margin="normal"
             onFocus={() => clearAllErrors()}
-            error={messageCode === 461 || errors.lastName}
-            helperText={
-            (messageCode === 461 && message) || errors?.lastName?.message
-            }
+            error={errors.lastName}
+            helperText={errors?.lastName?.message}
           />
         <TextField
             inputRef={register({
@@ -163,9 +158,9 @@ const RegisterForm = () => {
             value={values.userName}
             margin="normal"
             onFocus={() => clearAllErrors()}
-            error={messageCode === 461 || errors.userName}
+            error={messageCode === 459 || errors.userName}
             helperText={
-            (messageCode === 461 && message) || errors?.userName?.message
+            (messageCode === 459 && "username is already in use") || errors?.userName?.message
             }
           />
         <TextField
@@ -191,7 +186,7 @@ const RegisterForm = () => {
             error={messageCode === 460 || errors.email}
             onFocus={() => clearAllErrors()}
             helperText={
-            (messageCode === 460 && message) || errors?.email?.message
+            (messageCode === 460 && "email is already in use") || errors?.email?.message
             }
           />
         <TextField

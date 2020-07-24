@@ -14,8 +14,7 @@ export const fetchComments = () => async dispatch => {
     });
   } catch (err) {
     const errorCode = err.response ? err.response.data.code : 500;
-    const error = err.response && err.response.data.error;
-    dispatch(returnMessages(errorCode, error));
+    dispatch(returnMessages(errorCode));
     dispatch({
       type: FETCH_POSTS_FAIL
     });

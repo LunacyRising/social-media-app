@@ -6,7 +6,7 @@ import StarTwoToneIcon from '@material-ui/icons/StarTwoTone';
 import { IconButton,Tooltip } from "@material-ui/core";
 import { createFavorite } from "../../../actions/favoritesActions/createFavorite";
 import { deleteFavorite } from "../../../actions/favoritesActions/deleteFavorite";
-import { itemExists } from "../itemExists";
+import { favoriteExists } from "../../../helperFunctions/favoriteExists";  
 
 const FavoriteBtn = ({ postId }) => {
 
@@ -34,19 +34,17 @@ const FavoriteBtn = ({ postId }) => {
 
     const dispatch = useDispatch(); 
 
-    const favoriteExists = itemExists(favoritesSqueleton, postId, userId)
+    const favExists = favoriteExists(favoritesSqueleton, postId, userId)
 
 
     const action = (id) => {
-        !favoriteExists ? dispatch(createFavorite(id)) : dispatch(deleteFavorite(id))
+        !favExists ? dispatch(createFavorite(id)) : dispatch(deleteFavorite(id))
     }
-
-   // console.log(favoriteExists) 
   
     return (
         <>
             <Tooltip title={!favoriteExists ? t("AddFavorites") : t("RemoveFavorites")}>
-                <IconButton className={!favoriteExists ? btn : `${btn} ${color}` }  onClick={() => action(postId)}>
+                <IconButton className={!favExists ? btn : `${btn} ${color}` }  onClick={() => action(postId)}>
                     <StarTwoToneIcon />
                 </IconButton>
             </Tooltip>

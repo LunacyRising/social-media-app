@@ -7,14 +7,14 @@ import Login from "./auth/Login";
 import Register from "./auth/Register";
 import Posts from "./posts/Posts";
 import PostTextArea from "./posts/PostTextArea";
-import NoPostFound from "./posts/NoPostFound";
+import NoResults from "./posts/NoResults";
 import SnackbarMessages from "./SnackbarMessages";
 //import FriendMenu from "./friends/FriendMenu";
 import { fetchInitialPosts } from "../actions/postsActions/fetchInitialPosts";
 
 const Home = () => {
 
-  const useStyles = makeStyles(() => ({
+  const useStyles = makeStyles((theme) => ({
 
     main: {
       display: "flex",
@@ -33,21 +33,26 @@ const Home = () => {
     postsContainer: {
       width: "100%"
     },
-    noResults: { 
-      textAlign: "center"
-    },
     spinner: {
       position: "absolute",
       left: "49%"
+    },
+    noMorePosts: {
+      textAlign: "center",
+      color: theme.palette.primary.main,
+      marginBottom: 20
     }
   }));
   const classes = useStyles();
 
-  const { main, postsContainer, noResults, spinner } = classes;
+  const { main, postsContainer, spinner, noMorePosts } = classes;
 
   const { messageCode } = useSelector(state => state.messagesReducer);
 
-  const { amountOfPosts, postsLoading } = useSelector(state => state.postReducer);
+  const { postsLoading, maxResults, skip } = useSelector(state => state.postReducer);
+  
+  // se llego al limite de resultados
+  const maxResultsReached = skip >= maxResults; 
 
   const history = useHistory();
 
@@ -66,8 +71,9 @@ const Home = () => {
       <main className={main}>
           <PostTextArea />
             <section className={postsContainer}>
-              {messageCode === 300 && !postsLoading? <NoPostFound/> : <Posts/>}
+              {messageCode === 300 && !postsLoading? <NoResults/> : <Posts/>}
               {postsLoading && <CircularProgress className={spinner} size={50}/>}
+              {maxResultsReached && messageCode !== 300 && <p className={noMorePosts}>no hay mas resultados</p>}
               <Login/>
               <Register/>
             </section>

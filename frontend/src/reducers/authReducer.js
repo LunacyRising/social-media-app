@@ -3,19 +3,18 @@ import {
   PROFILE_UPDATING,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
-  LOGING_OUT,
+  LOGGING_OUT,
   LOGOUT_SUCCESS,
   REGISTER_SUCCESS,
   REGISTER_FAIL,
   WAITING_MAILCONFIRMATION,
-  MAIL_CONFIRMED,
-  MAILCONFIRMED_FAIL,
-  VERIFYCAPTCHA_SUCCESS,
-  VERIFYCAPTCHA_FAIL,
-  EDITUSER_SUCCESS,
+  MAIL_CONFIRM_SUCCESS,
+  MAIL_CONFIRM_FAILED,
+  VERIFY_CAPTCHA_SUCCESS,
+  VERIFY_CAPTCHA_FAIL,
   UPDATE_PROFILE_SUCCESS,
-  UPLOAD_IMAGE_SUCESS,
-  DATA_LOADING
+  CHANGING_AVATAR,
+  CHANGE_AVATAR_SUCESS,
 } from "../actions/types";
 
 const initialState = {
@@ -23,7 +22,6 @@ const initialState = {
   isAuthenticated: false,
   isLoading: false,
   isLogingOut: false,
-  avatarLoading: false,
   verifyCaptcha: false,
   token: null,
   role: null,
@@ -39,19 +37,14 @@ const authReducer = (state = initialState, action) => {
     case USER_LOADING:
     case PROFILE_UPDATING:
     case WAITING_MAILCONFIRMATION:
+    case CHANGING_AVATAR:
       return {
         ...state,
         isLoading: true
       };
-    case DATA_LOADING:
-      return {
-        ...state,
-        avatarLoading: true
-      };
     case LOGIN_SUCCESS:
       return {
         ...state,
-        //...action.payload,
         token: action.payload.token,
         userName: action.payload.userName,
         role: action.payload.role,
@@ -70,24 +63,42 @@ const authReducer = (state = initialState, action) => {
         isLoading: false,
         verifyCaptcha: true
       };
-    case VERIFYCAPTCHA_SUCCESS:
+    case VERIFY_CAPTCHA_SUCCESS:
       return {
         ...state,
         verifyCaptcha: true
       };
-    case VERIFYCAPTCHA_FAIL:
+    case VERIFY_CAPTCHA_FAIL:
       return {
         ...state,
         verifyCaptcha: false
       };
     case LOGIN_FAIL:
     case REGISTER_FAIL:
-    case MAILCONFIRMED_FAIL:
+    case MAIL_CONFIRM_FAILED:
       return {
         ...state,
         isLoading: false
       };
-    case LOGING_OUT: 
+    case MAIL_CONFIRM_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        verificarMail: true
+      };
+    case CHANGE_AVATAR_SUCESS:
+      return {
+        ...state,
+        avatar: action.payload.avatar,
+        isLoading: false
+      };
+    case UPDATE_PROFILE_SUCCESS:
+      return {
+        ...state,
+        ...action.payload,
+        isLoading: false
+      }
+    case LOGGING_OUT: 
       return {
         ...state,
         isLogingOut: true
@@ -105,25 +116,6 @@ const authReducer = (state = initialState, action) => {
         verificarMail: false, 
         verifyCaptcha: false
       };
-    case MAIL_CONFIRMED:
-      return {
-        ...state,
-        isLoading: false,
-        verificarMail: true
-      };
-    case EDITUSER_SUCCESS:
-    case UPLOAD_IMAGE_SUCESS:
-      return {
-        ...state,
-        avatar: action.payload.avatar,
-        avatarLoading: false
-      };
-    case UPDATE_PROFILE_SUCCESS:
-      return {
-        ...state,
-        ...action.payload,
-        isLoading: false
-      }
     default:
       return state;
   }

@@ -9,13 +9,14 @@ import { closeDrawer } from "../../../../actions/modalsActions/drawer";
 const GalleryBtn = () => {
 
 
-  const useStyles = makeStyles(() => ({
+  const useStyles = makeStyles((theme) => ({
 
     link: {
       color: "white",
+      transition: "0.3s ease-in-out",
       "&:hover": { 
         textDecoration: "none",
-        color: "white"
+        color: theme.palette.primary.main
       }
     }
   }));

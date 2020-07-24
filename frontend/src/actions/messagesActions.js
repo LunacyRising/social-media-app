@@ -2,13 +2,10 @@ import { GET_MESSAGES, CLEAR_MESSAGES, SNACK_OPEN, SNACK_CLOSE } from "./types";
 
 //return messages
 
-export const returnMessages = (messageCode, message) => {  
+export const returnMessages = (messageCode) => {  
   return {
     type: GET_MESSAGES,
-    payload: {
-      messageCode,
-      message
-    }
+    payload: messageCode 
   };
 };
 

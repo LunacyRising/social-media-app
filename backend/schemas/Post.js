@@ -12,10 +12,10 @@ const postSchema = new mongoose.Schema({
   post: {
     type: String
   },
-  image: {
+  media: {
     type: String
   },
-  gif: {
+  mediaAlt: {
     type: String
   },
   userId: {

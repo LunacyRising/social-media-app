@@ -46,8 +46,8 @@ const SinglePostPage = ({ match }) => {
             singlePost
             avatar={post.avatar} 
             post={post.post} 
-            image={post.image}
-            gif={post.gif} 
+            media={post.media}
+            mediaAlt={post.mediaAlt}
             creatorUserName={post.userName}  
             creatorAmountOfPosts={post.creatorAmountOfPosts} 
             title={post.title} 

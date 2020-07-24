@@ -19,11 +19,11 @@ import UserNameField from "./UserNameField";
 import EmailField from "./EmailField";
 import SnackbarMessages from "../SnackbarMessages";
 import { editProfile } from "../../actions/userActions/editProfileAction";
-import { changeAvatar } from "../../actions/uploadImageAction";
+import { changeAvatar } from "../../actions/changeAvatar";
 
 const EditProfile = () => {
 
-  const { isAuthenticated , email, userName, avatar, isLoading, avatarLoading } = useSelector(state => state.authReducer);
+  const { isAuthenticated , email, userName, avatar, isLoading } = useSelector(state => state.authReducer);
  
   const useStyles = makeStyles(() => ({
     formContainer: {
@@ -66,6 +66,7 @@ const EditProfile = () => {
       height: 100
     },
     changeAvatarBtn: {
+      marginTop: 10,
       color: "white"
     },
     changeAvatarIcon: {
@@ -195,7 +196,7 @@ const EditProfile = () => {
                 <Typography variant="caption">{t("ChangeAvatar")}</Typography>
                 <FaceIcon className={changeAvatarIcon}/>
               </Button>
-              {avatarLoading && <LinearProgress style={{width:"80%",marginTop: 5}}/>}
+              {isLoading && <LinearProgress style={{width:"80%",marginTop: 5}}/>}
             </Box>
             <Box className={userInfoContainer}>
               <Box className={uniqueFieldContainer}>

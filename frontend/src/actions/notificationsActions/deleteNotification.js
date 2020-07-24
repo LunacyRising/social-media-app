@@ -1,7 +1,7 @@
 import axios from "axios";
 import { DELETE_NOTIFICATION, FAIL_DELETE_NOTIFICATION} from "../types";
 import { returnMessages } from "../messagesActions";
-
+import { removeItem } from "../../helperFunctions/removeItem";
 
 export const deleteNotification = ({ notificationId }) => async (dispatch, getState) => {
 
@@ -14,12 +14,11 @@ export const deleteNotification = ({ notificationId }) => async (dispatch, getSt
     });
     dispatch({
       type: DELETE_NOTIFICATION,
-      payload: notifications.filter(noti =>  noti._id !== notificationId) 
+      payload: removeItem(notifications, notificationId, "_id")
     });
   } catch (err) {
     let errorCode = err.response ? err.response.data.code : 500;
-    let error = err.response && err.response.data.error;
-    dispatch(returnMessages(errorCode, error));
+    dispatch(returnMessages(errorCode));
     dispatch({
       type: FAIL_DELETE_NOTIFICATION
     });

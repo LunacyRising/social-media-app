@@ -9,13 +9,14 @@ import { NavBtn } from "../../../../styledComponents/MyBtn";
 const EditProfileBtn = () => {
 
 
-  const useStyles = makeStyles(() => ({
+  const useStyles = makeStyles((theme) => ({
 
     link: {
       color: "white",
+      transition: "0.3s ease-in-out",
       "&:hover": { 
         textDecoration: "none",
-        color: "white"
+        color: theme.palette.primary.main
       }
     }
   }));

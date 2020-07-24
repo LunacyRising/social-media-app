@@ -1,10 +1,10 @@
 import axios from "axios";
 import { returnMessages, snackOpen } from "../messagesActions";
 import { LIKE_COMMENT_SUCCESSS, LIKE_COMMENT_FAILED } from "../types";
-import { editKeyValue2 } from "../editKeyValue";
-import { filterCommentsLikesDislikes }  from "../../components/posts/buttons/filterItems"
+import { editKeyValue } from "../../helperFunctions/editKeyValue";
+import { removeItem } from "../../helperFunctions/removeItem";
 
-export const likeComment = ({ replyComponent, postId, commentId, removeItem, likes, dislikes }) => async (dispatch,getState) => {  
+export const likeComment = ({ replyComponent, postId, commentId, deleteItem, likes, dislikes }) => async (dispatch,getState) => {  
 
   const{ token, userId } = getState().authReducer;
 
@@ -32,20 +32,18 @@ export const likeComment = ({ replyComponent, postId, commentId, removeItem, lik
     dispatch({
       type: LIKE_COMMENT_SUCCESSS, 
       payload: {
-        like: response.data.savedLike,
-        filteredDislikes: removeItem ? filterCommentsLikesDislikes(allDislikes, commentId) : allDislikes, 
-        comments: removeItem ? editKeyValue2(comments, commentId, keyValue, keyValue2) : editKeyValue2(comments, commentId, keyValue),
-        replies : removeItem && replyComponent ?  editKeyValue2(replies, commentId, keyValue, keyValue2) : editKeyValue2(replies, commentId, keyValue), 
+        like: response.data.savedLike, 
+        filteredDislikes: deleteItem ? removeItem(allDislikes, commentId, "commentId") : allDislikes, 
+        comments: deleteItem ? editKeyValue(comments, commentId,"_id", keyValue, keyValue2) : editKeyValue(comments, commentId,"_id", keyValue),
+        replies : deleteItem && replyComponent ?  editKeyValue(replies, commentId,"_id", keyValue, keyValue2) : editKeyValue(replies, commentId,"_id", keyValue), 
       }
     });
-    const message = response.data.message;
     const messageCode = response.data.code;
-    dispatch(returnMessages(messageCode, message));
+    dispatch(returnMessages(messageCode));
     dispatch(snackOpen());
   } catch (err) {
     let errorCode = err.response ? err.response.data.code : 500;
-    let error = err.response && err.response.data.error;
-    dispatch(returnMessages(errorCode, error));
+    dispatch(returnMessages(errorCode));
     dispatch({
       type: LIKE_COMMENT_FAILED
     });

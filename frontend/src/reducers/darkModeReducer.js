@@ -1,6 +1,4 @@
-import {
-    DARK_MODE_ON
-  } from "../actions/types";
+import { DARK_MODE } from "../actions/types";
   
   const initialState = {
     darkMode : false
@@ -8,7 +6,7 @@ import {
   
   const darkModeReducer = (state = initialState, action) => {
     switch (action.type) {
-      case DARK_MODE_ON: {
+      case DARK_MODE: {
         let mode = !state.darkMode
         return {
             ...state,

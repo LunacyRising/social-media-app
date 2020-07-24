@@ -71,14 +71,14 @@ const fetchUsersReducer = (state = initialState, action) => {
       return {
         ...state
       };
-    case UPLOAD_IMAGE_SUCESS:
+   /* case UPLOAD_IMAGE_SUCESS:
       return {
         ...state
       };
     case UPLOAD_IMAGE_FAIL:
       return {
         ...state
-      };
+      };*/
     default:
       return state;
   }

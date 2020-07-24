@@ -18,18 +18,15 @@ export const postImagePreview = ( data ) => async (dispatch, getState) => {
 
     console.log(response)
 
-    const message = response.data.message;
-
     const messageCode = response.data.code;
 
-    dispatch(returnMessages(messageCode, message));
+    dispatch(returnMessages(messageCode));
 
     dispatch(snackOpen());
 
   } catch (err) {
     let errorCode = err.response ? err.response.data.code : 500;
-    let error = err.response && err.response.data.error;
-    dispatch(returnMessages(errorCode, error));
+    dispatch(returnMessages(errorCode));
     dispatch({
       type: POST_IMAGE_PREVIEW_FAILED
     });

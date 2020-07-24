@@ -51,7 +51,7 @@ const UploadImage = ({ values, setValues, referencia, setPreviewLoading }) => {
     console.log(preview)
     quill.insertEmbed(position, "image", preview); 
     // agrega al estado la imagen que se va a utilizar para subir a cloudinary, no es la misma que la preview!
-    setValues({...values, image: image})
+    setValues({...values, media: image, mediaAlt: image.name})
 
   };
 

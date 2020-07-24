@@ -2,43 +2,17 @@ import axios from "axios";
 import { returnMessages, snackOpen } from "../messagesActions";
 
 import {
-  MAIL_CONFIRMED,
-  MAILCONFIRMED_FAIL,
+  MAIL_CONFIRM_SUCCESS,
+  MAIL_CONFIRM_FAILED,
   WAITING_MAILCONFIRMATION
 } from "../types";
-
-/*export const emailConfirmedAction = ({ props, email }) => dispatch => {
-  dispatch({ type: WAITING_MAILCONFIRMATION });
-  axios
-    .patch(`http://localhost:5001/${email}`, {
-      isAuthenticated: true
-    })
-    .then(() => {
-      dispatch({
-        type: MAIL_CONFIRMED
-      });
-      props.history.push("/login");
-    })
-    .catch(err => {
-      let errorCode = err.response ? err.response.data.code : 500;
-      let error = err.response && err.response.data.error;
-      dispatch(returnMessages(errorCode, error));
-      dispatch({
-        type: MAILCONFIRMED_FAIL,
-        payload: {
-          errorCode,
-          error
-        }
-      });
-    });
-};*/
 
 export const emailConfirmedAction = ({ email }) => async dispatch => {
   dispatch({ type: WAITING_MAILCONFIRMATION });
   try {
     const response = await axios.put(`http://localhost:5001/${email}`, {});
     dispatch({
-      type: MAIL_CONFIRMED
+      type: MAIL_CONFIRM_SUCCESS
     });
     const messageCode = response.data.code;
     dispatch(returnMessages(messageCode));
@@ -48,7 +22,7 @@ export const emailConfirmedAction = ({ email }) => async dispatch => {
     let error = err.response && err.response.data.error;
     dispatch(returnMessages(errorCode, error));
     dispatch({
-      type: MAILCONFIRMED_FAIL,
+      type: MAIL_CONFIRM_FAILED,
       payload: {
         errorCode,
         error

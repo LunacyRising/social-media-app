@@ -9,6 +9,7 @@ const galleryImg = require("../schemas/GalleryImg");
 const verify = require("./verifyToken");
 const dotenv = require("dotenv");
 const cloudinary = require("cloudinary").v2; 
+const { uploadMedia } = require("../helperFunctions/uploadMedia")
 
 
 dotenv.config();
@@ -45,23 +46,20 @@ router.post("/user/:userId", verify, async (req, res) => {
 });
 
 // change user avatar
-router.post("/uploadFileTest/:userId", async (req, res ) => {  
+router.post("/changeAvatar/:userId", async (req, res ) => {  
 
     const file = req.files.userAvatar
 
     const { userId } = req.params
 
     try{
-      await cloudinary.uploader.upload(file.tempFilePath,
-        {public_id: userId, folder: "Avatars"},
-          async (err,result) => {
-          res.status(200).send({code: 235, result});  
-          await Post.updateMany({userId}, {$set:{avatar: result.secure_url}})
-          await User.updateOne({_id: userId}, {$set:{avatar: result.secure_url}})
-          await Comment.updateMany({userId},{$set:{avatar: result.secure_url}})
-        }
-      );
+      const avatar = await uploadMedia(file.tempFilePath,{public_id: userId, folder: "Avatars"}); 
+      await Post.updateMany({userId}, {$set:{avatar: avatar.secure_url}})
+      await User.updateOne({_id: userId}, {$set:{avatar: avatar.secure_url}})
+      await Comment.updateMany({userId}, {$set:{avatar: avatar.secure_url}})
+      res.status(200).send({code: 235, avatar: avatar.secure_url});
     }catch(err){
+      console.log(err)
       res.status(400).send({code: 500});   
     }
   })

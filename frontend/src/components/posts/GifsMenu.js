@@ -81,21 +81,21 @@ const GifsMenu = ({ setGifstMenuOpen, values, setValues, referencia }) => {
   },[])
 
   const targetOneGif = (id) => {
-    const oneGif = gifs.filter(gif => gif.slug === id);
-    const oneGifUrl = oneGif[0].images.downsized_large.url;
-    console.log(oneGifUrl)
+    const oneGifArr = gifs.filter(gif => gif.slug === id);
+    const oneGif = oneGifArr[0];
+    const oneGifUrl = oneGif.images.downsized_large.url;
     const quill = referencia.current.getEditor();
     quill.focus();
-    console.log(referencia.current)
-    let range = quill.getSelection()
+    console.log(referencia.current);
+    let range = quill.getSelection();
     let position = range ? range.index : 0;
-    console.log(quill.insertEmbed)
-    quill.insertEmbed(position, "image",  oneGifUrl , oneGif.userName ); 
+    console.log(quill.insertEmbed);
+    quill.insertEmbed(position, "image",  oneGifUrl , oneGif.title); 
     quill.setSelection(position + 1);
-    setValues({...values, gif: oneGifUrl });
-    dispatch(updateQuery(null))
-    setGifstMenuOpen(false)
-    console.log(values)
+    setValues({...values, media: oneGifUrl, mediaAlt: oneGif.title});
+    dispatch(updateQuery(null));
+    setGifstMenuOpen(false);
+    //console.log(values)
   }
 
   const handleSearch = (e) => {

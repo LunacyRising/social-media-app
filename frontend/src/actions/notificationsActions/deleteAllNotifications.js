@@ -10,12 +10,11 @@ export const deleteAllNotifications = () => async (dispatch, getState) => {
       headers: { "auth-token": token }  
     });
     dispatch({
-      type: DELETE_ALL_NOTIFICATIONS, 
+      type: DELETE_ALL_NOTIFICATIONS 
     });
   } catch (err) {
     let errorCode = err.response ? err.response.data.code : 500;
-    let error = err.response && err.response.data.error;
-    dispatch(returnMessages(errorCode, error));
+    dispatch(returnMessages(errorCode));
     dispatch({
       type: FAIL_DELETE_NOTIFICATION
     });

@@ -2,7 +2,7 @@ import axios from "axios";
 import { returnMessages, snackOpen } from "../messagesActions";
 import { loginModalClose } from "../modalsActions/login";
 import { USER_LOADING, LOGIN_SUCCESS, LOGIN_FAIL } from "../types";
-import { editKeyValueUser } from "../editKeyValue";
+import { editKeyValue } from "../../helperFunctions/editKeyValue";
 
 export const loginAction = ({ email, password }) => async (dispatch, getState) => {
 
@@ -13,7 +13,7 @@ export const loginAction = ({ email, password }) => async (dispatch, getState) =
   try {
     dispatch({ type: USER_LOADING });
     const response = await axios.post("http://localhost:5001/login",  
-    { email,password });
+    { email, password });
 
     console.log(response);
 
@@ -30,7 +30,7 @@ export const loginAction = ({ email, password }) => async (dispatch, getState) =
           likes: response.data.likes,
           dislikes: response.data.dislikes,
           favorites: response.data.favorites,
-          posts: editKeyValueUser(posts, response.data.user._id, keyValue) 
+          posts: editKeyValue(posts, response.data.user._id, "userId", keyValue)    
       }
     });
 
@@ -38,17 +38,16 @@ export const loginAction = ({ email, password }) => async (dispatch, getState) =
 
     dispatch(snackOpen());
 
-    const message = response.data.message;
+    const messageCode = response.data.code; 
 
-    const messageCode = response.data.code;
+    console.log(messageCode)
 
-    dispatch(returnMessages(messageCode, message));
+    dispatch(returnMessages(messageCode));  
 
   } catch (err) {
     console.log(err.response);
     let errorCode = err.response ? err.response.data.code : 500;
-    let error = err.response && err.response.data.error;
-    dispatch(returnMessages(errorCode, error));
+    dispatch(returnMessages(errorCode)); 
     dispatch({
       type: LOGIN_FAIL
     });

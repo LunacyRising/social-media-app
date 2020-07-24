@@ -1,9 +1,9 @@
-import { DARK_MODE_ON } from "../types";
+import { DARK_MODE } from "../types";
 
 
 export const darkModeOn = () => {
     return {
-      type: DARK_MODE_ON
+      type: DARK_MODE
     };
   };
   

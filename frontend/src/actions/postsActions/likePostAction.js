@@ -1,20 +1,20 @@
 import axios from "axios";
 import { returnMessages, snackOpen } from "../messagesActions";
 import { LIKE_SUCCESS, LIKE_FAIL, LIKE_LOADING } from "../types";
-import { editKeyValue2 } from "../editKeyValue";
-import { filterPostsLikesDislikes }  from "../../components/posts/buttons/filterItems"
+import { editKeyValue } from "../../helperFunctions/editKeyValue";
+import { removePostsLikesDislikes } from "../../helperFunctions/removePostsLikesDislikes";
 
-export const likePost = ({  postId, creatorUserName, title, likes, dislikes, removeItem}) => async (dispatch,getState) => {
+export const likePost = ({  postId, creatorUserName, title, likes, dislikes, deleteItem}) => async (dispatch,getState) => {
 
 
 
-  console.log(removeItem, dislikes)
+  console.log(deleteItem, dislikes)
 
   const{ token, userId, userName } = getState().authReducer 
 
   const { posts, allDislikes } = getState(). postReducer; 
 
-  let keyValue = { likes : likes +1 };
+  let keyValue = { likes : likes +1 }; 
 
   let keyValue2 = { ...keyValue, dislikes : dislikes -1}
   
@@ -38,11 +38,10 @@ export const likePost = ({  postId, creatorUserName, title, likes, dislikes, rem
       type: LIKE_SUCCESS, 
       payload: {
         like : response.data.savedLike,
-        posts: removeItem ? editKeyValue2(posts, postId, keyValue, keyValue2) : editKeyValue2(posts, postId, keyValue), 
-        filteredDislikes: removeItem ? filterPostsLikesDislikes(allDislikes, postId) : allDislikes 
+        posts: deleteItem ? editKeyValue(posts, postId, "_id", keyValue, keyValue2) : editKeyValue(posts, postId, "_id", keyValue), 
+        filteredDislikes: deleteItem ? removePostsLikesDislikes(allDislikes, postId) : allDislikes 
       } 
     });
-    const message = response.data.message;
     const messageCode = response.data.code;
    // dispatch(returnMessages(messageCode, message));
    // dispatch(snackOpen());
@@ -50,8 +49,7 @@ export const likePost = ({  postId, creatorUserName, title, likes, dislikes, rem
   } catch (err) {
     console.log(err.response) 
     let errorCode = err.response ? err.response.data.code : 500;
-    let error = err.response && err.response.data.error;
-    dispatch(returnMessages(errorCode, error));
+    dispatch(returnMessages(errorCode));
     dispatch({
       type: LIKE_FAIL
     });

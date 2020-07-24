@@ -8,7 +8,7 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import HighlightOffOutlinedIcon from '@material-ui/icons/HighlightOffOutlined';
 
-const Favorite = ({ gif, image , title, userName, favoriteId, amountOfComments, date }) => { 
+const Favorite = ({ media, mediaAlt, image , title, userName, favoriteId, amountOfComments, date }) => { 
     
     const useStyles = makeStyles(() => ({ 
       card: {
@@ -95,7 +95,7 @@ const Favorite = ({ gif, image , title, userName, favoriteId, amountOfComments, 
         <>    
             <Card className={card}>
                 <Box className={mediaContainer}>
-                    <img className={mediaStyle} src={gif ? gif : image} alt="media"/>
+                    <img className={mediaStyle} src={media} alt={mediaAlt}/>
                 </Box>
                 <Box className={cardContent}>
                     <Tooltip title="Go To Post">

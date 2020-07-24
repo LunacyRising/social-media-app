@@ -21,16 +21,13 @@ export const uploadImage = ({ galleryImage }) => async (dispatch, getState) => {
     });
     dispatch(snackOpen());
 
-    const message = response.data.message;
-
     const messageCode = response.data.code;
 
-    dispatch(returnMessages(messageCode, message));
+    dispatch(returnMessages(messageCode));
 
   } catch (err) {
     let errorCode = err.response ? err.response.data.code : 500;
-    let error = err.response && err.response.data.error;
-    dispatch(returnMessages(errorCode, error));
+    dispatch(returnMessages(errorCode));
     dispatch({
       type: UPLOAD_IMAGE_GALLERY_FAILED
     });

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { returnMessages, snackOpen } from "../messagesActions";
-import { filterPosts } from "../../components/posts/buttons/filterItems";
+import { removeItem } from "../../helperFunctions/removeItem";
 
 import { DELETE_POST, FAIL_DELETE_POST } from "../types";
 
@@ -16,17 +16,14 @@ export const deletePost = ({ postId }) => async (dispatch, getState) => {
     });
     dispatch({
       type: DELETE_POST,
-      //payload: postId 
-      payload: filterPosts(posts, postId) 
+      payload: removeItem(posts, postId,"_id") 
     });
-    const message = response.data.message;
     const messageCode = response.data.code;
-    dispatch(returnMessages(messageCode, message));
+    dispatch(returnMessages(messageCode));
     dispatch(snackOpen());
   } catch (err) {
     let errorCode = err.response ? err.response.data.code : 500;
-    let error = err.response && err.response.data.error;
-    dispatch(returnMessages(errorCode, error));
+    dispatch(returnMessages(errorCode));
     dispatch({
       type: FAIL_DELETE_POST
     });

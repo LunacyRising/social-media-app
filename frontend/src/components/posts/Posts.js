@@ -29,8 +29,8 @@ const Posts = () => {
               creatorAmountOfPosts={post.creatorAmountOfPosts}
               title={post.title} 
               post={post.post}
-              image={post.image}
-              gif={post.gif}
+              media={post.media}
+              mediaAlt={post.mediaAlt}
               avatar={userId === post.userId ? avatar : post.avatar} 
               date={post.date}
               amountOfComments={post.amountOfComments} 

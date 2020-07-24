@@ -1,14 +1,10 @@
 import axios from "axios";
 import { returnMessages, snackOpen } from "../messagesActions";
-
-import {
-  EDITPROFILE_FAIL,
-  PROFILE_UPDATING,
-  UPDATE_PROFILE_SUCCESS, 
-} from "../types";
+import { editKeyValue } from "../../helperFunctions/editKeyValue";
+import { EDITPROFILE_FAIL, PROFILE_UPDATING, UPDATE_PROFILE_SUCCESS} from "../types";
 
 
-export const editProfile = ({values}) => async (dispatch, getState )=> {
+export const editProfile = ({ values }) => async (dispatch, getState )=> {
 
   const { token, userId } = getState().authReducer;
 
@@ -24,28 +20,27 @@ export const editProfile = ({values}) => async (dispatch, getState )=> {
     );
     const userName = response.data.user.userName;
 
+    const keyValue = { userName: userName };
+
     dispatch({
       type: UPDATE_PROFILE_SUCCESS,
       payload: {
         userName,
         userId,
-        posts: posts.map(post => post.userId === userId ? {...post, userName }: post),
-        comments: comments.map(comment => comment.userId === userId ? {...comment, userName}: comment) 
+        posts : editKeyValue(posts, userId, "userId", keyValue),
+        comments: editKeyValue(comments, userId, "userId", keyValue)
       }
     });
 
     dispatch(snackOpen());
 
-    const message = response.data.message;
-
     const messageCode = response.data.code;
 
-    dispatch(returnMessages(messageCode, message));
+    dispatch(returnMessages(messageCode));
 
   } catch (err) {
     let errorCode = err.response ? err.response.data.code : 500;
-    let error = err.response && err.response.data.error;
-    dispatch(returnMessages(errorCode, error));
+    dispatch(returnMessages(errorCode));
     dispatch({
       type: EDITPROFILE_FAIL
     });

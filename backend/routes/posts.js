@@ -6,27 +6,7 @@ const Comment = require("../schemas/comment");
 const Notification = require("../schemas/Notification");
 const Like = require("../schemas/Like")
 const Dislike = require("../schemas/Dislike")
-const cloudinary = require("cloudinary").v2; 
-
-
-cloudinary.config({
-  cloud_name: process.env.CLOUD_NAME,
-  api_key: process.env.API_KEY,
-  api_secret: process.env.API_SECRET 
-});
-
-
-const uploadMedia = (media, options) => {
-  return new Promise((resolve, reject) => {
-   cloudinary.uploader.upload(media, options, (err, result) => {
-     if(result) {
-       resolve(result)
-     }else{
-       reject(err)
-     }
-   })
- })
-}
+const { uploadMedia } = require("../helperFunctions/uploadMedia");
 
 
 
@@ -46,7 +26,7 @@ router.post("/createPost", verify, async (req, res) => {
   try{
     const newPost = await new Post(newPostContent).save();
     await User.findOneAndUpdate({_id: userId},{$inc: { amountOfPosts : 1 }});
-    res.status(201).send({ code: 234, message: "Post Created!", newPost });
+    res.status(201).send({ code: 234, newPost });
   }catch(err){
       console.log(err)
       res.status(400).send({ code: 500 });
@@ -61,38 +41,35 @@ router.post("/posts", async (req, res) => {
 
   console.log(limit, skip) 
 
-  let start = parseInt(skip);
+  const offSet = parseInt(skip);
 
-  let postsLimit = parseInt(limit);
+  const postsLimit = parseInt(limit);
 
   console.log(`query : ${query}`) 
 
   const initialSearch = 
   await Post
       .find()
-      .skip(start)
+      .skip(offSet)
       .limit(postsLimit)
       .sort({ date: -1 });   
         
   const searchByQuery =
   await Post
       .find({$or: [{title: {$regex: query !== null && query !== undefined && query, $options: "mgix"}},{post:{$regex: query !== null && query !== undefined &&  query, $options: "mgix"}}]})
-      .skip(start)
+      .skip(offSet)
       .limit(postsLimit)
       .sort({ date: -1 });
 
   try { 
     const totalAmountOfPosts = await Post.countDocuments();
 
-    const postsFoundByQuery = query && query !== undefined && await Post.countDocuments({$or: [{title: {$regex: query !== null && query !== undefined && query, $options: "mgix"}},{post:{$regex: query !== null && query !== undefined &&  query, $options: "mgix"}}]})
+    const postsFoundByQuery = query &&  await Post.countDocuments({$or: [{title: {$regex: query !== null && query !== undefined && query, $options: "mgix"}},{post:{$regex: query !== null && query !== undefined &&  query, $options: "mgix"}}]})
 
-    const amountOfPosts = !query || query === undefined ? totalAmountOfPosts : postsFoundByQuery
+    const amountOfPosts = !query ? totalAmountOfPosts : postsFoundByQuery
 
-    const posts = query === null || query === undefined ? initialSearch : searchByQuery
+    const posts = !query ? initialSearch : searchByQuery
 
-    //console.log(posts)
-
-    //console.log(!query || query === undefined ? totalAmountOfPosts : postsFoundByQuery)
     let code =  posts == postsFoundByQuery && postsFoundByQuery === 0  ? 300 : null
     res.status(200).send({ code, posts, maxResults: amountOfPosts});  
     
@@ -193,18 +170,18 @@ router.delete("/posts/:postId", verify, async (req, res) => {
 router.post("/deleteAll", async (req, res) => {
   try {
     //borrar el post
-    const deletedPost = await Post.deleteMany();
+    await Post.deleteMany();
 
     // borrar todos los comentarios del post
-    const deleteComments = await Comment.deleteMany()
+    await Comment.deleteMany()
 
     // borrar todos los likes del comentario borrado
-    const deleteLikes = await Like.deleteMany()
+    await Like.deleteMany()
 
-     // borrar todos los dislikes del comentario borrado
-     const deleteDisikes = await Dislike.deleteMany()
+    // borrar todos los dislikes del comentario borrado
+    await Dislike.deleteMany()
 
-    res.status(200).send({ code: 250, message: "post deleted!", deletedPost });
+    res.status(200).send({ code: 250 });
   } catch (err) {
     res.status(400).send({ code: 500 });
   }
@@ -232,10 +209,10 @@ router.post("/posts/:postId/likes", verify, async (req, res) => {
   
 
   // si el usuario ya dio un dislike antes
-  const existentDislike = await Dislike.findOne({postId, userId:{$eq:userId}})
+  const existentDislike = await Dislike.findOne({postId, userId:{$eq:userId}, commentId: { $exists: false }}) 
   console.log(existentDislike)
   if(existentDislike) {
-    await Dislike.deleteOne({postId, userId:{$eq:userId}})
+    await Dislike.deleteOne({postId, userId:{$eq:userId}, commentId: { $exists: false }})
     await Post.findOneAndUpdate({_id: postId},{$inc: { dislikes : -1 }});
   }
 
@@ -266,9 +243,6 @@ const notification = new Notification({
   }
 });
 
-
-
-
 //dislike
 router.post("/posts/:postId/dislike", verify, async (req, res) => {
   const {postId,userId} = req.body;
@@ -277,9 +251,9 @@ router.post("/posts/:postId/dislike", verify, async (req, res) => {
    if(existentDislikeike)return res.status(400).send({code:254});
 
    // si el usuario ya dio un like antes 
-  const existentLike = await Like.findOne({postId, userId:{$eq:userId}})
+  const existentLike = await Like.findOne({postId, userId:{$eq:userId}, commentId: { $exists: false }})
   if(existentLike){
-    await Like.deleteOne({postId, userId:{$eq:userId}})
+    await Like.deleteOne({postId, userId:{$eq:userId}, commentId: { $exists: false }})
     await Post.findOneAndUpdate({_id: postId},{$inc: { likes : -1 }});
   }
 

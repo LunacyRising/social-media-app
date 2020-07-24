@@ -26,8 +26,7 @@ export const fetchGifs = () => async (dispatch, getState) => {
   } catch (err) {
     if(axios.isCancel(err)) return;
     let errorCode = err.response ? err.response.data.code : 500;
-    let error = err.response && err.response.data.error;
-    dispatch(returnMessages(errorCode, error));
+    dispatch(returnMessages(errorCode));
     dispatch({
       type: FETCH_GIFS_FAILED
     });

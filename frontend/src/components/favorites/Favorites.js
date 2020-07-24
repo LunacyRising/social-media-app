@@ -56,7 +56,8 @@ const Favorites = () => {
                         key={favorite._id}
                         favoriteId={favorite._id}
                         gif={favorite.gif}
-                        image={favorite.image}
+                        media={favorite.media}
+                        mediaAlt={favorite.mediaAlt}
                         title={favorite.title}  
                         userName={favorite.userName}
                         amountOfComments={favorite.amountOfComments}

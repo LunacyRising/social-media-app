@@ -22,7 +22,6 @@ export const NavBtn = styled(Button)({
       content: '""',
     },
     "&:hover":{
-      textDecoration: "none",
       color: "#8b70d2",
       backgroundColor: "transparent",
       "&::after": {

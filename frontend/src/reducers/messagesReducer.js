@@ -7,7 +7,6 @@ import {
 
 const initialState = {
   messageCode: null,
-  message: null,
   isOpen: false
 };
 
@@ -16,12 +15,11 @@ const messagesReducer = (state = initialState, action) => {
     case GET_MESSAGES:
       return {
         ...state,
-        ...action.payload
+        messageCode: action.payload
       };
     case CLEAR_MESSAGES:
       return {
-        messageCode: null,
-        message: null
+        messageCode: null
       };
     case SNACK_OPEN: {
       return {

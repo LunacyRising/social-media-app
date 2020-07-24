@@ -1,6 +1,5 @@
 import axios from "axios";
 import { returnMessages } from "../messagesActions";
-
 import { GET_USERS, GET_USERSFAIL, DATA_LOADING } from "../types";
 
 export const fetchUsers = ({ token }) => dispatch => {
@@ -16,16 +15,13 @@ export const fetchUsers = ({ token }) => dispatch => {
           users: res.data.users
         }
       });
-      const message = res.data.message;
       const messageCode = res.data.code;
-      dispatch(returnMessages(messageCode, message));
-      console.log(res, message, messageCode, res.data.users);
+      dispatch(returnMessages(messageCode))
     })
 
     .catch(err => {
       let errorCode = err.response ? err.response.data.code : 500;
-      let error = err.response && err.response.data.error;
-      dispatch(returnMessages(errorCode, error));
+      dispatch(returnMessages(errorCode));
       dispatch({
         type: GET_USERSFAIL
       });

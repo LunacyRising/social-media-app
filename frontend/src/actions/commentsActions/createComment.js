@@ -1,7 +1,7 @@
 import axios from "axios";
 import { returnMessages, snackOpen } from "../messagesActions";
 import { LOADING, SUCCESS_COMMENT, FAIL_COMMENT } from "../types";
-import { editKeyValue2 } from "../editKeyValue"; 
+import { editKeyValue } from "../../helperFunctions/editKeyValue"; 
 
 export const createComment = ({ comment, postId, postCreator, title, amountOfComments }) => async (dispatch, getState) => {
 
@@ -9,7 +9,9 @@ export const createComment = ({ comment, postId, postCreator, title, amountOfCom
 
   const { posts } = getState().postReducer
 
-  let keyValue = {amountOfComments: amountOfComments +1};
+  
+
+  let keyValue = {amountOfComments: amountOfComments +1}; 
 
   dispatch({ type: LOADING }); 
   try {
@@ -32,17 +34,15 @@ export const createComment = ({ comment, postId, postCreator, title, amountOfCom
       type: SUCCESS_COMMENT,
       payload: {
         comment: response.data.savedComment,
-        posts: editKeyValue2(posts, postId, keyValue)   
+        posts: editKeyValue(posts, postId, "_id", keyValue)    
       }
     });
-    const message = response.data.message;
     const messageCode = response.data.code;
-    dispatch(returnMessages(messageCode, message));
+    dispatch(returnMessages(messageCode));
     dispatch(snackOpen());
   } catch (err) {
     let errorCode = err.response ? err.response.data.code : 500;
-    let error = err.response && err.response.data.error;
-    dispatch(returnMessages(errorCode, error));
+    dispatch(returnMessages(errorCode));
     dispatch({
       type: FAIL_COMMENT
     });

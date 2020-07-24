@@ -1,7 +1,7 @@
 import axios from "axios";
 import { returnMessages, snackOpen } from "../messagesActions";
 import { REPLY_SUCCESS, REPLY_FAILED } from "../types";
-import { editKeyValue2 } from "../editKeyValue";
+import { editKeyValue } from "../../helperFunctions/editKeyValue";
 
 export const createReply = ({ postId, commentId, comment , replies }) => async (dispatch, getState) => {
 
@@ -32,18 +32,16 @@ export const createReply = ({ postId, commentId, comment , replies }) => async (
       type: REPLY_SUCCESS,
       payload: {
         reply: response.data.savedReply,
-        comments: editKeyValue2(comments, commentId, keyValue) 
+        comments: editKeyValue(comments, commentId, "_id", keyValue) 
       }
     });
     console.log(response)
-    const message = response.data.message;
     const messageCode = response.data.code;
-    dispatch(returnMessages(messageCode, message));
+    dispatch(returnMessages(messageCode));
     dispatch(snackOpen());
   } catch (err) {
     let errorCode = err.response ? err.response.data.code : 500;
-    let error = err.response && err.response.data.error;
-    dispatch(returnMessages(errorCode, error));
+    dispatch(returnMessages(errorCode));
     dispatch({
       type: REPLY_FAILED
     });

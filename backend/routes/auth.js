@@ -6,6 +6,9 @@ const Dislike = require("../schemas/Dislike")
 const Favorite = require("../schemas/Favorite");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const verifyPassword = require("../helperFunctions/verifyPassword");
+const verifyEmail = require("../helperFunctions/verifyEmail");
+const emailConfirmed = require("../helperFunctions/emailConfirmed");
 
 //register normal
 router.post("/register", async (req, res) => {
@@ -16,13 +19,13 @@ router.post("/register", async (req, res) => {
   if (emailExists)
     return res
       .status(400)
-      .send({ code: 460, error: "email is already in use" });
+      .send({ code: 460 });
   // check si el userName existe
   const userExists = await User.findOne({ userName });
   if (userExists)
     return res
       .status(400)
-      .send({ code: 459, error: "userName is already in use" });
+      .send({ code: 459 });
       
   // hash password
   const salt = await bcrypt.genSalt(10);
@@ -38,49 +41,30 @@ router.post("/register", async (req, res) => {
   });
   try {
     await user.save();
-    res.status(201).send({ code: 230, message: "account created", user });
+    res.status(201).send({ code: 230, user });
   } catch (err) {
     res.status(500).send({ code: 500 });
   }
 });
 
 //login normal
-router.post("/login", async (req, res) => {
-  const { email, password } = req.body;
-  // check mail no existe
+router.post("/login", verifyEmail, verifyPassword, emailConfirmed, async (req, res) => { 
+  const { email } = req.body;
   const user = await User.findOne({ email });
-  if (!user)
-    return res
-      .status(400)
-      .send({ code: 462, error: "email or password incorrect" });
-
-  //check password
-  const validPass = await bcrypt.compare(password, user.password);
-  if (!validPass)
-    return res
-      .status(400)
-      .send({ code: 462, error: "email or password incorrect" });
-
-  // check if the email is authenticated
-  const validEmail = await user.isAuthenticated;
-  !validEmail &&
-    res.status(400).send({ code: 463, error: "email is not confirmed", user });
-  
   // find user likes and dislikes
   const likes = await Like.find({userId: user._id});
   const dislikes = await Dislike.find({userId: user._id})
   // find favorites
   const favorites = await Favorite.find({userId: user._id})
 
-  // crear y asignar jwt
   try {
+    await Post.updateMany({userName: user.userName}, {$set:{userIsOnline: true}}) 
     const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET);
     res
       .header("auth-token", token)
       .status(200)
       .send({
-        token,
-        message: "logged in", 
+        token, 
         code: 231,
         user,
         likes,
@@ -90,7 +74,6 @@ router.post("/login", async (req, res) => {
   } catch (err) {
     res.status(500).send({ code: 500 });
   }
-    await Post.updateMany({email}, {$set:{userIsOnline: true}}) 
 });
 
 // authenticate email
@@ -101,7 +84,7 @@ router.put("/:email", async (req, res) => {
       { email },
       { isAuthenticated: true }
     );
-    res.status(200).send({ code: 232, message: "authenticated!", updatedUser });
+    res.status(200).send({ code: 232, updatedUser });
   } catch (err) {
     res.status(400).send(500);
   }

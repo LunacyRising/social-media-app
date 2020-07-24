@@ -20,23 +20,20 @@ export const createPost = (data) => async (dispatch, getState) => {
     );
     dispatch({ 
       type: CREATE_POST_SUCCESS,
-      payload: response.data.savedPost
+      payload: response.data.newPost
     });
 
-    console.log(response.data.savedPost)
-
-    const message = response.data.message;
+    console.log(response.data.newPost)
 
     const messageCode = response.data.code;
 
-    dispatch(returnMessages(messageCode, message));
+    dispatch(returnMessages(messageCode));
 
     dispatch(snackOpen());
 
   } catch (err) {
     let errorCode = err.response ? err.response.data.code : 500;
-    let error = err.response && err.response.data.error;
-    dispatch(returnMessages(errorCode, error));
+    dispatch(returnMessages(errorCode));
     dispatch({
       type: CREATE_POST_FAIL
     });
