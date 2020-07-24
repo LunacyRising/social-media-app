@@ -9,13 +9,13 @@ router.post("/gifs", async (req,res) => {
 
     const  { gifLimit, gifOffset, gifQuery } = req.body; 
 
-    console.log(gifQuery)
+    console.log(gifQuery, gifLimit)
 
-    const gifsByTrend = `${baseUrl}trending?api_key=${API_KEY}&tag&limit=$${gifLimit}&offset=${gifOffset}`;
+    const gifsByTrend = `${baseUrl}trending?api_key=${API_KEY}&limit=${gifLimit}&offset=${gifOffset}`;
 
-    const gifsByQuery = `${baseUrl}search?q=${gifQuery}&api_key=${API_KEY}&tag&limit=$${gifLimit}&offset=${gifOffset}`;
+    const gifsByQuery = `${baseUrl}search?api_key=${API_KEY}&q=${gifQuery}&limit=${gifLimit}&offset=${gifOffset}`;
 
-    let endPoint = gifQuery === null || gifQuery === undefined || gifQuery === "" ? gifsByTrend : gifsByQuery ;
+    let endPoint = !gifQuery ? gifsByTrend : gifsByQuery ;
     
     try{
         const response = await axios.get(endPoint);

@@ -2,7 +2,7 @@ import { GIFS_LOADING, FETCH_GIFS_SUCCESS, FETCH_GIFS_FAILED, FETCH_GIFS_BY_QUER
   
   const initialState = {
     gifsLoading: false,
-    gifLimit: 21,
+    gifLimit: 12,
     gifOffset: 0,
     maxResults: 0, 
     gifs: [],

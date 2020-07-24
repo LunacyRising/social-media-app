@@ -2,15 +2,21 @@ import React, { useEffect } from "react";
 import {useDispatch, useSelector} from "react-redux";
 import { useTranslation } from "react-i18next";
 import { makeStyles } from "@material-ui/core/styles";
-import { Box, IconButton, Card , TextField, CircularProgress} from "@material-ui/core";
+import { Box, IconButton, Card , TextField } from "@material-ui/core";
 import HighlightOffRoundedIcon from '@material-ui/icons/HighlightOffRounded';
+import dots from "../../utils/images/dots.svg";
 import { fetchGifs } from "../../actions/gifsActions/fetchGifs";
 import { updateQuery } from "../../actions/gifsActions/updateQuery";
 import useInfiniteScroll from "./useInfiniteScroll"; 
 
+
 const GifsMenu = ({ setGifstMenuOpen, values, setValues, referencia }) => { 
 
-  const useStyles = makeStyles(() => ({
+  const colorsArr = ["#f7347a", "#5ac18e", "#008080", "#e6e6fa", "#fa8072", "#8a2be2", "#088da5", "#333333"];
+
+  const { darkMode } = useSelector(state => state.darkModeReducer);
+
+  const useStyles = makeStyles((theme) => ({
 
     menuContainer:{
         position: "absolute",
@@ -18,6 +24,7 @@ const GifsMenu = ({ setGifstMenuOpen, values, setValues, referencia }) => {
         left: "50%",
         transform: "translateX(-50%)",
         width: "100%",
+        backgroundColor: darkMode ? "#0e1111" : theme.palette.background.paper,
         overflow: "visible",
         zIndex: 5
     },
@@ -41,30 +48,28 @@ const GifsMenu = ({ setGifstMenuOpen, values, setValues, referencia }) => {
         height: 40
     },
     gifsContainer: {
-        width: "100%"
-    },
-    gifsBox: {
-        width: "100%",
-        height: 325,
-        display: "flex",
-        flexDirection: "row",
-        flexWrap: "wrap",
-        overflow: "auto"
+      display: "flex",
+      flexDirection: "row",
+      flexWrap: "wrap",
+      width: "100%",
+      maxHeight: 350,
+      overflow: "hidden auto"
     },
     singleGif: {
-        cursor: "pointer",
-        width: 110,
-        height: 110 
+      width: 75,
+      height: 75,
+      margin: 5,
+      backgroundColor: colorsArr[Math.floor(Math.random() * colorsArr.length)],
+      cursor: "pointer"
     },
     spinner: {
         margin: "auto"
     }
   })); 
 
-
   const classes = useStyles();
 
-  const { contentWrapper, menuContainer, exitAndTextField, exitBtn, field, gifsContainer, gifsBox, singleGif, spinner } = classes;
+  const { contentWrapper, menuContainer, exitAndTextField, exitBtn, field, gifsContainer, singleGif, spinner } = classes;
 
   const { gifs, maxResults , gifsLoading, gifOffset, gifQuery } = useSelector(state => state.gifsReducer);
 
@@ -76,37 +81,34 @@ const GifsMenu = ({ setGifstMenuOpen, values, setValues, referencia }) => {
 
   const { lastElement } = useInfiniteScroll( fetchGifs, maxResultsNotReached, gifsLoading );  
 
-    useEffect(() => {
+  useEffect(() => {
     dispatch(fetchGifs())
   },[])
 
-  const targetOneGif = (id) => {
-    const oneGifArr = gifs.filter(gif => gif.slug === id);
-    const oneGif = oneGifArr[0];
-    const oneGifUrl = oneGif.images.downsized_large.url;
+  const targetOneGif = (title, gif) => {
     const quill = referencia.current.getEditor();
     quill.focus();
-    console.log(referencia.current);
     let range = quill.getSelection();
     let position = range ? range.index : 0;
     console.log(quill.insertEmbed);
-    quill.insertEmbed(position, "image",  oneGifUrl , oneGif.title); 
+    quill.insertEmbed(position, "image", gif, title); 
     quill.setSelection(position + 1);
-    setValues({...values, media: oneGifUrl, mediaAlt: oneGif.title});
+    setValues({...values, media: gif, mediaAlt: title});
     dispatch(updateQuery(null));
     setGifstMenuOpen(false);
-    //console.log(values)
   }
 
+
   const handleSearch = (e) => {
-    dispatch(updateQuery(e))
+    let query = e.target.value
+    dispatch(updateQuery(query))
     dispatch(fetchGifs())
   }
 
   const closeGifsMenu = () => {
-     dispatch(updateQuery(null));
-     setGifstMenuOpen(false) 
-  }
+      dispatch(updateQuery(null));
+      setGifstMenuOpen(false) 
+  }  
 
   return (
       <>
@@ -123,20 +125,16 @@ const GifsMenu = ({ setGifstMenuOpen, values, setValues, referencia }) => {
                   }}
                   variant="outlined" 
                   label="Buscar gif"
-                  onChange={(e) => handleSearch(e.target.value)}
+                  onChange={handleSearch}
                   value={gifQuery}
                   />
                 </Box>
                 <Box className={gifsContainer}>
-                  <Box className={gifsBox}>
-                      { maxResults === 0 ? <p>no se encontro nada</p> : 
+                      { maxResults === 0 ? <p style={{margin:"auto"}}>no se encontro nada</p> : 
                       gifs && gifs.map((gif, index) => (
-                          <div key={index} ref={ gifs.length === index + 1 ? lastElement : null}>
-                              <img className={singleGif} loading="lazy" onClick={ () => targetOneGif(gif.slug)} src={gif.images.downsized_large.url} alt={gif.userName}/>
-                          </div>
+                          <img key={index} ref={ gifs.length === index + 1 ? lastElement : null} className={singleGif} loading="lazy" onClick={ () => targetOneGif(gif.title, gif.images.downsized_small.mp4)} src={gif.images.downsized_large.url} alt={gif.userName}/>
                       ))}
-                  {gifsLoading && <CircularProgress className={spinner} size={100}/>}   
-                  </Box>
+                  {gifsLoading && <img src={dots} alt="loading"/>}
                 </Box>
               </Box>
           </Card>   

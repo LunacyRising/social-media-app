@@ -65,7 +65,6 @@ const Home = () => {
     dispatch(fetchInitialPosts()); 
   },[]);
   
-  
   return (
     <>
       <main className={main}>
