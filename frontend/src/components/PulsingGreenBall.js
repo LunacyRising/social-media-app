@@ -28,6 +28,7 @@ const PulsingGreenBall = () => {
               left: 0,
               width: '100%',
               height: '100%',
+              boxSizing: "border-box",
               borderRadius: '50%',
               animation: 'ripple 1.2s infinite ease-in-out',
               border: '1px solid currentColor',
