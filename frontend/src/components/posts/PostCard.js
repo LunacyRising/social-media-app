@@ -44,7 +44,7 @@ const PostCard = ({
     card: {
       margin: "0px auto 30px",
       animation: "drop 1s ease",
-      overflow:"visible",
+      //overflow:"visible",
       width: "100%",
       "@media(min-width: 481px) and (max-width: 768px)" : {
         width: "75%",

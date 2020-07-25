@@ -19,6 +19,14 @@ a:hover {
   text-decoration: none;
 }
 
+
+/* estilos para el emoji picker*/
+
+.emoji-picker-react{
+  margin: 5px auto 0px;
+  box-shadow: none !important;
+}
+
 /*testeando estilo para el quill*/
 
 .quill {

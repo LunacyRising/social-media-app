@@ -5,7 +5,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { IconButton,Tooltip } from "@material-ui/core";
 import EmojiEmotionsOutlinedIcon from '@material-ui/icons/EmojiEmotionsOutlined';
 
-const SearchEmoji = ({ handleCommentModal  }) => {
+const SearchEmoji = ({ setEmojisMenuOpen }) => {
 
   const useStyles = makeStyles(() => ({
 
@@ -28,7 +28,7 @@ const SearchEmoji = ({ handleCommentModal  }) => {
   return (
       <>
           <Tooltip title="search emoji">
-              <IconButton className={btn}>
+              <IconButton className={btn} onClick={() => setEmojisMenuOpen(true)}>
                 <EmojiEmotionsOutlinedIcon fontSize="large"/>
               </IconButton>
           </Tooltip>

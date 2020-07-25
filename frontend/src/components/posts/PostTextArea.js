@@ -5,12 +5,13 @@ import { useTranslation } from "react-i18next";
 import { makeStyles } from "@material-ui/core/styles";
 import { TextField, Button, Box, LinearProgress} from "@material-ui/core";
 import UploadImageBtn from "../posts/mediaBtns/UploadImageBtn";
-import SearchEmoji from "../posts/mediaBtns/SearchEmoji";
+import SearchEmoji from "../posts/emojis/SearchEmoji";
 import SearchGif from "../posts/mediaBtns/SearchGif";
 import GifsMenu from "./GifsMenu";
 import { createPost } from "../../actions/postsActions/createPostAction";
 import { loginModalOpen } from "../../actions/modalsActions/login";
 import QuillEditor from "./editor/QuillEditor";
+import EmojisMenu from "./emojis/EmojisMenu";
 
 const PostTextArea = () => {
 
@@ -85,7 +86,9 @@ const PostTextArea = () => {
 
   const { title, post, media, mediaAlt } = values;
 
-  const [ gifstMenuOpen, setGifstMenuOpen ] = useState(false)
+  const [ gifstMenuOpen, setGifstMenuOpen ] = useState(false);
+
+  const [ emojisMenuOpen, setEmojisMenuOpen ] = useState(false);
 
   const createNewPost = () => {
     const data = new FormData(); 
@@ -121,15 +124,14 @@ const PostTextArea = () => {
             value={title}
             onChange={handleChange} 
           />
-          
-            <QuillEditor referencia={reactQuillRef} handleChangePost={handleChangePost} value={post}/>  
-          
+          <QuillEditor referencia={reactQuillRef} handleChangePost={handleChangePost} value={post}/>   
           {previewLoading && <LinearProgress style={{width: "100%"}}/>}
           {gifstMenuOpen && <GifsMenu setGifstMenuOpen={setGifstMenuOpen} values={values} setValues={setValues} referencia={reactQuillRef}/>}
+          {emojisMenuOpen && <EmojisMenu setEmojisMenuOpen={setEmojisMenuOpen} values={values} setValues={setValues} referencia={reactQuillRef}/>}
           <Box className={mediaBtnsContainer}>
             <UploadImageBtn values={values} setValues={setValues} referencia={reactQuillRef} setPreviewLoading={setPreviewLoading}/>
             <SearchGif setGifstMenuOpen={setGifstMenuOpen}/>
-            <SearchEmoji/>
+            <SearchEmoji setEmojisMenuOpen={setEmojisMenuOpen}/>
           </Box>
           <Button color="primary" className={submitBtn} onClick={() => submit()}>
             {t("PostIt")}

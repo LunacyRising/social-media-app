@@ -50,5 +50,16 @@
     "Gallery": "Galeria",
     "SelectImage": "Selecione A Imagem",
     "ImageDescription": "Título Da Imagem",
-    "UploadImage": "Carregar Uma Nova Imagem Para Sua Galeria"
+    "UploadImage": "Carregar Uma Nova Imagem Para Sua Galeria",
+    "EmojiPicker": {
+        "smileys_people": "Caritas",
+        "animals_nature": "Animais & Natureza",
+        "food_drink": "Alimentos & Bebidas",
+        "travel_places": "Viagens & Lugares",
+        "activities": "Atividades",
+        "objects": "Objetos",
+        "symbols": "Símbolos",
+        "flags": "Bandeiras",
+        "recently_used": "Usados Recentemente"
+     }
  }
