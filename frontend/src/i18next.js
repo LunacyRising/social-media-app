@@ -7,7 +7,15 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 // have a look at the Quick start guide 
 // for passing in lng and translations on init
 
-const Languages = ["en","es","port"];
+const Languages = ["en","es","pt"];
+
+const options = {
+  // order and from where user language should be detected
+  order: ['navigator', 'localStorage'],
+
+  // keys or params to lookup language from
+  lookupLocalStorage: 'i18nextLng'
+}
 
 i18n
   // load translation using http -> see /public/locales (i.e. https://github.com/i18next/react-i18next/tree/master/example/react/public/locales)
@@ -24,6 +32,7 @@ i18n
     fallbackLng: 'es',
     debug: true,
     whitelist: Languages,
+    detection: options,
     interpolation: {
       escapeValue: false, // not needed for react as it escapes by default
     }
