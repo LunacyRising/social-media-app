@@ -92,7 +92,6 @@ const Comment = ({ replyComponent, postId, id, replyId, commentsCount, comment ,
       bottom: 0,
       left: "50%",
       transform: "translateX(-50%)",
-      width: "10%",
       fontSize: 10
     }
   }));

@@ -16,12 +16,15 @@ const ReplyField = ({ postId, setReplyFieldOpen, commentId, replies}) => {
     btnsContainer: {
         display: "flex",
         justifyContent: "flex-end" 
+    },
+    btns: {
+      fontSize: 12
     }
   })); 
 
   const classes = useStyles();
 
-  const { container, btnsContainer } = classes;
+  const { container, btnsContainer, btns } = classes;
 
   const { isAuthenticated } = useSelector(state => state.authReducer);
 
@@ -42,8 +45,8 @@ const ReplyField = ({ postId, setReplyFieldOpen, commentId, replies}) => {
         <Box className={container}>
           <TextField onChange={(e) => setReply(e.target.value)} type="text" name="reply" value={reply}/>
           <Box className={btnsContainer}>
-            <Button onClick={() => dispatchReply()}>{t("Accept")}</Button>
-            <Button onClick={() => setReplyFieldOpen(false)}>{t("Cancel")}</Button>
+            <Button className={btns} onClick={() => dispatchReply()}>{t("Accept")}</Button>
+            <Button className={btns} onClick={() => setReplyFieldOpen(false)}>{t("Cancel")}</Button>
           </Box>
         </Box>
       </>
