@@ -10,7 +10,7 @@ import { updateQuery } from "../../actions/gifsActions/updateQuery";
 import useInfiniteScroll from "./useInfiniteScroll"; 
 
 
-const GifsMenu = ({ setGifstMenuOpen, values, setValues, referencia }) => { 
+const GifsMenu = ({ setGifstMenuOpen, values, setValues, reactQuillRef }) => { 
 
   const colorsArr = ["#f7347a", "#5ac18e", "#008080", "#e6e6fa", "#fa8072", "#8a2be2", "#088da5", "#333333"];
 
@@ -90,7 +90,7 @@ const GifsMenu = ({ setGifstMenuOpen, values, setValues, referencia }) => {
 
 
   const targetOneGif = (title, gif) => {
-    const quill = referencia.current.getEditor(); 
+    const quill = reactQuillRef.current.getEditor(); 
     quill.focus();
     const range = quill.getSelection();
     let position = range ? range.index : 0;

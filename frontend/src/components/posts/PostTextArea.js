@@ -114,6 +114,8 @@ const PostTextArea = () => {
 
   const submit = () => {
     isAuthenticated ? createNewPost() : dispatch(loginModalOpen());
+    const quill = reactQuillRef.current.getEditor();
+    quill.setContents([{ insert: '\n' }]);
     setValues({title: "", post : ""})
   };
 
@@ -130,8 +132,8 @@ const PostTextArea = () => {
           />
           <QuillEditor referencia={reactQuillRef} handleChangePost={handleChangePost} value={post}/>   
           {previewLoading && <LinearProgress style={{width: "100%"}}/>}
-          {gifstMenuOpen && <GifsMenu setGifstMenuOpen={setGifstMenuOpen} values={values} setValues={setValues} referencia={reactQuillRef}/>}
-          {emojisMenuOpen && <EmojisMenu setEmojisMenuOpen={setEmojisMenuOpen} values={values} setValues={setValues} referencia={reactQuillRef}/>}
+          {gifstMenuOpen && <GifsMenu setGifstMenuOpen={setGifstMenuOpen} values={values} setValues={setValues} reactQuillRef={reactQuillRef}/>}
+          {emojisMenuOpen && <EmojisMenu setEmojisMenuOpen={setEmojisMenuOpen} values={values} setValues={setValues} reactQuillRef={reactQuillRef}/>}
           <Box className={mediaBtnsContainer}>
             <UploadImageBtn values={values} setValues={setValues} referencia={reactQuillRef} setPreviewLoading={setPreviewLoading}/>
             <SearchGif setGifstMenuOpen={setGifstMenuOpen}/>

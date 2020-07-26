@@ -4,7 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Picker from 'emoji-picker-react';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
-const EmojisMenu = ({ setEmojisMenuOpen, referencia }) => { 
+const EmojisMenu = ({ setEmojisMenuOpen, reactQuillRef }) => { 
 
     const useStyles = makeStyles(() => ({
 
@@ -24,7 +24,7 @@ const EmojisMenu = ({ setEmojisMenuOpen, referencia }) => {
     const { t } = useTranslation();
 
     const onEmojiClick = (event, emojiObject) => {
-        const quill = referencia.current.getEditor();
+        const quill = reactQuillRef.current.getEditor();
         quill.focus();
         let range = quill.getSelection();
         let position = range ? range.index : 0;
@@ -38,7 +38,6 @@ const EmojisMenu = ({ setEmojisMenuOpen, referencia }) => {
         <ClickAwayListener onClickAway={() => setEmojisMenuOpen(false)}>
         <div className={pickerContainer}>
             <Picker onEmojiClick={onEmojiClick}
-            // cambiar esos nombres con int cuando pinten ganas
             groupNames={{
             smileys_people: t('EmojiPicker.smileys_people'),
             animals_nature: t('EmojiPicker.animals_nature'),

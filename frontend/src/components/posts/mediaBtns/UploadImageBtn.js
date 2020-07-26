@@ -6,7 +6,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { IconButton,Tooltip } from "@material-ui/core";
 import ImageOutlinedIcon from '@material-ui/icons/ImageOutlined';
 
-const UploadImage = ({ values, setValues, referencia, setPreviewLoading }) => {
+const UploadImage = ({ values, setValues, reactQuillRef, setPreviewLoading }) => {
 
   const useStyles = makeStyles(() => ({
 
@@ -41,7 +41,7 @@ const UploadImage = ({ values, setValues, referencia, setPreviewLoading }) => {
     setPreviewLoading(false)
     const preview = response.data.preview
     // targetea el quill
-    const quill = referencia.current.getEditor();
+    const quill = reactQuillRef.current.getEditor();
     // focus el quill 
     quill.focus();
     const range = quill.getSelection()
