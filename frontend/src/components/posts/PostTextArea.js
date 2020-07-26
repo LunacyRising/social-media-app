@@ -135,7 +135,7 @@ const PostTextArea = () => {
           {gifstMenuOpen && <GifsMenu setGifstMenuOpen={setGifstMenuOpen} values={values} setValues={setValues} reactQuillRef={reactQuillRef}/>}
           {emojisMenuOpen && <EmojisMenu setEmojisMenuOpen={setEmojisMenuOpen} values={values} setValues={setValues} reactQuillRef={reactQuillRef}/>}
           <Box className={mediaBtnsContainer}>
-            <UploadImageBtn values={values} setValues={setValues} referencia={reactQuillRef} setPreviewLoading={setPreviewLoading}/>
+            <UploadImageBtn values={values} setValues={setValues} reactQuillRef={reactQuillRef} setPreviewLoading={setPreviewLoading}/>
             <SearchGif setGifstMenuOpen={setGifstMenuOpen}/>
             <SearchEmoji setEmojisMenuOpen={setEmojisMenuOpen}/>
           </Box>
