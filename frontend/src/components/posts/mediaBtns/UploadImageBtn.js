@@ -41,15 +41,15 @@ const UploadImage = ({ values, setValues, referencia, setPreviewLoading }) => {
     setPreviewLoading(false)
     const preview = response.data.preview
     // targetea el quill
-      const quill = referencia.current.getEditor();
+    const quill = referencia.current.getEditor();
     // focus el quill 
     quill.focus();
     const range = quill.getSelection()
     // posicion de la imagen
     const position = range ? range.index : 0;
     // inserta la imagen al editor
-    console.log(preview)
     quill.insertEmbed(position, "image", preview); 
+    quill.setSelection(position + 1);
     // agrega al estado la imagen que se va a utilizar para subir a cloudinary, no es la misma que la preview!
     setValues({...values, media: image, mediaAlt: image.name})
 

@@ -88,13 +88,13 @@ const GifsMenu = ({ setGifstMenuOpen, values, setValues, referencia }) => {
     dispatch(fetchGifs())
   },[])
 
+
   const targetOneGif = (title, gif) => {
-    console.log(gif)
-    const quill = referencia.current.getEditor();
+    const quill = referencia.current.getEditor(); 
     quill.focus();
-    let range = quill.getSelection();
+    const range = quill.getSelection();
     let position = range ? range.index : 0;
-    console.log(quill.insertEmbed);
+    console.log(range.index);
     quill.insertEmbed(position, "image", gif, title); 
     quill.setSelection(position + 1);
     setValues({...values, media: gif, mediaAlt: title});
@@ -136,8 +136,8 @@ const GifsMenu = ({ setGifstMenuOpen, values, setValues, referencia }) => {
                 <Box className={gifsContainer}>
                       { maxResults === 0 ? <p className={alignCenter}>no se encontro nada</p> : 
                       gifs && gifs.map((gif, index) => (
-                      <Box className={gifBox}>
-                        <img key={index} ref={ gifs.length === index + 1 ? lastElement : null} className={singleGif} loading="lazy" onClick={ () => targetOneGif(gif.title, gif.images.downsized_large.url)} src={gif.images.preview_gif.url} alt={gif.userName}/>
+                      <Box key={gif.id} className={gifBox}>
+                        <img ref={ gifs.length === index + 1 ? lastElement : null} className={singleGif} loading="lazy" onClick={ () => targetOneGif(gif.title, gif.images.downsized_large.url)} src={gif.images.preview_gif.url} alt={gif.userName}/>
                       </Box>
                       ))}
                   {gifsLoading && <img className={alignCenter} src={dots} alt="loading"/>}

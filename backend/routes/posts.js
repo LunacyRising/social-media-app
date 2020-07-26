@@ -12,11 +12,10 @@ const { uploadMedia } = require("../helperFunctions/uploadMedia");
 
 //CREATE POST
 router.post("/createPost", verify, async (req, res) => { 
- 
-  const { userId } = req.body; 
-  const image = req.files !== null && req.files.media;
 
-  console.log(req.body)
+  const { userId } = req.body;  
+ 
+  const image = req.files && req.files.media;
 
   const cloudinaryResponse =  image && await uploadMedia(image.tempFilePath, {public_id: image.name, folder: "Post Images"}); 
   const postImage =  cloudinaryResponse && cloudinaryResponse.secure_url;
@@ -25,6 +24,7 @@ router.post("/createPost", verify, async (req, res) => {
 
   try{
     const newPost = await new Post(newPostContent).save();
+    console.log(newPost)
     await User.findOneAndUpdate({_id: userId},{$inc: { amountOfPosts : 1 }});
     res.status(201).send({ code: 234, newPost });
   }catch(err){

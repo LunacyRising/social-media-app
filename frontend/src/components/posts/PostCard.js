@@ -221,10 +221,6 @@ const PostCard = ({
 
   const dispatch = useDispatch(); 
     
-  function createMarkup() {
-    return {__html: post};
-  }
-
   return ( 
     <>  
         <EditPostModal postToEdit={post} postId={postId} openEditPostModal={openEditPostModal} editPostModal={editPostModal} />
@@ -262,8 +258,7 @@ const PostCard = ({
                     >
                       {title}
                   </Typography>
-                  {/*<Typography variant="body2">{post}</Typography>*/}
-                  <Typography className={postText} variant="body2" dangerouslySetInnerHTML={createMarkup()}/>
+                  <Typography className={postText} variant="body2">{post}</Typography>
                   {<Box className={mediaContainer}>
                     {media && <img className={mediaStyle} loading="lazy" src={media} alt={mediaAlt}/>}
                   </Box>}

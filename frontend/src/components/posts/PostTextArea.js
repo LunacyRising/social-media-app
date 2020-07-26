@@ -90,10 +90,14 @@ const PostTextArea = () => {
 
   const [ emojisMenuOpen, setEmojisMenuOpen ] = useState(false);
 
-  const createNewPost = () => {
+  const regex = /(<([^>]+)>)/ig;
+
+  const removeHtmlTagFromPost  = post.replace(regex, '');
+
+  const createNewPost = () => { 
     const data = new FormData(); 
     data.append("title", title);
-    data.append("post", post);
+    data.append("post", removeHtmlTagFromPost );
     data.append("avatar", avatar);
     data.append("creatorAmountOfPosts", creatorAmountOfPosts);
     data.append("userId", userId);
