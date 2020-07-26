@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -13,16 +13,15 @@ import {
   Button
 } from "@material-ui/core"; 
 import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
+import relativeTime from "dayjs/plugin/relativeTime"; 
 //testing
 import LikeDislikeBtns from "../posts/buttons/LikeDislikeBtns";
 import ReplyField from "./ReplyField";
 import Replies from "./Replies";
-import { fetchCommentsByPost } from "../../actions/commentsActions/fetchCommentsByPost";
 import { fetchReplies } from "../../actions/commentsActions/fetchReplies";
 
 
-const Comment = ({ replyComponent, postId, id, replyId, commentsCount, comment , userName, avatar, likes, dislikes, createdAt, repliesCounter, replies }) => { 
+const Comment = ({ replyComponent, postId, id, comment , userName, avatar, likes, dislikes, createdAt, repliesCounter, replies }) => { 
 
   console.log(`soy el id del comentario : ${id}`)
   const useStyles = makeStyles(() => ({ 
@@ -105,29 +104,9 @@ const Comment = ({ replyComponent, postId, id, replyId, commentsCount, comment ,
 
   dayjs.extend(relativeTime);
 
-  let [ skip, setSkip ] = useState(0);
-
-  const [ limit ] = useState(1);
-
-  //const [ commentsLoading, setCommentsLoading ] = useState(false);
-
   const [ replyFieldOpen , setReplyFieldOpen ] = useState(false);
 
   const [ openReplies , setOpenReplies ] = useState(false);
-
-  //const [ commentId, setCommentId ] = useState(null);
-  
-  // los comentarios correspondientes de cada post
-  //const commentsByPost = comments.filter(comment => comment.postId === postId);
-
-  const fetchComments = () => {
-    // si no hay comentarios o ya se trajeron todos los comentarios de dicho post no hace nada
-    //if(commentsCount === 0 || commentsCount === commentsByPost.length) return; 
-   // setCommentsLoading(true)
-    setSkip( prev => prev + limit);
-    dispatch(fetchCommentsByPost({ postId, skip, limit }));
-   // setCommentsLoading(false)
-  }
 
   const repliesLength = replies.filter(reply => reply.commentId === id).length
 

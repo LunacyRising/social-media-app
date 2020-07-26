@@ -1,13 +1,11 @@
 import React  from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { makeStyles } from "@material-ui/core/styles";
-import { Button, Box, CircularProgress } from "@material-ui/core";
+import { Button, Box } from "@material-ui/core";
 import GavelTwoToneIcon from '@material-ui/icons/GavelTwoTone';
-import { fetchCommentsByPost } from "../../../actions/commentsActions/fetchCommentsByPost";
+import dots from "../../../utils/images/dots.svg";
 
-
-const LoadMoreBtn = ({ loadMore }) => {
+const LoadMoreBtn = ({ loadMore, moreCommentsLoading }) => {
 
     const useStyles = makeStyles(() => ({
       
@@ -22,30 +20,20 @@ const LoadMoreBtn = ({ loadMore }) => {
       },
       spanBtn: {
         marginRight: 8
-      },
-      disabled: {
-        pointerEvents: "none",
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
       }
     })); 
     
     const classes = useStyles();
 
-    const { container, btn, spanBtn, disabled } = classes;
+    const { container, btn, spanBtn } = classes;
 
     const { t } = useTranslation();
-
-    const { loadingMorePosts } = useSelector(state => state.postReducer);
-
-    const dispatch = useDispatch()
 
     return (
 
         <Box className={container}>
-            { loadingMorePosts ? <CircularProgress size={50}/>: 
-            <Button className={loadingMorePosts ? disabled : btn} onClick={() => loadMore()}>
+            { moreCommentsLoading ? <img src={dots} alt="dots"/>: 
+            <Button className={btn} onClick={() => loadMore()}>
                 <span className={spanBtn}>{t("LoadMore")}</span>
                 <GavelTwoToneIcon/>
             </Button>}

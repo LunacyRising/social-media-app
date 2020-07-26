@@ -17,8 +17,6 @@ const initialState = {
   comments: [],
   commentsLoading: false,
   loading: false,
-  skip: 0, 
-  limit: 1,
   amountOfComments: 0,
   amountOfReplies: 0,
   replies: []

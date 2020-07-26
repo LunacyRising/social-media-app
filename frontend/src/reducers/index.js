@@ -12,6 +12,7 @@ import favoritesReducer from "./favoritesReducer";
 import friendsReducer from "./friendsReducer";
 import galleryReducer from "./galleryReducer";
 
+
 const allReducers = combineReducers({
   messagesReducer,
   authReducer,

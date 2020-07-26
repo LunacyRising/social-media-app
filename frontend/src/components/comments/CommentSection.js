@@ -6,7 +6,8 @@ import { Typography, Box, IconButton } from "@material-ui/core";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import Comments from "./Comments";
-//import LoadMoreBtn from "../posts/buttons/LoadMoreBtn";
+import LoadMoreBtn from "../posts/buttons/LoadMoreBtn";
+import dots from "../../utils/images/dots.svg";
 import { fetchCommentsByPost } from "../../actions/commentsActions/fetchCommentsByPost"; 
 
 const CommentSection = ({ postId, commentsCount }) => { 
@@ -41,7 +42,6 @@ const CommentSection = ({ postId, commentsCount }) => {
 
   const { comments, replies } = useSelector(state => state.commentsReducer);
 
-  const [ openComments, setOpenComments ] = useState(false);  
 
   const { t } = useTranslation();
 
@@ -49,28 +49,35 @@ const CommentSection = ({ postId, commentsCount }) => {
 
   const dispatch = useDispatch();
 
+  const [ openComments, setOpenComments ] = useState(false); 
+  
+  const [ loading, setLoading ] = useState(false);  
+
+  const [ moreCommentsLoading, setMoreCommentsLoading ] = useState(false);  
+
   const [ skip, setSkip ] = useState(0);
 
-  const [ limit, setLimit ] = useState(1)
+  const [ limit, setLimit ] = useState(1);
 
   let dinamicCommentWord = commentsCount === 1 ?  t("Comment") : t("Comments")
 
   let dinamicOpenCommentsWord = !openComments ? t("OpenComments") : t("CloseComments")
 
-  //verificar si ya hay un comentario en el reducer, si lo hay no es necesario fetchear mas comentarios con el boton de abrir comentarios
-  const yaHayUnComentario = comments && comments.some(comment => comment.postId === postId)
-  //console.log(yaHayUnComentario)
+  const commentsByPost = comments && comments.filter(comment => comment.postId === postId);
 
-  const testingFetchComments = async () => {
+  const fetchComments = () => {
     setOpenComments(prev => !prev);
-    //console.log(yaHayUnComentario)
-    if(yaHayUnComentario) return 
-     dispatch(fetchCommentsByPost({postId, skip, limit}))
+    if(commentsCount === 0 || commentsByPost.length === commentsCount || commentsByPost.length >= 1 ) return 
+    setLoading(true)
+    dispatch(fetchCommentsByPost({postId, skip, limit}))
+    setLoading(false)
     setSkip( prev => prev + limit)
   }
 
   const loadMore = () => {
+    setMoreCommentsLoading(true)
     dispatch(fetchCommentsByPost({postId, skip, limit}));
+    setMoreCommentsLoading(false)
     setSkip( prev => prev + limit)
   }
 
@@ -80,12 +87,13 @@ const CommentSection = ({ postId, commentsCount }) => {
        <Typography variant="caption">
             {commentsCount} {dinamicCommentWord}
         </Typography>
-        <IconButton className={btn} onClick={() => testingFetchComments()}>{dinamicOpenCommentsWord}</IconButton>
+        <IconButton className={btn} onClick={() => fetchComments()}>{dinamicOpenCommentsWord}</IconButton>
       </Box>
       {openComments && 
       <Box className={commentsContainer}>
+        {loading && <img src={dots} alt="dots"/>}
         {commentsCount > 0  ? <Comments comments={comments} replies={replies} commentsCount={commentsCount} postId={postId}/> : <Typography className={noComments}>{t("NoComments")}</Typography>}
-        {/*yaHayUnComentario && commentsCount > test && <LoadMoreBtn loadMore={loadMore} postId={postId} skip={skip} limit={limit}/>*/}
+        {commentsByPost.length !== commentsCount && <LoadMoreBtn loadMore={loadMore} postId={postId} skip={skip} limit={limit} moreCommentsLoading={moreCommentsLoading}/>}
       </Box>}
     </>
   );

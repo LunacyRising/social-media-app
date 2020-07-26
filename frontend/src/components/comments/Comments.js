@@ -7,7 +7,7 @@ const Comments = ({ comments, commentsCount, postId, replies }) => {
     <>
       {comments.filter(comment =>(comment.postId === postId))
       .map(comment => (
-        <Comment key={comment._id} postId={postId} commentsCount={commentsCount} comment={comment.comment} avatar={comment.avatar} userName={comment.userName} likes={comment.likes} dislikes={comment.dislikes} createdAt={comment.createdAt} repliesCounter={comment.replies} id={comment._id} replies={replies}/>
+        <Comment key={comment._id} postId={postId} commentsCount={commentsCount} comment={comment.comment} avatar={comment.avatar} userName={comment.userName} likes={comment.likes} dislikes={comment.dislikes} createdAt={comment.createdAt} repliesCounter={comment.replies} id={comment._id} comments={comments} replies={replies}/>
       ))
       }
     </>
