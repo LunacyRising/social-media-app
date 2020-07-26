@@ -12,6 +12,7 @@ import SnackbarMessages from "./SnackbarMessages";
 //import FriendMenu from "./friends/FriendMenu";
 import { fetchInitialPosts } from "../actions/postsActions/fetchInitialPosts";
 
+
 const Home = () => {
 
   const useStyles = makeStyles((theme) => ({

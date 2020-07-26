@@ -35,6 +35,7 @@ const initialState = {
   dislikeLoading: false,
   skip: 0, 
   limit: 2,
+  sortOptions: {date: -1},
   maxResults: 0,  
   allLikes: [],
   allDislikes: [],
@@ -64,9 +65,10 @@ const postsReducer = (state = initialState, action) => {
     case FETCH_POSTS_SUCCESS:
       return {
         ...state,
-        posts: [...state.posts, ...action.payload.posts],
+        posts: action.payload.replacePosts ? action.payload.posts : [...state.posts, ...action.payload.posts],
         skip: action.payload.skip,
         maxResults: action.payload.maxResults,
+        sortOptions: action.payload.sortOptions,
         postsLoading: false
       }; 
     case FETCH_POST_SUCCESS: 

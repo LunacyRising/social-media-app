@@ -4,17 +4,17 @@ import { returnMessages } from "../messagesActions";
 
 export const fetchInitialPosts = () => async (dispatch, getState) => {
 
-  let { limit, amountOfPosts } = getState().postReducer; 
+  let { limit, sortOptions } = getState().postReducer; 
 
-  let skip = 0;
+  const offSet = 0;
+  // lo puse dentro de una variable para que tenga el mismo nombre que el q pasa la accion de fetchposts al backend
+  const sort = sortOptions;
   
-  //console.log(skip , limit, amountOfPosts)
- 
   dispatch({ type: POSTS_LOADING })
 
   try {
     const response = await axios.post(`http://localhost:5001/posts/`, 
-     {skip, limit }
+     {offSet, limit, sort}
     );
 
     console.log(response)
@@ -23,7 +23,7 @@ export const fetchInitialPosts = () => async (dispatch, getState) => {
       type: FETCH_INITIAL_POSTS_SUCCESS,
       payload: {
         posts : response.data.posts, 
-        skip : skip + limit,
+        skip : offSet + limit,
         maxResults : response.data.maxResults
       }
     });

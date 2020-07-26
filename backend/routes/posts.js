@@ -37,11 +37,9 @@ router.post("/createPost", verify, async (req, res) => {
 // GET ALL POSTS
 router.post("/posts", async (req, res) => { 
 
-  const { skip, limit, query, order} = req.body  
+  const { offSet, limit, query, sort} = req.body  
 
-  console.log(limit, skip) 
-
-  const offSet = parseInt(skip);
+  const offSet2 = parseInt(offSet);
 
   const postsLimit = parseInt(limit);
 
@@ -50,16 +48,16 @@ router.post("/posts", async (req, res) => {
   const initialSearch = 
   await Post
       .find()
-      .skip(offSet)
+      .skip(offSet2)
       .limit(postsLimit)
-      .sort({ date: -1 });   
+      .sort(sort);   
         
   const searchByQuery =
   await Post
       .find({$or: [{title: {$regex: query !== null && query !== undefined && query, $options: "mgix"}},{post:{$regex: query !== null && query !== undefined &&  query, $options: "mgix"}}]})
-      .skip(offSet)
+      .skip(offSet2)
       .limit(postsLimit)
-      .sort({ date: -1 });
+      .sort(sort);
 
   try { 
     const totalAmountOfPosts = await Post.countDocuments();
@@ -133,15 +131,6 @@ router.post("/posts/:postId/edit", verify, async (req,res) => {
   }
 })
 
-// GET OLDEST POSTS
-router.get("/posts/oldest/asd", async (req, res) => {
-  try {
-    const posts = await Post.find().sort();
-    res.status(200).send({ code: 237, posts });
-  } catch (err) {
-    res.status(400).send({ code: 500 });
-  }
-});
 
 // DELETE POST
 router.delete("/posts/:postId", verify, async (req, res) => {
@@ -187,16 +176,6 @@ router.post("/deleteAll", async (req, res) => {
   }
 });
 
-// POST BY MOST LIKES
-
-router.get("/posts/mostLikes/asd", async (req, res) => {
-  try {
-    const posts = await Post.find().sort({ likes: -1 });
-    res.status(200).send({ code: 238, posts });
-  } catch (err) {
-    res.status(400).send({ code: 500 });
-  }
-});
 
 //LIKE
 router.post("/posts/:postId/likes", verify, async (req, res) => {

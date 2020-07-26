@@ -10,8 +10,6 @@ import SortRoundedIcon from "@material-ui/icons/SortRounded";
 import { makeStyles } from "@material-ui/core/styles";
 import { useDispatch } from "react-redux";
 import { fetchPosts } from "../../actions/postsActions/fetchPostsAction";
-import { fetchOldestPosts } from "../../actions/postsActions/fetchOldestPostsAction";
-import { fetchPostMostLikes } from "../../actions/postsActions/fetchPostMostLikesAction";
 
 
 const SortPosts = () => {
@@ -58,18 +56,26 @@ const SortPosts = () => {
 
   const dispatch = useDispatch()
 
+  const replacePosts = true
+
+  const oldestOptions = {date: +1};
+
+  const newestOptions = {date: -1};
+
+  const mostLikeOptions = {likes: -1};
+
   const oldestSort = () => { 
-    dispatch(fetchOldestPosts());
+    dispatch(fetchPosts(oldestOptions, replacePosts));
     handleClose();
   };
 
   const newestSort = () => {
-    dispatch(fetchPosts());
+    dispatch(fetchPosts(newestOptions, replacePosts));
     handleClose();
   };
 
   const mostLikes = () => {
-    dispatch(fetchPostMostLikes());
+    dispatch(fetchPosts(mostLikeOptions, replacePosts));
     handleClose();
   };
 
