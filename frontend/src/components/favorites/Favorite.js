@@ -8,7 +8,7 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import HighlightOffOutlinedIcon from '@material-ui/icons/HighlightOffOutlined';
 
-const Favorite = ({ media, mediaAlt, image , title, userName, favoriteId, amountOfComments, date }) => { 
+const Favorite = ({ media, mediaAlt, title, userName, favoriteId, amountOfComments, date }) => { 
     
     const useStyles = makeStyles(() => ({ 
       card: {
@@ -17,10 +17,7 @@ const Favorite = ({ media, mediaAlt, image , title, userName, favoriteId, amount
             alignItems: "center",
             marginTop: 10,
             transition: "0.5s ease-out",
-            height: 80,
-            "@media(min-width: 1024px)" : {
-                height: 120,
-            },
+            height: 80
         },
         cardContent: {
             display: "flex",
@@ -37,7 +34,8 @@ const Favorite = ({ media, mediaAlt, image , title, userName, favoriteId, amount
         },    
         mediaStyle: {
             width: "100%",
-            height: "100%"
+            height: "100%",
+            objectFit: "cover"
         },
         favoriteTitle: {
             fontSize: 10,

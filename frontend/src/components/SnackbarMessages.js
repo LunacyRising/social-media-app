@@ -82,7 +82,7 @@ const SnackbarMessages = () => {
       break;
     case 252:
       text = "Post Edited!";
-      style = messageSuccess;
+      style = messageSuccess; 
       break;
     case 253:
       text = "You cannot like the same post twice!";

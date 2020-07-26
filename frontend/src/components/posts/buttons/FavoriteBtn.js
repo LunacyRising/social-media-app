@@ -43,7 +43,7 @@ const FavoriteBtn = ({ postId }) => {
   
     return (
         <>
-            <Tooltip title={!favoriteExists ? t("AddFavorites") : t("RemoveFavorites")}>
+            <Tooltip title={!favExists ? t("AddFavorites") : t("RemoveFavorites")}>
                 <IconButton className={!favExists ? btn : `${btn} ${color}` }  onClick={() => action(postId)}>
                     <StarTwoToneIcon />
                 </IconButton>
