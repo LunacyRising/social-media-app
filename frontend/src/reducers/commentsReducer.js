@@ -57,7 +57,7 @@ const commentsReducer = (state = initialState, action) => {
     case FETCH_COMMENTS_BY_POST: 
       return {
         ...state,
-        comments : [...action.payload.comments, ...state.comments],  
+        comments : [...state.comments, ...action.payload.comments],  
         amountOfComments: action.payload.amountOfComments, 
         commentsLoading: false 
       };
