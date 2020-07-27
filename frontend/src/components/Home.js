@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { makeStyles } from "@material-ui/core/styles";
 import { CircularProgress } from "@material-ui/core";
 import Login from "./auth/Login";
@@ -50,6 +51,8 @@ const Home = () => {
 
   const history = useHistory();
 
+  const { t } = useTranslation();
+
   //const { isAuthenticated } = useSelector(state => state.authReducer);
 
   const dispatch = useDispatch()
@@ -65,7 +68,7 @@ const Home = () => {
           <PostTextArea />
             {messageCode === 300 && !postsLoading? <NoResults/> : <Posts/>}
             {postsLoading && !postsLoading2 && <CircularProgress size={50}/>}
-            {maxResultsReached && messageCode !== 300 && <p className={noMorePosts}>no hay mas resultados</p>}
+            {maxResultsReached && messageCode !== 300 && <p className={noMorePosts}>{t("NoMoreResults")}</p>}
             <Login/>
             <Register/>
           {/* isAuthenticated && <FriendMenu/>*/} 
