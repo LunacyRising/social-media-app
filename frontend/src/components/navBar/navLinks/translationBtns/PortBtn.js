@@ -26,7 +26,7 @@ const LoginBtn = () => {
 
     return (
             <>
-                <NavBtn className={noMargin} onClick={() => changeLang("port")}>
+                <NavBtn className={noMargin} onClick={() => changeLang("pt")}>
                     <img className={span} src={brazil} width={25} height={25} alt="brazil"/>
                 </NavBtn>
             </>
