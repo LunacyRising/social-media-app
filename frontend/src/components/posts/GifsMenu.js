@@ -138,7 +138,7 @@ const GifsMenu = ({ setGifstMenuOpen, values, setValues, reactQuillRef }) => {
                   />
                 </Box>
                 <Box className={gifsContainer}>
-                      { maxResults === 0 ? <p className={noResults}>no se encontro nada</p> : 
+                      { maxResults === 0 && !gifsLoading ? <p className={noResults}>no se encontro nada</p> : 
                       gifs && gifs.map((gif, index) => (
                       <Box key={gif.id} className={gifBox}>
                         <img ref={ gifs.length === index + 1 ? lastElement : null} className={singleGif} loading="lazy" onClick={ () => targetOneGif(gif.title, gif.images.downsized_large.url)} src={gif.images.preview_gif.url} alt={gif.userName}/>
