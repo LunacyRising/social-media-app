@@ -22,7 +22,7 @@ const CommentSection = ({ postId, commentsCount }) => {
       padding: 7
     },
     btn: {
-      fontSize: 14
+      fontSize: 12
     },
     commentsContainer: {
       display: "flex",
