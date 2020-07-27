@@ -1,5 +1,5 @@
 import axios from "axios";
-import { FETCH_POSTS_SUCCESS, FETCH_POSTS_FAIL, POSTS_LOADING, FETCH_POSTS_BY_SEARCH } from "../types";
+import { FETCH_POSTS_SUCCESS, FETCH_POSTS_FAIL, POSTS_LOADING, POSTS_LOADING2} from "../types";
 import { returnMessages } from "../messagesActions";
 
 
@@ -13,7 +13,9 @@ export const fetchPosts = (sortOrder, replacePosts) => async (dispatch, getState
   // si la accion viene de alguno de los botones de sort el offset va a ser 0 
   let offSet = sortOrder ? 0 : skip;
 
-  dispatch({ type: POSTS_LOADING })
+  dispatch({ type: POSTS_LOADING });
+
+  replacePosts && dispatch({ type: POSTS_LOADING2 })
 
   try {
     const response = await axios.post(`http://localhost:5001/posts/`, 

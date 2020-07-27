@@ -3,6 +3,7 @@ import {
   FETCH_POSTS_SUCCESS,
   FETCH_POSTS_FAIL,
   POSTS_LOADING,
+  POSTS_LOADING2,
   POST_IMAGE_PREVIEW_SUCCESS,
   CREATE_POST_SUCCESS,
   CREATE_POST_FAIL,
@@ -29,8 +30,8 @@ import {
 
 const initialState = {
   loading: false, 
-  loadingMorePosts: false,
   postsLoading : false,
+  postsLoading2: false,
   likeLoading: false,
   dislikeLoading: false,
   skip: 0, 
@@ -54,13 +55,19 @@ const postsReducer = (state = initialState, action) => {
         ...state,
         postsLoading: true
       };
+    case POSTS_LOADING2: 
+      return {
+        ...state,
+        postsLoading2: true
+      };
     case FETCH_INITIAL_POSTS_SUCCESS:
       return {
         ...state,
         posts: action.payload.posts,
         skip: action.payload.skip,
         maxResults: action.payload.maxResults,
-        postsLoading: false
+        postsLoading: false,
+        postsLoading2: false
       };
     case FETCH_POSTS_SUCCESS:
       return {
@@ -69,7 +76,8 @@ const postsReducer = (state = initialState, action) => {
         skip: action.payload.skip,
         maxResults: action.payload.maxResults,
         sortOptions: action.payload.sortOptions,
-        postsLoading: false
+        postsLoading: false,
+        postsLoading2: false
       }; 
     case FETCH_POST_SUCCESS: 
       return {
@@ -92,7 +100,7 @@ const postsReducer = (state = initialState, action) => {
       return {
         ...state,
         postsLoading: false,
-        loadingMorePosts: false
+        postsLoading2: false,
       }; 
     case EDIT_POST_SUCCESS:
       return {

@@ -50,6 +50,7 @@ export const EDITUSER_FAIL = "EDITUSER_FAIL";
 //////////////////////////////////////////////
 // posts
 export const POSTS_LOADING = "POSTS_LOADING";
+export const POSTS_LOADING2 = "POSTS_LOADING2";
 export const FETCH_INITIAL_POSTS_SUCCESS = "FETCH_INITIAL_POSTS_SUCCESS";
 export const FETCH_POSTS_SUCCESS = "FETCH_POSTS_SUCCESS";
 export const FETCH_POSTS_BY_SEARCH = "FETCH_POSTS_BY_SEARCH";

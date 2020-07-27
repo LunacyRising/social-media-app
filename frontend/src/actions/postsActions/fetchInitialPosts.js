@@ -1,5 +1,5 @@
 import axios from "axios";
-import { FETCH_INITIAL_POSTS_SUCCESS, FETCH_POSTS_FAIL, POSTS_LOADING } from "../types";
+import { FETCH_INITIAL_POSTS_SUCCESS, FETCH_POSTS_FAIL, POSTS_LOADING, POSTS_LOADING2 } from "../types";
 import { returnMessages } from "../messagesActions";
 
 export const fetchInitialPosts = () => async (dispatch, getState) => {
@@ -10,7 +10,9 @@ export const fetchInitialPosts = () => async (dispatch, getState) => {
   // lo puse dentro de una variable para que tenga el mismo nombre que el q pasa la accion de fetchposts al backend
   const sort = sortOptions;
   
-  dispatch({ type: POSTS_LOADING })
+  dispatch({ type: POSTS_LOADING });
+
+  dispatch({ type: POSTS_LOADING2 });
 
   try {
     const response = await axios.post(`http://localhost:5001/posts/`, 

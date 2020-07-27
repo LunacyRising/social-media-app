@@ -31,13 +31,6 @@ const Home = () => {
         width: "50%"
       }
     },
-    postsContainer: {
-      width: "100%"
-    },
-    spinner: {
-      position: "absolute",
-      left: "49%"
-    },
     noMorePosts: {
       textAlign: "center",
       color: theme.palette.primary.main,
@@ -46,11 +39,11 @@ const Home = () => {
   }));
   const classes = useStyles();
 
-  const { main, postsContainer, spinner, noMorePosts } = classes;
+  const { main, noMorePosts } = classes;
 
   const { messageCode } = useSelector(state => state.messagesReducer);
 
-  const { postsLoading, maxResults, skip } = useSelector(state => state.postReducer);
+  const { postsLoading, postsLoading2, maxResults, skip } = useSelector(state => state.postReducer);
   
   // se llego al limite de resultados
   const maxResultsReached = skip >= maxResults; 
@@ -70,13 +63,11 @@ const Home = () => {
     <>
       <main className={main}>
           <PostTextArea />
-            <section className={postsContainer}>
-              {messageCode === 300 && !postsLoading? <NoResults/> : <Posts/>}
-              {postsLoading && <CircularProgress className={spinner} size={50}/>}
-              {maxResultsReached && messageCode !== 300 && <p className={noMorePosts}>no hay mas resultados</p>}
-              <Login/>
-              <Register/>
-            </section>
+            {messageCode === 300 && !postsLoading? <NoResults/> : <Posts/>}
+            {postsLoading && !postsLoading2 && <CircularProgress size={50}/>}
+            {maxResultsReached && messageCode !== 300 && <p className={noMorePosts}>no hay mas resultados</p>}
+            <Login/>
+            <Register/>
           {/* isAuthenticated && <FriendMenu/>*/} 
       </main>
       {<SnackbarMessages />}
