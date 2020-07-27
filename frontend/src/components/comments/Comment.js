@@ -26,60 +26,35 @@ const Comment = ({ replyComponent, postId, id, comment , userName, avatar, likes
   console.log(`soy el id del comentario : ${id}`)
   const useStyles = makeStyles(() => ({ 
 
-    commentWrapper: {
-      width: "100%"
-    },
     commentContainer: {
       display: "flex",
       flexDirection: "column",
       justifyContent: "space-between",
       transition: "all 0.3s ease",
-      "@media(min-width: 769px)" : {
-        flexDirection: "row",
-      },
+      marginLeft: replyComponent && "10%"
     },
-    leftSection: {
+    BtnsContainer: {
       display: "flex",
-      alignItems: "center",
-      flexGrow: replyComponent && 1,
-      marginLeft: replyComponent && "10%",
-      width: "90%",
-      "@media(min-width: 769px)" : {
-        width: "auto",
-      },
-    },
-    rightSection: {
-      display: "flex",
-      alignItems: "center",
-      width: "90%",
-      marginTop: 22,
-      "@media(min-width: 769px)" : {
-        width: "auto",
-      },
-    },
-    likeDislikeContainer: {
-      flexGrow: 1,
-      "@media(min-width: 769px)" : {
-        flexGrow: "inherit"
-      },
-    },   
-    commentDetails: {
-      display: "flex",
-      flexDirection: "column",
-      marginLeft: 15
-    },
+      justifyContent: "space-between",
+      width: "100%",
+      marginTop: 20
+    }, 
     avatarStyle: {
       width: !replyComponent ? 50 : 40,
       height: !replyComponent ? 50 : 40
     },
-    creatorAndDate: {
-      display: "flex"
+    creatorAndDate: { 
+      display: "flex",
+      alignItems: "center",
+      width: "100%",
+      marginTop: 15
     },
     day: {
       marginLeft: 10
     },
     commentText: {
-      marginTop: 14
+      marginTop: 14,
+      width: "98%"
     },  
     commentIcon: {
         marginLeft: 8
@@ -96,7 +71,7 @@ const Comment = ({ replyComponent, postId, id, comment , userName, avatar, likes
   }));
   const classes = useStyles();
 
-  const { commentWrapper, commentContainer, leftSection, rightSection, likeDislikeContainer, commentDetails, avatarStyle, creatorAndDate, day, commentText, openRepliesBtn, replyExistsBtn } = classes;
+  const { commentContainer, BtnsContainer, avatarStyle, creatorAndDate, day, commentText, openRepliesBtn, replyExistsBtn } = classes;
 
   const { t } = useTranslation();
 
@@ -119,15 +94,13 @@ const Comment = ({ replyComponent, postId, id, comment , userName, avatar, likes
 
   return (
     <>
-    <Box className={commentWrapper}>
-        <Divider/>
+      <Divider/>
         <ListItem  className={commentContainer} disableGutters={true}> 
-            <Box className={leftSection}>
-            <ListItemAvatar>
-                <Avatar className={avatarStyle} alt="avatar" src={avatar} />
-            </ListItemAvatar>
-            <Box className={commentDetails}>
-                <Box className={creatorAndDate}>
+          <Divider/>
+            <Box className={creatorAndDate}>
+              <ListItemAvatar>
+                  <Avatar className={avatarStyle} alt="avatar" src={avatar} />
+              </ListItemAvatar>
                 <Typography
                     color="primary"
                     variant="caption" 
@@ -137,25 +110,18 @@ const Comment = ({ replyComponent, postId, id, comment , userName, avatar, likes
                 >
                     {userName} 
                 </Typography>
-                    <Typography className={day} variant="caption">
-                    {dayjs(createdAt).fromNow()}
-                    </Typography>
-                </Box>
-                <Typography className={commentText} variant="body2">{comment}</Typography>
-            </Box>
-            </Box>
-            <Box className={rightSection}>
-                <Box className={likeDislikeContainer}>
+                <Typography className={day} variant="caption">
+                  {dayjs(createdAt).fromNow()}
+                </Typography>
+              </Box>
+              <Typography className={commentText} variant="body2">{comment}</Typography>
+              <Box className={BtnsContainer}>
                 <LikeDislikeBtns replyComponent commentBtn postId={postId} likes={likes} dislikes={dislikes} commentId={id}/>  
-                </Box> 
                 {!replyComponent &&
                 <Box>
-                    <Button className={openRepliesBtn} onClick={() => setReplyFieldOpen(true)} size="small">{t("Reply")}</Button>
+                  <Button className={openRepliesBtn} onClick={() => setReplyFieldOpen(true)} size="small">{t("Reply")}</Button>
                 </Box>}
-                {replyComponent && 
-                <Button onClick={() => console.log(id)}>reply Id</Button>
-                }
-            </Box>
+              </Box>
         </ListItem> 
         {replyFieldOpen &&
         <ReplyField postId={postId} replyFieldOpen={replyFieldOpen} commentId={id}  replies={repliesCounter} setReplyFieldOpen={setReplyFieldOpen}/>} 
@@ -163,7 +129,6 @@ const Comment = ({ replyComponent, postId, id, comment , userName, avatar, likes
         <Button className={replyExistsBtn} onClick={() => getReplies(id)}>{`${repliesCounter} ${repliesCounter === 1 ? "reply" : "replies"}`}</Button>}
         {openReplies && <Replies postId={postId} commentId={id}/>}
         <Divider/>
-    </Box>
     </>
   );
 };
