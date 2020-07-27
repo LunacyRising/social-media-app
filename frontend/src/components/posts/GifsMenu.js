@@ -65,14 +65,18 @@ const GifsMenu = ({ setGifstMenuOpen, values, setValues, reactQuillRef }) => {
       width: "100%",
       height: "100%"
     },
-    alignCenter: {
-        margin: "auto"
+    noResults: {
+        margin: "10px auto",
+    },
+    loader: {
+      width: "50%",
+      margin: "10px auto"
     }
   })); 
 
   const classes = useStyles();
 
-  const { contentWrapper, menuContainer, exitAndTextField, exitBtn, field, gifsContainer, gifBox, singleGif, alignCenter } = classes;
+  const { contentWrapper, menuContainer, exitAndTextField, exitBtn, field, gifsContainer, gifBox, singleGif, noResults, loader } = classes;
 
   const { gifs, maxResults , gifsLoading, gifOffset, gifQuery } = useSelector(state => state.gifsReducer);
 
@@ -134,13 +138,13 @@ const GifsMenu = ({ setGifstMenuOpen, values, setValues, reactQuillRef }) => {
                   />
                 </Box>
                 <Box className={gifsContainer}>
-                      { maxResults === 0 ? <p className={alignCenter}>no se encontro nada</p> : 
+                      { maxResults === 0 ? <p className={noResults}>no se encontro nada</p> : 
                       gifs && gifs.map((gif, index) => (
                       <Box key={gif.id} className={gifBox}>
                         <img ref={ gifs.length === index + 1 ? lastElement : null} className={singleGif} loading="lazy" onClick={ () => targetOneGif(gif.title, gif.images.downsized_large.url)} src={gif.images.preview_gif.url} alt={gif.userName}/>
                       </Box>
                       ))}
-                  {gifsLoading && <img className={alignCenter} src={dots} alt="loading"/>}
+                  {gifsLoading && <img className={loader} src={dots} alt="loading"/>}
                 </Box>
               </Box>
           </Card>   
