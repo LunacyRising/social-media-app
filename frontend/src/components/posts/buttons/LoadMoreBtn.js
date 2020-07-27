@@ -34,7 +34,7 @@ const LoadMoreBtn = ({ loadMore, moreCommentsLoading }) => {
         <Box className={container}>
             { moreCommentsLoading ? <img src={dots} alt="dots"/>: 
             <Button className={btn} onClick={() => loadMore()}>
-                <span className={spanBtn}>{t("LoadMore")}</span>
+                <span className={spanBtn}>{t("LoadMoreComments")}</span> 
                 <GavelTwoToneIcon/>
             </Button>}
         </Box>
