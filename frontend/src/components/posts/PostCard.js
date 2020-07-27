@@ -134,17 +134,14 @@ const PostCard = ({
       }
     },
     mediaContainer: {
-      width: "80%",
-      marginTop: 10
+    width: "80%",
+    marginTop: 10
     },  
     mediaStyle: {
       width: "100%",
       height: "100%",
-      borderRadius: 5,
-      "@media(min-width: 769px)" : {
-        width: "80%",
-      }
-    },  
+      borderRadius: 5
+    }, 
     creatorAndDate: {
         display: "flex",
         marginTop: 20
