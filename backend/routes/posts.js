@@ -112,20 +112,18 @@ router.get("/posts/:postId/favs", async(req,res) => {
 // EDIT POST  
 router.post("/posts/:postId/edit", verify, async (req,res) => {
 
+  console.log(req.body)
+
   const { postId } = req.params
 
-  const { editedPost } = req.body
-
-  const post = editedPost
-
   try {
-     await Post.updateOne(
+      await Post.updateOne(
       { _id: postId },
-      { $set: { post } }
+      { $set: { ...req.body } }
     );
-    const finalPost = await Post.findById(postId);
+    const post = await Post.findById(postId);
     
-    res.status(200).send({ code: 252, finalPost });
+    res.status(200).send({ code: 252, post });
   } catch (err) {
     res.status(400).send({ code: 500 });
   }

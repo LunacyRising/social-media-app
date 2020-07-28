@@ -7,7 +7,7 @@ import useInfiniteScroll from "./useInfiniteScroll";
 import SortPosts from "./SortPosts";
 import dots from "../../utils/images/dots.svg";
 
-const Posts = () => {
+const Posts = ( { quillRef }) => {
 
   const useStyles = makeStyles(() => ({
 
@@ -56,6 +56,7 @@ const Posts = () => {
                 likes={post.likes}
                 dislikes={post.dislikes}
                 userIsOnline={post.userIsOnline}
+                quillRef={quillRef}
               />
             </article> 
           ))}

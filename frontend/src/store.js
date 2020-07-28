@@ -12,8 +12,8 @@ const middleware = [thunk];
 
 let blacklistTransform = createTransform(
   (inboundState, key) => {
-    console.log("inboundstate", inboundState)
-    console.log("key", key)
+    //console.log("inboundstate", inboundState)
+    //console.log("key", key)
       if (key === 'commentsReducer') {
           return pullAll(inboundState.commentsReducer, "comments");
       } else {

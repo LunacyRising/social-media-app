@@ -15,7 +15,7 @@ import EditPost from "./buttons/EditPost";
 import DeletePost from "./buttons/DeletePost";
 import GoToPost from "./buttons/GoToPost";
 import CommentModal from "../comments/CommentModal"; 
-import EditPostModal from "./EditPostModal";
+import EditPostModal from "./editPost/EditPostModal";
 import UserDetails from "./userDetails/UserDetails";
 import PulsingGreenBall from "../PulsingGreenBall";
 import UserRanking from "./UserRanking";
@@ -217,10 +217,16 @@ const PostCard = ({
   };
 
   const dispatch = useDispatch(); 
+
+  const postToEdit = {
+    post,
+    media,
+    mediaAlt
+  }
     
   return ( 
     <>  
-        <EditPostModal postToEdit={post} postId={postId} openEditPostModal={openEditPostModal} editPostModal={editPostModal} />
+        <EditPostModal postToEdit={post} media={media} mediaAlt={mediaAlt} postId={postId} openEditPostModal={openEditPostModal} editPostModal={editPostModal}/>
         <CommentModal  postId={postId} postCreator={userId} title={title} amountOfComments={amountOfComments} comentModalOpen={comentModalOpen} handleCommentModal={handleCommentModal}/>   
         <Card className={card}>
           <Box className={wrapper}>

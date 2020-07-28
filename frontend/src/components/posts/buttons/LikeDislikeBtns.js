@@ -129,7 +129,10 @@ const LikeDislikeBtns = (props) => {
             <Box className={btnsContainer}>
                 <Box className={singleBtnContainer}>
                     <Tooltip title={t("Like")}>  
-                        <IconButton className={ finalTest ?`${primary} ${btn}`: btn} onClick={isAuthenticated ? () => testLike() : () => dispatch(loginModalOpen())}>
+                        {/*<IconButton className={ finalTest ?`${primary} ${btn}`: btn} onClick={isAuthenticated ? () => testLike() : () => dispatch(loginModalOpen())}>
+                            <ThumbUpTwoToneIcon className={icon}/>
+                        </IconButton>*/}
+                        <IconButton className={ finalTest ?`${primary} ${btn}`: btn} onClick={() => console.log(commentBtn)}>
                             <ThumbUpTwoToneIcon className={icon}/>
                         </IconButton>
                     </Tooltip>

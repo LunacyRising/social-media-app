@@ -26,12 +26,17 @@ const useCustomForm = (initialState) => {
         }));
       };
 
+    const handleChangeQuill = (e) => {
+      setValues({...values, editedPost: e}) 
+      console.log(values)
+    }
+
     const clearAllErrors = () => {
       clearError();
       dispatch(clearMessages())    
     }
 
-    return { handleChange, values, setValues, register, handleSubmit, errors, clearAllErrors }
+    return { handleChange, handleChangeQuill, values, setValues, register, handleSubmit, errors, clearAllErrors }
 }
 
 export default useCustomForm

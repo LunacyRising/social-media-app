@@ -10,6 +10,7 @@ import SearchGif from "../posts/mediaBtns/SearchGif";
 import GifsMenu from "./GifsMenu";
 import { createPost } from "../../actions/postsActions/createPostAction";
 import { loginModalOpen } from "../../actions/modalsActions/login";
+import { removeHtmlTag } from "../../helperFunctions/removeHtmlTag";
 import QuillEditor from "./editor/QuillEditor";
 import EmojisMenu from "./emojis/EmojisMenu";
 
@@ -73,7 +74,7 @@ const PostTextArea = () => {
 
   const dispatch = useDispatch();
 
-  const reactQuillRef = useRef()
+  const quillRef = useRef()
 
   const [ previewLoading, setPreviewLoading ] = useState(false)
 
@@ -90,14 +91,10 @@ const PostTextArea = () => {
 
   const [ emojisMenuOpen, setEmojisMenuOpen ] = useState(false);
 
-  const regex = /(<([^>]+)>)/ig;
-
-  const removeHtmlTagFromPost  = post.replace(regex, '');
-
   const createNewPost = () => { 
     const data = new FormData(); 
     data.append("title", title);
-    data.append("post", removeHtmlTagFromPost );
+    data.append("post", removeHtmlTag(post));
     data.append("avatar", avatar);
     data.append("creatorAmountOfPosts", creatorAmountOfPosts);
     data.append("userId", userId);
@@ -114,7 +111,7 @@ const PostTextArea = () => {
 
   const submit = () => {
     isAuthenticated ? createNewPost() : dispatch(loginModalOpen());
-    const quill = reactQuillRef.current.getEditor();
+    const quill = quillRef.current.getEditor();
     quill.setContents([{ insert: '\n' }]);
     setValues({title: "", post : ""})
   };
@@ -130,18 +127,18 @@ const PostTextArea = () => {
             value={title}
             onChange={handleChange} 
           />
-          <QuillEditor referencia={reactQuillRef} handleChangePost={handleChangePost} value={post}/>   
+          <QuillEditor quillRef={quillRef} handleChangePost={handleChangePost} value={post}/>   
           {previewLoading && <LinearProgress style={{width: "100%"}}/>}
-          {gifstMenuOpen && <GifsMenu setGifstMenuOpen={setGifstMenuOpen} values={values} setValues={setValues} reactQuillRef={reactQuillRef}/>}
-          {emojisMenuOpen && <EmojisMenu setEmojisMenuOpen={setEmojisMenuOpen} values={values} setValues={setValues} reactQuillRef={reactQuillRef}/>}
+          {gifstMenuOpen && <GifsMenu setGifstMenuOpen={setGifstMenuOpen} values={values} setValues={setValues} quillRef={quillRef}/>}
+          {emojisMenuOpen && <EmojisMenu setEmojisMenuOpen={setEmojisMenuOpen} values={values} setValues={setValues} quillRef={quillRef}/>}
           <Box className={mediaBtnsContainer}>
-            <UploadImageBtn values={values} setValues={setValues} reactQuillRef={reactQuillRef} setPreviewLoading={setPreviewLoading}/>
+            <UploadImageBtn postComponent values={values} setValues={setValues} quillRef={quillRef} setPreviewLoading={setPreviewLoading}/>
             <SearchGif setGifstMenuOpen={setGifstMenuOpen}/>
             <SearchEmoji setEmojisMenuOpen={setEmojisMenuOpen}/>
           </Box>
           <Button color="primary" className={submitBtn} onClick={() => submit()}>
             {t("PostIt")}
-          </Button>
+          </Button> 
       </Box>
     </>
   );

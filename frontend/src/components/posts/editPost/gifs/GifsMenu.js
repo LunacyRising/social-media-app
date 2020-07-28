@@ -4,10 +4,10 @@ import { useTranslation } from "react-i18next";
 import { makeStyles } from "@material-ui/core/styles";
 import { Box, IconButton, Card , TextField } from "@material-ui/core";
 import HighlightOffRoundedIcon from '@material-ui/icons/HighlightOffRounded';
-import dots from "../../utils/images/dots.svg";
-import { fetchGifs } from "../../actions/gifsActions/fetchGifs";
-import { updateQuery } from "../../actions/gifsActions/updateQuery";
-import useInfiniteScroll from "./useInfiniteScroll"; 
+import dots from "../../../../utils/images/dots.svg";
+import { fetchGifs } from "../../../../actions/gifsActions/fetchGifs";
+import { updateQuery } from "../../../../actions/gifsActions/updateQuery";
+import useInfiniteScroll from "../../useInfiniteScroll"; 
 
 
 const GifsMenu = ({ setGifstMenuOpen, values, setValues, quillRef }) => { 
@@ -20,8 +20,8 @@ const GifsMenu = ({ setGifstMenuOpen, values, setValues, quillRef }) => {
 
     menuContainer:{
         position: "absolute",
-        top: -80,
         left: "50%",
+        top: 10,
         transform: "translateX(-50%)",
         width: "100%",
         backgroundColor: darkMode ? "#0e1111" : theme.palette.background.paper,
@@ -101,7 +101,7 @@ const GifsMenu = ({ setGifstMenuOpen, values, setValues, quillRef }) => {
     console.log(range.index);
     quill.insertEmbed(position, "image", gif, title); 
     quill.setSelection(position + 1);
-    setValues({...values, media: gif, mediaAlt: title});
+    setValues({...values, newMedia: gif, newMediaAlt: title});
     dispatch(updateQuery(null));
     setGifstMenuOpen(false);
   }

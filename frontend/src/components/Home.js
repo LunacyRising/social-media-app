@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -65,7 +65,7 @@ const Home = () => {
   return (
     <>
       <main className={main}>
-          <PostTextArea />
+          <PostTextArea/>
             {messageCode === 300 && !postsLoading? <NoResults/> : <Posts/>}
             {postsLoading && !postsLoading2 && <CircularProgress size={50}/>}
             {maxResultsReached && messageCode !== 300 && <p className={noMorePosts}>{t("NoMoreResults")}</p>}

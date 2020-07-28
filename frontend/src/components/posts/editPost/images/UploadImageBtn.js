@@ -5,15 +5,11 @@ import { useTranslation } from "react-i18next";
 import { makeStyles } from "@material-ui/core/styles";
 import { IconButton,Tooltip } from "@material-ui/core";
 import ImageOutlinedIcon from '@material-ui/icons/ImageOutlined';
-import { insertMedia } from "../../../helperFunctions/insertMedia";
+import { insertMedia } from "../../../../helperFunctions/insertMedia";
 
-const UploadImageBtn = ({ randomNum, values, setValues, quillRef,quillRef2, setPreviewLoading }) => {
+const UploadImageBtn = ({ values, setValues, quillRef, setPreviewLoading }) => {
 
 
-  /*useEffect(() => {
-    console.log(randomNum, quillRef2, editPostComponent )
-    setTestRef(editPostComponent)
-  },[editPostComponent])*/
   const useStyles = makeStyles(() => ({
 
     btn: {
@@ -39,8 +35,6 @@ const UploadImageBtn = ({ randomNum, values, setValues, quillRef,quillRef2, setP
   };
 
   const addImage = async (e) => {
-
-      //quillRef2.current.focus()
  
     /*const image = e.target.files[0];
     const previewImage = new FormData(); 
