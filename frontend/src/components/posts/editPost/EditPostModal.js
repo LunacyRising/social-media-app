@@ -106,9 +106,6 @@ const EditPostModal = ({ postToEdit, media, mediaAlt, postId, openEditPostModal,
     newMedia && data.append("media", newMedia);
     newMediaAlt && data.append("mediaAlt", newMediaAlt);
     dispatch(editPost(data, postId));
-    const quill = quillRef && quillRef.current.getEditor();
-    quill && quill.setContents([{ insert: '\n' }]);
-    console.log("quill", quill)
     editPostModal(); 
   }
 
