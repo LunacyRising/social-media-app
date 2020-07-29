@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useState } from "react";
+import React, { useRef, useCallback, useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import useCustomForm from "../../auth/useCustomForm";
@@ -41,12 +41,6 @@ const EditPostModal = ({ postToEdit, media, mediaAlt, postId, openEditPostModal,
           width: "50%"
          }
       },
-      textArea: {
-        width: "100%",
-        margin: "auto",
-        backgroundColor: theme.palette.background.paper,
-        borderRadius: 5
-      },
       mediaBtnsContainer: {
         display: "flex",
         justifyContent: "space-between",
@@ -67,7 +61,7 @@ const EditPostModal = ({ postToEdit, media, mediaAlt, postId, openEditPostModal,
   }));
   const classes = useStyles();
 
-  const { modalContent, modal, textArea, mediaBtnsContainer, btn } = classes;
+  const { modalContent, modal, mediaBtnsContainer, btn } = classes;
 
   const [ gifstMenuOpen, setGifstMenuOpen ] = useState(false);
 
@@ -80,19 +74,26 @@ const EditPostModal = ({ postToEdit, media, mediaAlt, postId, openEditPostModal,
   const quillRef = useRef();
 
   const formDefaultValues = {  
-    editedPost: postToEdit
+    post: postToEdit
   };
+
+  useEffect(() => {
+    setValues({...values, post: postToEdit})
+  },[postToEdit])
 
   const { values, setValues, handleChangeQuill } = useCustomForm(formDefaultValues)
 
+  console.log("value", values)
+  const { post, newMedia, newMediaAlt } = values
 
-  const { editedPost, newMedia, newMediaAlt } = values
 
   const qre = useCallback(item => {
     const quill =  item && item.getEditor();
-    const range = quill && item.getEditor().getContents().ops.length;
+    quill && quill.focus(); 
+    const mediaExists = quill && item.getEditor().getContents().ops.length;
     console.log( item && item.getEditor().getContents())
-    if(item && media && range === 1){
+    quill && quill.setSelection(300000);
+    if(item && media && mediaExists === 1){
       insertMedia(item, media, mediaAlt)
       quillRef.current = {...item}
     }
@@ -101,12 +102,12 @@ const EditPostModal = ({ postToEdit, media, mediaAlt, postId, openEditPostModal,
   const editPostDispatch = () => {
     console.log(values)
     const data = new FormData();
-    data.append("post", removeHtmlTag(editedPost));
+    data.append("post", removeHtmlTag(post));
     newMedia && data.append("media", newMedia);
     newMediaAlt && data.append("mediaAlt", newMediaAlt);
     dispatch(editPost(data, postId));
-    const quill = quillRef.current.getEditor();
-    quill.setContents([{ insert: '\n' }]);
+    const quill = quillRef && quillRef.current.getEditor();
+    quill && quill.setContents([{ insert: '\n' }]);
     console.log("quill", quill)
     editPostModal(); 
   }
@@ -128,7 +129,7 @@ const EditPostModal = ({ postToEdit, media, mediaAlt, postId, openEditPostModal,
             <ReactQuill
             ref={qre} 
             onChange={handleChangeQuill}
-            defaultValue={editedPost}
+            defaultValue={post}
             theme="bubble"
             placeholder="edit post"
             />
@@ -145,7 +146,7 @@ const EditPostModal = ({ postToEdit, media, mediaAlt, postId, openEditPostModal,
             >
               {t("Edit")}
               {loading && <CircularProgress size={10} />} 
-            </Button>*/
+            </Button>
           </Box>
         </Zoom>
       </Modal>

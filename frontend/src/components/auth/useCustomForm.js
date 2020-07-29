@@ -27,7 +27,7 @@ const useCustomForm = (initialState) => {
       };
 
     const handleChangeQuill = (e) => {
-      setValues({...values, editedPost: e}) 
+      setValues({...values, post: e}) 
       console.log(values)
     }
 

@@ -26,7 +26,13 @@ const GifsMenu = ({ setGifstMenuOpen, values, setValues, quillRef }) => {
         width: "100%",
         backgroundColor: darkMode ? "#0e1111" : theme.palette.background.paper,
         overflow: "visible",
-        zIndex: 5
+        zIndex: 5,
+        "@media(min-width: 480px and) and (max-width: 568px)" : {
+          width: "70%",
+        },
+        "@media(min-width: 768px)" : {
+          width: "50%",
+        },
     },
     contentWrapper: {
       width: "90%",
@@ -94,16 +100,15 @@ const GifsMenu = ({ setGifstMenuOpen, values, setValues, quillRef }) => {
 
 
   const targetOneGif = (title, gif) => {
-    const quill = quillRef.current.getEditor(); 
-    quill.focus();
-    const range = quill.getSelection();
-    let position = range ? range.index : 0;
-    console.log(range.index);
-    quill.insertEmbed(position, "image", gif, title); 
-    quill.setSelection(position + 1);
-    setValues({...values, newMedia: gif, newMediaAlt: title});
-    dispatch(updateQuery(null));
-    setGifstMenuOpen(false);
+      const quill = quillRef.current.getEditor(); 
+      quill && quill.focus();
+      const range = quill && quill.getSelection();
+      let position = range ? range.index : 0;
+      quill && quill.insertEmbed(position, "image", gif, title); 
+      quill && quill.setSelection(position + 1);
+      setValues({...values, newMedia: gif, newMediaAlt: title});
+      dispatch(updateQuery(null));
+      setGifstMenuOpen(false);
   }
 
 
