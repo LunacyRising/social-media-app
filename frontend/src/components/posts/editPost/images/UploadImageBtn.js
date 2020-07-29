@@ -44,7 +44,7 @@ const UploadImageBtn = ({ values, setValues, quillRef, setPreviewLoading }) => {
     setPreviewLoading(false);
     const preview = response.data.preview;
     insertMedia(quillRef.current, preview, image.name)
-    setValues({...values, newMedia: response.data.preview, newMediaAlt: image.name})
+    setValues({...values, media: response.data.preview, mediaAlt: image.name})
 
   };
 

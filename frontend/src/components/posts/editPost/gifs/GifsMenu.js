@@ -106,7 +106,7 @@ const GifsMenu = ({ setGifstMenuOpen, values, setValues, quillRef }) => {
       let position = range ? range.index : 0;
       quill && quill.insertEmbed(position, "image", gif, title); 
       quill && quill.setSelection(position + 1);
-      setValues({...values, newMedia: gif, newMediaAlt: title});
+      setValues({...values, media: gif, mediaAlt: title});
       dispatch(updateQuery(null));
       setGifstMenuOpen(false);
   }

@@ -4,26 +4,24 @@ import { CREATE_POST_SUCCESS, CREATE_POST_FAIL,POSTS_LOADING } from "../types";
 
 export const createPost = (data) => async (dispatch, getState) => {
 
-  const { token } = getState().authReducer;
+  const { token, userId } = getState().authReducer;
 
   dispatch({ type: POSTS_LOADING });
 
   try {
     const response = await axios.post(
-      "http://localhost:5001/createPost", 
-      
-        data
-      , 
+      `http://localhost:5001/createPost/${userId}`, 
+      data,
       {
         headers: { "auth-token": token, "Content-Type": "multipart/form-data" } 
       }
     );
     dispatch({ 
       type: CREATE_POST_SUCCESS,
-      payload: response.data.newPost
+      payload: response.data.post
     });
 
-    console.log(response.data.newPost)
+    console.log(response.data.post)
 
     const messageCode = response.data.code;
 

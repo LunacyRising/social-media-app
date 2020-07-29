@@ -5,7 +5,8 @@ export const formData = (obj) => {
     for ( let key in obj ) {
       console.log("key", key)
       console.log("values", obj[key])
-      data.append(key, removeHtmlTag(obj[key]));
+      let objData = typeof obj[key] !== "number" ? removeHtmlTag(obj[key]) : obj[key];
+      data.append(key, objData);
     }
     return data
 }

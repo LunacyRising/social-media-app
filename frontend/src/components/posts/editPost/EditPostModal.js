@@ -20,7 +20,9 @@ import SearchEmoji from "./emojis/SearchEmoji";
 import EmojisMenu from "./emojis/EmojisMenu";
 import { editPost } from "../../../actions/postsActions/editPostAction";
 import { insertMedia } from "../../../helperFunctions/insertMedia";
-import { removeHtmlTag } from "../../../helperFunctions/removeHtmlTag";
+///////////////////////////////////////////////////////////////////////
+//import UploadImageBtn from "../mediaBtns/UploadImageBtn"; 
+import { formData } from "../../../helperFunctions/formData";
 
 
 const EditPostModal = ({ postToEdit, media, mediaAlt, postId, openEditPostModal, editPostModal }) => {   
@@ -87,9 +89,7 @@ const EditPostModal = ({ postToEdit, media, mediaAlt, postId, openEditPostModal,
 
   const { values, setValues, handleChangeQuill } = useCustomForm(formDefaultValues)
 
-  console.log("value", values)
-  const { post, newMedia, newMediaAlt } = values
-
+  const { post } = values
 
   const qre = useCallback(item => {
     quillRef.current = {...item};
@@ -105,10 +105,7 @@ const EditPostModal = ({ postToEdit, media, mediaAlt, postId, openEditPostModal,
 
   const editPostDispatch = () => {
     console.log(values)
-    const data = new FormData();
-    data.append("post", removeHtmlTag(post));
-    newMedia && data.append("media", newMedia);
-    newMediaAlt && data.append("mediaAlt", newMediaAlt);
+    const data = formData(values)
     dispatch(editPost(data, postId));
     editPostModal(); 
   }

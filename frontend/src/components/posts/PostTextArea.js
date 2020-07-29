@@ -10,7 +10,7 @@ import SearchGif from "../posts/mediaBtns/SearchGif";
 import GifsMenu from "./GifsMenu";
 import { createPost } from "../../actions/postsActions/createPostAction";
 import { loginModalOpen } from "../../actions/modalsActions/login";
-import { removeHtmlTag } from "../../helperFunctions/removeHtmlTag";
+import { formData } from "../../helperFunctions/formData";
 import QuillEditor from "./editor/QuillEditor";
 import EmojisMenu from "./emojis/EmojisMenu";
 
@@ -40,10 +40,6 @@ const PostTextArea = () => {
       top: 120,
       transform: "translateX(-50%)" 
     },
-    textFieldAndPreview: {
-     display: "flex",
-     flexDirection: "row"
-    },
     submitBtn: {
       width: "50%",
       margin: "35px auto",
@@ -68,7 +64,7 @@ const PostTextArea = () => {
   }));
   const classes = useStyles();
 
-  const { TextAreaContainer, textFieldAndPreview, submitBtn, mediaBtnsContainer, titleArea } = classes; 
+  const { TextAreaContainer, submitBtn, mediaBtnsContainer, titleArea } = classes; 
 
   const { t } = useTranslation();
 
@@ -85,22 +81,14 @@ const PostTextArea = () => {
 
   const { values, setValues, handleChange } = useCustomForm(formDefaultValues);
 
-  const { title, post, media, mediaAlt } = values;
+  const { title, post, } = values;
 
   const [ gifstMenuOpen, setGifstMenuOpen ] = useState(false);
 
   const [ emojisMenuOpen, setEmojisMenuOpen ] = useState(false);
 
   const createNewPost = () => { 
-    const data = new FormData(); 
-    data.append("title", title);
-    data.append("post", removeHtmlTag(post));
-    data.append("avatar", avatar);
-    data.append("creatorAmountOfPosts", creatorAmountOfPosts);
-    data.append("userId", userId);
-    data.append("userName", userName);
-    media && data.append("media", media);
-    mediaAlt && data.append("mediaAlt", mediaAlt);
+    const data = formData({...values, userId, userName, creatorAmountOfPosts, avatar});
     dispatch(createPost(data)); 
   }
 

@@ -1,4 +1,4 @@
-import React,{ useEffect, useState } from "react";
+import React,{ useRef } from "react";
 import axios from "axios";
 import { useSelector} from "react-redux";
 import { useTranslation } from "react-i18next";
@@ -28,13 +28,13 @@ const UploadImageBtn = ({ values, setValues, quillRef, setPreviewLoading }) => {
 
   const { t } = useTranslation();
 
+  const inputRef = useRef();
+
   const openImageInput = () => {
-    const fileInput = document.getElementById("postImage");  
-    fileInput.click();
+    inputRef.current.click()
   };
 
   const addImage = async (e) => {
- 
     const image = e.target.files[0];
     const previewImage = new FormData(); 
     previewImage.append("image", image);
@@ -44,8 +44,7 @@ const UploadImageBtn = ({ values, setValues, quillRef, setPreviewLoading }) => {
     const preview = response.data.preview;
     // inserta la imagen en el editor
     insertMedia(quillRef.current, preview, image.name)
-    // agrega al estado la imagen que se va a utilizar para subir a cloudinary, no es la misma que la preview!
-    setValues({...values, media: image, mediaAlt: image.name})
+    setValues({...values, media: response.data.preview, mediaAlt: image.name})
 
   };
 
@@ -58,10 +57,10 @@ const UploadImageBtn = ({ values, setValues, quillRef, setPreviewLoading }) => {
           </Tooltip>
           <input
           className={inputImg}
+          ref={inputRef}
           onChange={addImage}
           name="postImage"
           type="file"
-          id="postImage"
           hidden="hidden"
           />
       </>
