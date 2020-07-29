@@ -9,7 +9,8 @@ import {
   Zoom,
   Backdrop,
   Box,
-  CircularProgress
+  CircularProgress,
+  LinearProgress
 } from "@material-ui/core";
 import ReactQuill from 'react-quill';
 import UploadImageBtn from "./images/UploadImageBtn";
@@ -68,6 +69,8 @@ const EditPostModal = ({ postToEdit, media, mediaAlt, postId, openEditPostModal,
 
   const [ emojisMenuOpen, setEmojisMenuOpen ] = useState(false);
 
+  const [ previewLoading, setPreviewLoading ] = useState(false);
+
   const dispatch = useDispatch();
 
   const { t } = useTranslation();
@@ -97,7 +100,6 @@ const EditPostModal = ({ postToEdit, media, mediaAlt, postId, openEditPostModal,
     quill && quill.setSelection(300000);
     if(item && media && mediaExists === 1){
       insertMedia(item, media, mediaAlt)
-      //quillRef.current = {...item}
     }
   },[])
 
@@ -134,8 +136,9 @@ const EditPostModal = ({ postToEdit, media, mediaAlt, postId, openEditPostModal,
             />
             {gifstMenuOpen && <GifsMenu setGifstMenuOpen={setGifstMenuOpen} values={values} setValues={setValues} quillRef={quillRef}/>}
             {emojisMenuOpen && <EmojisMenu setEmojisMenuOpen={setEmojisMenuOpen} quillRef={quillRef}/>}
+            {previewLoading && <LinearProgress style={{width: "100%"}}/>}
             <Box className={mediaBtnsContainer}>
-              <UploadImageBtn quillRef={quillRef}/>
+              <UploadImageBtn quillRef={quillRef} setPreviewLoading={setPreviewLoading} values={values} setValues={setValues}/>
               <SearchGif quillRef={quillRef} setGifstMenuOpen={setGifstMenuOpen}/>
               <SearchEmoji quillRef={quillRef} setEmojisMenuOpen={setEmojisMenuOpen}/>
             </Box>

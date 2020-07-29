@@ -1,4 +1,4 @@
-import React,{ useEffect, useState } from "react";
+import React,{ useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { useSelector} from "react-redux";
 import { useTranslation } from "react-i18next";
@@ -29,14 +29,15 @@ const UploadImageBtn = ({ values, setValues, quillRef, setPreviewLoading }) => {
 
   const { t } = useTranslation();
 
+  const inputRef = useRef();
+
   const openImageInput = () => {
-    const fileInput = document.getElementById("postImage");  
-    fileInput.click();
+    inputRef.current.click()
   };
 
   const addImage = async (e) => {
- 
-    /*const image = e.target.files[0];
+    //console.log("hi")
+    const image = e.target.files[0];
     const previewImage = new FormData(); 
     previewImage.append("image", image);
     setPreviewLoading(true);
@@ -44,9 +45,9 @@ const UploadImageBtn = ({ values, setValues, quillRef, setPreviewLoading }) => {
     setPreviewLoading(false);
     const preview = response.data.preview;
     // inserta la imagen en el editor
-    insertMedia(quillRef2.current, preview, image.name)
+    insertMedia(quillRef.current, preview, image.name)
     // agrega al estado la imagen que se va a utilizar para subir a cloudinary, no es la misma que la preview!
-    setValues({...values, media: image, mediaAlt: image.name})*/
+    setValues({...values, newMedia: response.data.preview, newMediaAlt: image.name})
 
   };
 
@@ -56,17 +57,13 @@ const UploadImageBtn = ({ values, setValues, quillRef, setPreviewLoading }) => {
               <IconButton className={btn} onClick={openImageInput}> 
                 <ImageOutlinedIcon fontSize="large"/>
               </IconButton>
-              {/*<IconButton className={btn} onClick={() => console.log(quillRef2.current)}> 
-                <ImageOutlinedIcon fontSize="large"/>
-              </IconButton>*/}
           </Tooltip>
           <input
           className={inputImg}
+          ref={inputRef}
           onChange={addImage}
-          //onChange={() => console.log(quillRef2)}
           name="postImage"
           type="file"
-          id="postImage"
           hidden="hidden"
           />
       </>

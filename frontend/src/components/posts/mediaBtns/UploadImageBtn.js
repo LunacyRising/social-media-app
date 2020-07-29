@@ -7,13 +7,8 @@ import { IconButton,Tooltip } from "@material-ui/core";
 import ImageOutlinedIcon from '@material-ui/icons/ImageOutlined';
 import { insertMedia } from "../../../helperFunctions/insertMedia";
 
-const UploadImageBtn = ({ randomNum, values, setValues, quillRef,quillRef2, setPreviewLoading }) => {
+const UploadImageBtn = ({ values, setValues, quillRef, setPreviewLoading }) => {
 
-
-  /*useEffect(() => {
-    console.log(randomNum, quillRef2, editPostComponent )
-    setTestRef(editPostComponent)
-  },[editPostComponent])*/
   const useStyles = makeStyles(() => ({
 
     btn: {
@@ -39,10 +34,8 @@ const UploadImageBtn = ({ randomNum, values, setValues, quillRef,quillRef2, setP
   };
 
   const addImage = async (e) => {
-
-      //quillRef2.current.focus()
  
-    /*const image = e.target.files[0];
+    const image = e.target.files[0];
     const previewImage = new FormData(); 
     previewImage.append("image", image);
     setPreviewLoading(true);
@@ -50,9 +43,9 @@ const UploadImageBtn = ({ randomNum, values, setValues, quillRef,quillRef2, setP
     setPreviewLoading(false);
     const preview = response.data.preview;
     // inserta la imagen en el editor
-    insertMedia(quillRef2.current, preview, image.name)
+    insertMedia(quillRef.current, preview, image.name)
     // agrega al estado la imagen que se va a utilizar para subir a cloudinary, no es la misma que la preview!
-    setValues({...values, media: image, mediaAlt: image.name})*/
+    setValues({...values, media: image, mediaAlt: image.name})
 
   };
 
@@ -62,14 +55,10 @@ const UploadImageBtn = ({ randomNum, values, setValues, quillRef,quillRef2, setP
               <IconButton className={btn} onClick={openImageInput}> 
                 <ImageOutlinedIcon fontSize="large"/>
               </IconButton>
-              {/*<IconButton className={btn} onClick={() => console.log(quillRef2.current)}> 
-                <ImageOutlinedIcon fontSize="large"/>
-              </IconButton>*/}
           </Tooltip>
           <input
           className={inputImg}
           onChange={addImage}
-          //onChange={() => console.log(quillRef2)}
           name="postImage"
           type="file"
           id="postImage"
