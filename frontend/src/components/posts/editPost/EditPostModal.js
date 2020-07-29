@@ -16,6 +16,7 @@ import UploadImageBtn from "./images/UploadImageBtn";
 import SearchGif from "./gifs/SearchGif";
 import GifsMenu from "./gifs/GifsMenu";
 import SearchEmoji from "./emojis/SearchEmoji";
+import EmojisMenu from "./emojis/EmojisMenu";
 import { editPost } from "../../../actions/postsActions/editPostAction";
 import { insertMedia } from "../../../helperFunctions/insertMedia";
 import { removeHtmlTag } from "../../../helperFunctions/removeHtmlTag";
@@ -88,6 +89,7 @@ const EditPostModal = ({ postToEdit, media, mediaAlt, postId, openEditPostModal,
 
 
   const qre = useCallback(item => {
+    quillRef.current = {...item};
     const quill =  item && item.getEditor();
     quill && quill.focus(); 
     const mediaExists = quill && item.getEditor().getContents().ops.length;
@@ -95,7 +97,7 @@ const EditPostModal = ({ postToEdit, media, mediaAlt, postId, openEditPostModal,
     quill && quill.setSelection(300000);
     if(item && media && mediaExists === 1){
       insertMedia(item, media, mediaAlt)
-      quillRef.current = {...item}
+      //quillRef.current = {...item}
     }
   },[])
 
@@ -131,10 +133,11 @@ const EditPostModal = ({ postToEdit, media, mediaAlt, postId, openEditPostModal,
             placeholder="edit post"
             />
             {gifstMenuOpen && <GifsMenu setGifstMenuOpen={setGifstMenuOpen} values={values} setValues={setValues} quillRef={quillRef}/>}
+            {emojisMenuOpen && <EmojisMenu setEmojisMenuOpen={setEmojisMenuOpen} quillRef={quillRef}/>}
             <Box className={mediaBtnsContainer}>
               <UploadImageBtn quillRef={quillRef}/>
               <SearchGif quillRef={quillRef} setGifstMenuOpen={setGifstMenuOpen}/>
-              <SearchEmoji  quillRef={quillRef}/>
+              <SearchEmoji quillRef={quillRef} setEmojisMenuOpen={setEmojisMenuOpen}/>
             </Box>
             <Button
               onClick={() => editPostDispatch()}

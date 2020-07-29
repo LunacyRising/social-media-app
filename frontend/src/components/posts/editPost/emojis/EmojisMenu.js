@@ -24,6 +24,7 @@ const EmojisMenu = ({ setEmojisMenuOpen, quillRef }) => {
     const { t } = useTranslation();
 
     const onEmojiClick = (event, emojiObject) => {
+        //console.log(quillRef && quillRef)
         const quill = quillRef.current.getEditor();
         quill.focus();
         let range = quill.getSelection();
