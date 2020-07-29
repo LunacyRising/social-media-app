@@ -11,22 +11,15 @@ const { uploadMedia } = require("../helperFunctions/uploadMedia");
 
 
 //CREATE POST
-router.post("/createPost", verify, async (req, res) => { 
+router.post("/createPost/:userId", verify, async (req, res) => { 
 
-  const { userId } = req.body;  
- 
-  const image = req.files && req.files.media;
-
-  const cloudinaryResponse =  image && await uploadMedia(image.tempFilePath, {public_id: image.name, folder: "Post Images"}); 
-  const postImage =  cloudinaryResponse && cloudinaryResponse.secure_url;
-  const newPostContent = image ? {...req.body, media: postImage} : {...req.body}; 
-  console.log(newPostContent)
-
+  const { userId } = req.params; 
+  
   try{
-    const newPost = await new Post(newPostContent).save();
-    console.log(newPost)
+    const post = await new Post({...req.body}).save();
+    console.log(post)
     await User.findOneAndUpdate({_id: userId},{$inc: { amountOfPosts : 1 }});
-    res.status(201).send({ code: 234, newPost });
+    res.status(201).send({ code: 234, post });
   }catch(err){
       console.log(err)
       res.status(400).send({ code: 500 });
