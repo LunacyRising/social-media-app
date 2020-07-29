@@ -97,10 +97,10 @@ const EditPostModal = ({ postToEdit, media, mediaAlt, postId, openEditPostModal,
     quill && quill.focus(); 
     const mediaExists = quill && item.getEditor().getContents().ops.length;
     console.log( item && item.getEditor().getContents())
-    quill && quill.setSelection(300000);
     if(item && media && mediaExists === 1){
       insertMedia(item, media, mediaAlt)
     }
+    quill && quill.setSelection(300002);
   },[])
 
   const editPostDispatch = () => {

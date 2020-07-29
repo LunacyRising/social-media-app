@@ -1,4 +1,4 @@
-import React,{ useEffect, useState, useRef } from "react";
+import React,{ useRef } from "react";
 import axios from "axios";
 import { useSelector} from "react-redux";
 import { useTranslation } from "react-i18next";
@@ -36,7 +36,6 @@ const UploadImageBtn = ({ values, setValues, quillRef, setPreviewLoading }) => {
   };
 
   const addImage = async (e) => {
-    //console.log("hi")
     const image = e.target.files[0];
     const previewImage = new FormData(); 
     previewImage.append("image", image);
@@ -44,9 +43,7 @@ const UploadImageBtn = ({ values, setValues, quillRef, setPreviewLoading }) => {
     const response = await axios.post("http://localhost:5001/posts/imagePreview", previewImage, { headers: { "auth-token": token, "Content-Type": "multipart/form-data" } }); 
     setPreviewLoading(false);
     const preview = response.data.preview;
-    // inserta la imagen en el editor
     insertMedia(quillRef.current, preview, image.name)
-    // agrega al estado la imagen que se va a utilizar para subir a cloudinary, no es la misma que la preview!
     setValues({...values, newMedia: response.data.preview, newMediaAlt: image.name})
 
   };

@@ -7,6 +7,6 @@ export const insertMedia = (ref, media, alt) => {
     //posicion de la imagen
     let position = range ? range.index : 0;
     //inserta la imagen al editor
-    quill.insertEmbed(position, "image", media, alt);
+    quill.insertEmbed(300001, "image", media, alt);
     quill.setSelection(position + 1)
   }
