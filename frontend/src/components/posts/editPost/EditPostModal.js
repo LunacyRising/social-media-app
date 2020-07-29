@@ -14,8 +14,8 @@ import {
 } from "@material-ui/core";
 import ReactQuill from 'react-quill';
 import UploadImageBtn from "../mediaBtns/UploadImageBtn"; 
-import SearchGif from "./gifs/SearchGif";
-import GifsMenu from "./gifs/GifsMenu";
+import SearchGif from "../mediaBtns/SearchGif";
+import GifsMenu from "../GifsMenu";
 import SearchEmoji from "./emojis/SearchEmoji";
 import EmojisMenu from "./emojis/EmojisMenu";
 import { editPost } from "../../../actions/postsActions/editPostAction";
@@ -129,7 +129,7 @@ const EditPostModal = ({ postToEdit, media, mediaAlt, postId, openEditPostModal,
             theme="bubble"
             placeholder="edit post"
             />
-            {gifstMenuOpen && <GifsMenu setGifstMenuOpen={setGifstMenuOpen} values={values} setValues={setValues} quillRef={quillRef}/>}
+            {gifstMenuOpen && <GifsMenu editPostComponent setGifstMenuOpen={setGifstMenuOpen} values={values} setValues={setValues} quillRef={quillRef}/>}
             {emojisMenuOpen && <EmojisMenu setEmojisMenuOpen={setEmojisMenuOpen} quillRef={quillRef}/>}
             {previewLoading && <LinearProgress style={{width: "100%"}}/>}
             <Box className={mediaBtnsContainer}>

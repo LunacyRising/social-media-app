@@ -10,7 +10,11 @@ import { updateQuery } from "../../actions/gifsActions/updateQuery";
 import useInfiniteScroll from "./useInfiniteScroll"; 
 
 
-const GifsMenu = ({ setGifstMenuOpen, values, setValues, quillRef }) => { 
+const GifsMenu = ({ editPostComponent, setGifstMenuOpen, values, setValues, quillRef }) => { 
+
+  useEffect(() => {
+    console.log(editPostComponent)
+  },[])
 
   const colorsArr = ["#f7347a", "#5ac18e", "#008080", "#e6e6fa", "#fa8072", "#8a2be2", "#088da5", "#333333"];
 
@@ -20,13 +24,19 @@ const GifsMenu = ({ setGifstMenuOpen, values, setValues, quillRef }) => {
 
     menuContainer:{
         position: "absolute",
-        top: -80,
+        top: editPostComponent ? 10 : -80,
         left: "50%",
         transform: "translateX(-50%)",
         width: "100%",
         backgroundColor: darkMode ? "#0e1111" : theme.palette.background.paper,
         overflow: "visible",
-        zIndex: 5
+        zIndex: 5,
+        "@media(min-width: 480px and) and (max-width: 568px)" : {
+          width: editPostComponent ? "70%" : "initial"
+        },
+        "@media(min-width: 768px)" : {
+          width: editPostComponent ? "50%" : "initial"
+        },
     },
     contentWrapper: {
       width: "90%",
