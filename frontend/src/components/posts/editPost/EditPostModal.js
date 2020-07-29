@@ -13,15 +13,13 @@ import {
   LinearProgress
 } from "@material-ui/core";
 import ReactQuill from 'react-quill';
-import UploadImageBtn from "./images/UploadImageBtn";
+import UploadImageBtn from "../mediaBtns/UploadImageBtn"; 
 import SearchGif from "./gifs/SearchGif";
 import GifsMenu from "./gifs/GifsMenu";
 import SearchEmoji from "./emojis/SearchEmoji";
 import EmojisMenu from "./emojis/EmojisMenu";
 import { editPost } from "../../../actions/postsActions/editPostAction";
 import { insertMedia } from "../../../helperFunctions/insertMedia";
-///////////////////////////////////////////////////////////////////////
-//import UploadImageBtn from "../mediaBtns/UploadImageBtn"; 
 import { formData } from "../../../helperFunctions/formData";
 
 
