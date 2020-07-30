@@ -65,7 +65,7 @@ const useLikeDislike = (initialState) => {
       
     // funcion para cuando no existe like o dislike, pero existe uno de ellos, ej: no existe like pero si existe dislike
     // asi que hay que borrar primero el dislike para asi luego incrementar el contador de likes y disminuir contador de dislikes
-    const itemDoesntExistButItemDoes = (func, condition) => {
+    const itemADoesntExistButItemBDoes = (func, condition) => {
       // crea un nuevo objeto de valores con un nuevo key value de remove item, para usarlo en la accion asi determinar si hay que borrar un like o dislike
       const newValues = {...values, deleteItem: deleteItem} 
       // cambia el contador de likes o dislikes
@@ -78,7 +78,7 @@ const useLikeDislike = (initialState) => {
       //console.table(newValues)
     };
 
-    return { values, setValues, itemExists, itemDoesntExist, itemDoesntExistButItemDoes, classColor, likesState, dislikesState, likeColor, dislikeColor}
+    return { values, setValues, itemExists, itemDoesntExist, itemADoesntExistButItemBDoes, classColor, likesState, dislikesState, likeColor, dislikeColor}
 }
 
 export default useLikeDislike

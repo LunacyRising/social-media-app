@@ -52,7 +52,7 @@ const LikeDislikeBtns = (props) => {
   // el estado depende desde donde se esta usando el boton, post o comentario
   const initialState =  { ...props }
 
-  const { values, setValues, itemExists, itemDoesntExist, itemDoesntExistButItemDoes, classColor, likesState, dislikesState, likeColor, dislikeColor } = useLikeDislike(initialState); 
+  const { values, setValues, itemExists, itemDoesntExist, itemADoesntExistButItemBDoes, classColor, likesState, dislikesState, likeColor, dislikeColor } = useLikeDislike(initialState); 
   //console.log(likeColor)
   
   
@@ -105,7 +105,7 @@ const LikeDislikeBtns = (props) => {
      itemDoesntExist(likeAction, testLikeState);
      // si no hay like pero hay un dislike, primero va a borrar el dislike y va a editar el contador de likes y dislikes del post  
     }else if ( !likeExiste && dislikeExiste ) {
-     itemDoesntExistButItemDoes(likeAction, testLikeState)
+      itemADoesntExistButItemBDoes(likeAction, testLikeState)
     }
   }
 
@@ -119,7 +119,7 @@ const LikeDislikeBtns = (props) => {
     if(!dislikeExiste && !likeExiste ) {
       itemDoesntExist(dislikeAction, testDislikeState)
     }else if ( !dislikeExiste && likeExiste ) {
-      itemDoesntExistButItemDoes(dislikeAction, testDislikeState) 
+      itemADoesntExistButItemBDoes(dislikeAction, testDislikeState) 
     }
   }
 
@@ -129,10 +129,7 @@ const LikeDislikeBtns = (props) => {
             <Box className={btnsContainer}>
                 <Box className={singleBtnContainer}>
                     <Tooltip title={t("Like")}>  
-                        {/*<IconButton className={ finalTest ?`${primary} ${btn}`: btn} onClick={isAuthenticated ? () => testLike() : () => dispatch(loginModalOpen())}>
-                            <ThumbUpTwoToneIcon className={icon}/>
-                        </IconButton>*/}
-                        <IconButton className={ finalTest ?`${primary} ${btn}`: btn} onClick={() => console.log(commentBtn)}>
+                        <IconButton className={ finalTest ?`${primary} ${btn}`: btn} onClick={isAuthenticated ? () => testLike() : () => dispatch(loginModalOpen())}>
                             <ThumbUpTwoToneIcon className={icon}/>
                         </IconButton>
                     </Tooltip>
