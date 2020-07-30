@@ -21,7 +21,7 @@ import Replies from "./Replies";
 import { fetchReplies } from "../../actions/commentsActions/fetchReplies";
 
 
-const Comment = ({ replyComponent, postId, id, comment , userName, avatar, likes, dislikes, createdAt, repliesCounter, replies }) => { 
+const Comment = ({ replyComponent, postId, id, comment, media, mediaAlt, userName, avatar, likes, dislikes, createdAt, repliesCounter, replies }) => { 
 
   console.log(`soy el id del comentario : ${id}`)
   const useStyles = makeStyles(() => ({ 
@@ -53,12 +53,22 @@ const Comment = ({ replyComponent, postId, id, comment , userName, avatar, likes
       marginLeft: 10
     },
     commentText: {
-      marginTop: 14,
-      width: "98%"
+      alignSelf: "start",
+      marginTop: 14
     },  
     commentIcon: {
         marginLeft: 8
     },
+    mediaContainer: {
+        width: "80%",
+        alignSelf: "start",
+        marginTop: 10
+    },  
+    mediaStyle: {
+      width: "100%",
+      height: "100%",
+      borderRadius: 5
+    }, 
     openRepliesBtn: {
       marginLeft: 20
     },
@@ -71,7 +81,7 @@ const Comment = ({ replyComponent, postId, id, comment , userName, avatar, likes
   }));
   const classes = useStyles();
 
-  const { commentContainer, BtnsContainer, avatarStyle, creatorAndDate, day, commentText, openRepliesBtn, replyExistsBtn } = classes;
+  const { commentContainer, BtnsContainer, avatarStyle, creatorAndDate, day, commentText, mediaContainer, mediaStyle, openRepliesBtn, replyExistsBtn } = classes;
 
   const { t } = useTranslation();
 
@@ -110,11 +120,15 @@ const Comment = ({ replyComponent, postId, id, comment , userName, avatar, likes
                 >
                     {userName} 
                 </Typography>
-                <Typography className={day} variant="caption">
+                <Typography className={day} variant="caption"> 
                   {dayjs(createdAt).fromNow()}
                 </Typography>
               </Box>
               <Typography className={commentText} variant="body2">{comment}</Typography>
+              {media &&
+              <Box className={mediaContainer}>
+                <img className={mediaStyle} loading="lazy" src={media} alt={mediaAlt}/>
+              </Box>}
               <Box className={BtnsContainer}>
                 <LikeDislikeBtns replyComponent commentBtn postId={postId} likes={likes} dislikes={dislikes} commentId={id}/>  
                 {!replyComponent &&
