@@ -36,21 +36,17 @@ const SearchBar = () => {
   const { query } = useSelector(state => state.postReducer); 
 
   const handleChange = e => {
-    e.preventDefault();
-    let query = e.target.value;
+    const inputValue = e.target.value;
     const skip = 0;
     const amounOfPosts = 0;
-    let trimQuery = query.trim();
-    dispatch(handleQuery({ skip, trimQuery, amounOfPosts, })) 
+    dispatch(handleQuery(skip, inputValue, amounOfPosts)) 
   };
 
   const dispatch = useDispatch()
 
   const searchPosts = (e) => {
-    e.preventDefault()
-    query && query !== "" &&
-    dispatch(fetchPosts(query));
-    //dispatch(handleQuery({query: ""}))  
+    e.preventDefault();
+    query && dispatch(fetchPosts(query));
   }
     return (
         <>

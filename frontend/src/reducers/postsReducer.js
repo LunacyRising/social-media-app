@@ -90,7 +90,6 @@ const postsReducer = (state = initialState, action) => {
         ...state,
         query: action.payload.query,
         skip: action.payload.skip,
-        amountOfPosts: action.payload.amounOfPosts,
         posts: action.payload.cleanPosts
       }
     }; 
