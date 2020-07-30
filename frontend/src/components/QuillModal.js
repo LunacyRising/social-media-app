@@ -125,7 +125,7 @@ const QuillModal = ({ editPostComponent, extraInfo, number, id, openModal, btnTe
             theme="bubble"
             placeholder="despues lo tradusco"
             />
-            {gifstMenuOpen && <GifsMenu genericModal setGifstMenuOpen={setGifstMenuOpen} values={values} setValues={setValues} quillRef={quillRef}/>}
+            {gifstMenuOpen && <GifsMenu quillModal setGifstMenuOpen={setGifstMenuOpen} values={values} setValues={setValues} quillRef={quillRef}/>}
             {emojisMenuOpen && <EmojisMenu setEmojisMenuOpen={setEmojisMenuOpen} quillRef={quillRef}/>}
             {previewLoading && <LinearProgress style={{width: "100%"}}/>}
             <Box className={mediaBtnsContainer}>
