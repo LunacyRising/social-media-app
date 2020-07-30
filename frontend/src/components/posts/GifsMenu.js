@@ -28,6 +28,7 @@ const GifsMenu = ({ quillModal, setGifstMenuOpen, values, setValues, quillRef })
         left: "50%",
         transform: "translateX(-50%)",
         width: "inherit",
+        height: quillModal ? "auto" : "100%",
         backgroundColor: darkMode ? "#0e1111" : theme.palette.background.paper,
         overflow: "visible",
         zIndex: 5,
