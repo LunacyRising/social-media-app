@@ -10,10 +10,10 @@ import { updateQuery } from "../../actions/gifsActions/updateQuery";
 import useInfiniteScroll from "./useInfiniteScroll"; 
 
 
-const GifsMenu = ({ genericModal, setGifstMenuOpen, values, setValues, quillRef }) => { 
+const GifsMenu = ({ quillModal, setGifstMenuOpen, values, setValues, quillRef }) => { 
 
   useEffect(() => {
-    console.log("genericmodal", genericModal)
+    console.log("quillModal", quillModal)
   },[])
 
   const colorsArr = ["#f7347a", "#5ac18e", "#008080", "#e6e6fa", "#fa8072", "#8a2be2", "#088da5", "#333333"];
@@ -24,18 +24,18 @@ const GifsMenu = ({ genericModal, setGifstMenuOpen, values, setValues, quillRef 
 
     menuContainer:{
         position: "absolute",
-        top: genericModal ? 10 : -80,
+        top: quillModal ? 10 : -80,
         left: "50%",
         transform: "translateX(-50%)",
-        width: "100%",
+        width: "inherit",
         backgroundColor: darkMode ? "#0e1111" : theme.palette.background.paper,
         overflow: "visible",
         zIndex: 5,
         "@media(min-width: 480px and) and (max-width: 568px)" : {
-          width: genericModal ? "70%" : "initial"
+          width: quillModal ? "70%" : "inherit"
         },
         "@media(min-width: 768px)" : {
-          width: genericModal ? "50%" : "initial"
+          width: quillModal ? "50%" : "inherit"
         },
     },
     contentWrapper: {
