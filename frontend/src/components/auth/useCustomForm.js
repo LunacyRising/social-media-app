@@ -8,7 +8,6 @@ const useCustomForm = (initialState) => {
     const [values, setValues] = useState(initialState); 
 
     useEffect(() => {
-      console.log(values);
       return () => {
         console.log("removido")
       }
@@ -27,8 +26,7 @@ const useCustomForm = (initialState) => {
       };
 
     const handleChangeQuill = (e) => {
-      setValues({...values, post: e}) 
-      console.log(values)
+      setValues({...values, text: e}) 
     }
 
     const clearAllErrors = () => {
