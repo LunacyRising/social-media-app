@@ -15,16 +15,14 @@ router.post("/post/:postId/createComment", verify, async (req, res) => {
 
   const { postId } = req.params;
 
-  console.log(req.body);
-
-  console.log(req.params.postId)
-
+  
   try{
     //create Comment
     const comment = await new Comment({
       userName,
-      title,
       text,
+      media,
+      mediaAlt,
       avatar,
       userId,
       postId})
