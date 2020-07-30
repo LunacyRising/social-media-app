@@ -14,6 +14,8 @@ const { uploadMedia } = require("../helperFunctions/uploadMedia");
 router.post("/createPost/:userId", verify, async (req, res) => { 
 
   const { userId } = req.params; 
+
+  console.log(req.body)
   
   try{
     const post = await new Post({...req.body}).save();
@@ -47,7 +49,7 @@ router.post("/posts", async (req, res) => {
         
   const searchByQuery =
   await Post
-      .find({$or: [{title: {$regex: query !== null && query !== undefined && query, $options: "mgix"}},{post:{$regex: query !== null && query !== undefined &&  query, $options: "mgix"}}]})
+      .find({$or: [{title: {$regex: query !== null && query !== undefined && query, $options: "mgix"}},{text:{$regex: query !== null && query !== undefined &&  query, $options: "mgix"}}]})
       .skip(offSet2)
       .limit(postsLimit)
       .sort(sort);

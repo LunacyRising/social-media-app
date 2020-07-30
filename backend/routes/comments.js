@@ -9,32 +9,38 @@ const Dislike = require("../schemas/Dislike")
 
 // create a comment 
 
-router.post("/post/:postId/comments", verify, async (req, res) => {
-  const { userName, comment, avatar, postId, postCreator, title, userId } = req.body;
-  const data = new Comment({
-    userName,
-    comment,
-    avatar,
-    userId,
-    postId,
-    title
-  });
- 
-  // notification
-  const noti = new Notification({ 
-    userName,
-    userId,
-    postId,
-    postCreator, 
-    message: `${userName} commented your post! ${title}...`
-  }) 
-  try {
+router.post("/post/:postId/createComment", verify, async (req, res) => {
+
+  const { userId, userName, avatar, postCreator, title, text, media, mediaAlt } = req.body;
+
+  const { postId } = req.params;
+
+  console.log(req.body);
+
+  console.log(req.params.postId)
+
+  try{
+    //create Comment
+    const comment = await new Comment({
+      userName,
+      title,
+      text,
+      avatar,
+      userId,
+      postId})
+      .save();
+    //create Notification
+    await new Notification({
+      userName,
+      userId,
+      postId,
+      postCreator,
+      message: `${userName} commented your post! ${title}...`})
+      .save();
     await Post.updateOne({_id: postId}, { $inc: { amountOfComments: 1 } }) 
-    const savedComment = await data.save();
-    await noti.save();
-    res.status(210).send({ code: 251, message: "commented!", savedComment });
-  } catch (err) {
-    res.status(500).send({ code: 499, message: "failed to comment!" });
+    res.status(210).send({ code: 251, comment });
+  }catch(err){
+    res.status(500).send({ code: 499});
   }
 });
 

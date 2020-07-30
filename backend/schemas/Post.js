@@ -9,7 +9,7 @@ const postSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  post: {
+  text: {
     type: String
   },
   media: {
