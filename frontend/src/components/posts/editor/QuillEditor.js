@@ -3,7 +3,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.bubble.css';
 import { useTranslation } from "react-i18next";
 
-const QuillEditor = ({ handleChangePost, value, quillRef }) => {
+const QuillEditor = ({ handleChangeQuill, value, quillRef }) => {
 
   const { t } = useTranslation();
 
@@ -11,7 +11,7 @@ const QuillEditor = ({ handleChangePost, value, quillRef }) => {
     <>
     <ReactQuill
     ref={quillRef} 
-    onChange={handleChangePost}
+    onChange={handleChangeQuill}
     defaultValue={value}
     theme="bubble"
     placeholder={t("YourPost")}

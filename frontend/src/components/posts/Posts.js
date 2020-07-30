@@ -43,14 +43,14 @@ const Posts = ( { quillRef }) => {
               <PostCard
                 key={post._id} 
                 postId={post._id} 
-                userId={post.userId}  
+                creatorId={post.userId}  
                 creatorUserName={post.userName}
                 creatorAmountOfPosts={post.creatorAmountOfPosts}
                 title={post.title} 
-                post={post.post}
+                text={post.text}
                 media={post.media}
                 mediaAlt={post.mediaAlt}
-                avatar={userId === post.userId ? avatar : post.avatar} 
+                postAvatar={userId === post.userId ? avatar : post.avatar} 
                 date={post.date}
                 amountOfComments={post.amountOfComments} 
                 likes={post.likes}

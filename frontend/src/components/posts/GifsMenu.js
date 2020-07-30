@@ -10,10 +10,10 @@ import { updateQuery } from "../../actions/gifsActions/updateQuery";
 import useInfiniteScroll from "./useInfiniteScroll"; 
 
 
-const GifsMenu = ({ editPostComponent, setGifstMenuOpen, values, setValues, quillRef }) => { 
+const GifsMenu = ({ genericModal, setGifstMenuOpen, values, setValues, quillRef }) => { 
 
   useEffect(() => {
-    console.log(editPostComponent)
+    console.log("genericmodal", genericModal)
   },[])
 
   const colorsArr = ["#f7347a", "#5ac18e", "#008080", "#e6e6fa", "#fa8072", "#8a2be2", "#088da5", "#333333"];
@@ -24,7 +24,7 @@ const GifsMenu = ({ editPostComponent, setGifstMenuOpen, values, setValues, quil
 
     menuContainer:{
         position: "absolute",
-        top: editPostComponent ? 10 : -80,
+        top: genericModal ? 10 : -80,
         left: "50%",
         transform: "translateX(-50%)",
         width: "100%",
@@ -32,10 +32,10 @@ const GifsMenu = ({ editPostComponent, setGifstMenuOpen, values, setValues, quil
         overflow: "visible",
         zIndex: 5,
         "@media(min-width: 480px and) and (max-width: 568px)" : {
-          width: editPostComponent ? "70%" : "initial"
+          width: genericModal ? "70%" : "initial"
         },
         "@media(min-width: 768px)" : {
-          width: editPostComponent ? "50%" : "initial"
+          width: genericModal ? "50%" : "initial"
         },
     },
     contentWrapper: {
@@ -108,7 +108,6 @@ const GifsMenu = ({ editPostComponent, setGifstMenuOpen, values, setValues, quil
     quill.focus();
     const range = quill.getSelection();
     let position = range ? range.index : 0;
-    console.log(range.index);
     quill.insertEmbed(position, "image", gif, title); 
     quill.setSelection(position + 1);
     setValues({...values, media: gif, mediaAlt: title});

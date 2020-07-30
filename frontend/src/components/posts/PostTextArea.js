@@ -76,12 +76,12 @@ const PostTextArea = () => {
 
   const formDefaultValues = {
     title: "",
-    post: ""
+    text: ""
   };
 
-  const { values, setValues, handleChange } = useCustomForm(formDefaultValues);
+  const { values, setValues, handleChangeQuill, handleChange } = useCustomForm(formDefaultValues);
 
-  const { title, post, } = values;
+  const { title, text, } = values;
 
   const [ gifstMenuOpen, setGifstMenuOpen ] = useState(false);
 
@@ -90,11 +90,6 @@ const PostTextArea = () => {
   const createNewPost = () => { 
     const data = formData({...values, userId, userName, creatorAmountOfPosts, avatar});
     dispatch(createPost(data)); 
-  }
-
-  const handleChangePost = (e) => {
-    setValues({...values, post: e})
-    console.log(values)
   }
 
   const submit = () => {
@@ -115,7 +110,7 @@ const PostTextArea = () => {
             value={title}
             onChange={handleChange} 
           />
-          <QuillEditor quillRef={quillRef} handleChangePost={handleChangePost} value={post}/>   
+          <QuillEditor quillRef={quillRef} handleChangeQuill={handleChangeQuill} value={text}/>   
           {previewLoading && <LinearProgress style={{width: "100%"}}/>}
           {gifstMenuOpen && <GifsMenu setGifstMenuOpen={setGifstMenuOpen} values={values} setValues={setValues} quillRef={quillRef}/>}
           {emojisMenuOpen && <EmojisMenu setEmojisMenuOpen={setEmojisMenuOpen} values={values} setValues={setValues} quillRef={quillRef}/>}

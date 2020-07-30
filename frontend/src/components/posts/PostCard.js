@@ -1,41 +1,42 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography, Card, Divider, Box } from "@material-ui/core";
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import {  CSSTransition } from 'react-transition-group' 
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import QuillModal from "../QuillModal";
 import CommentSection from "../comments/CommentSection";
-//testing
 import LikeDislikeBtns from "./buttons/LikeDislikeBtns";
 import FavoriteBtn from "./buttons/FavoriteBtn";
 import AddComment from "./buttons/AddComment";
 import EditPost from "./buttons/EditPost";
 import DeletePost from "./buttons/DeletePost";
 import GoToPost from "./buttons/GoToPost";
-import CommentModal from "../comments/CommentModal"; 
-import EditPostModal from "./editPost/EditPostModal";
 import UserDetails from "./userDetails/UserDetails";
 import PulsingGreenBall from "../PulsingGreenBall";
 import UserRanking from "./UserRanking";
 import AddFriend from "../friends/AddFriend";
-import { loginModalOpen } from "../../actions/modalsActions/login";
+import { loginModalOpen } from "../../actions/modalsActions/login"
+import { editPost } from "../../actions/postsActions/editPostAction";
+import { createComment } from "../../actions/commentsActions/createComment";
 
 const PostCard = ({
   postId,
-  userId,
+  creatorId,
   creatorUserName,
   creatorAmountOfPosts, 
   title,
-  post,
+  text,
   media,
   mediaAlt,
   date,
   amountOfComments, 
   likes,
   dislikes,
-  avatar,
+  postAvatar,
   userIsOnline,
   singlePost
 }) => {
@@ -200,7 +201,9 @@ const PostCard = ({
 
   dayjs.extend(relativeTime); 
 
-  const { userName, isAuthenticated } = useSelector(state => state.authReducer);
+  const { t } = useTranslation();
+
+  const { userName, avatar, userId, isAuthenticated } = useSelector(state => state.authReducer);
 
   const [showDetails, setShowDetails] = useState(false);
 
@@ -218,16 +221,29 @@ const PostCard = ({
 
   const dispatch = useDispatch(); 
 
-  const postToEdit = {
-    post,
+  const editPostBtnText = t("Edit");
+
+  const commentBtnText = t("AddComment");
+
+  const extraInfoPost = {
+    text,
     media,
     mediaAlt
+  };
+
+  const extraInfoComment = {
+    userId,
+    userName,
+    avatar,
+    postCreator: creatorId,
+    title,
+    amountOfComments
   }
-    
+
   return ( 
     <>  
-        <EditPostModal postToEdit={post} media={media} mediaAlt={mediaAlt} postId={postId} openEditPostModal={openEditPostModal} editPostModal={editPostModal}/>
-        <CommentModal  postId={postId} postCreator={userId} title={title} amountOfComments={amountOfComments} comentModalOpen={comentModalOpen} handleCommentModal={handleCommentModal}/>   
+        {openEditPostModal && <QuillModal editPostComponent extraInfo={extraInfoPost} btnText={editPostBtnText} text={text} media={media} mediaAlt={mediaAlt} id={postId} openModal={openEditPostModal} closeModal={editPostModal} action={editPost}/>}
+        {comentModalOpen && <QuillModal extraInfo={extraInfoComment} btnText={commentBtnText} number={amountOfComments} text={text} media={media} mediaAlt={mediaAlt} id={postId} openModal={comentModalOpen} closeModal={handleCommentModal} action={createComment}/>}
         <Card className={card}>
           <Box className={wrapper}>
             <Box className={leftAndRightWrapper}>
@@ -235,16 +251,16 @@ const PostCard = ({
                   <Box className={userAvatarAndGreenBall}>
                     <img
                       className={userAvatar}
-                      src={avatar}
+                      src={postAvatar}
                       alt="avatar"
                     />
                     {userIsOnline && <PulsingGreenBall/>}
                   </Box>
                   <UserRanking creatorAmountOfPosts={creatorAmountOfPosts}/>
                   <Box className={friendBtnContainer}>
-                    <AddFriend creatorUserName={creatorUserName} avatar={avatar}/>
-                    <AddFriend creatorUserName={creatorUserName} avatar={avatar}/>
-                    <AddFriend creatorUserName={creatorUserName} avatar={avatar}/>
+                    <AddFriend creatorUserName={creatorUserName} avatar={postAvatar}/>
+                    <AddFriend creatorUserName={creatorUserName} avatar={postAvatar}/>
+                    <AddFriend creatorUserName={creatorUserName} avatar={postAvatar}/>
                   </Box>
                 </Box>
               <Box className={textAndMedia}>
@@ -261,7 +277,7 @@ const PostCard = ({
                     >
                       {title}
                   </Typography>
-                  <Typography className={postText} variant="body2">{post}</Typography>
+                  <Typography className={postText} variant="body2">{text}</Typography>
                   {<Box className={mediaContainer}>
                     {media && <img className={mediaStyle} loading="lazy" src={media} alt={mediaAlt}/>}
                   </Box>}
@@ -286,7 +302,7 @@ const PostCard = ({
               </Box>
             <Box className={btns}>
               <Box className={likeDislikeBtns}>
-                <LikeDislikeBtns postBtn postId={postId} likes={likes} dislikes={dislikes} title={title} postCreator={userId} creatorUserName={creatorUserName}/> 
+                <LikeDislikeBtns postBtn postId={postId} likes={likes} dislikes={dislikes} title={title} postCreator={creatorId} creatorUserName={creatorUserName}/> 
               </Box>
               <Box className={restOfBtns}>
                   {!singlePost && <GoToPost postId={postId}/>}
