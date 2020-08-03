@@ -3,15 +3,17 @@ import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { makeStyles } from "@material-ui/core/styles";
-import { CircularProgress } from "@material-ui/core";
+import { Box, Typography, CircularProgress } from "@material-ui/core";
 import Login from "./auth/Login";
 import Register from "./auth/Register";
 import Posts from "./posts/Posts";
 import PostTextArea from "./posts/PostTextArea";
 import NoResults from "./posts/NoResults";
 import SnackbarMessages from "./SnackbarMessages";
-//import FriendMenu from "./friends/FriendMenu";
+import FriendMenu from "./friends/FriendMenu";
 import { fetchInitialPosts } from "../actions/postsActions/fetchInitialPosts";
+/////////////////
+import { fetchFriends } from "../actions/friendsActions/fetchFriends";
 
 
 const Home = () => {
@@ -19,6 +21,7 @@ const Home = () => {
   const useStyles = makeStyles((theme) => ({
 
     main: {
+      position:"relative",
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
@@ -53,13 +56,17 @@ const Home = () => {
 
   const { t } = useTranslation();
 
-  //const { isAuthenticated } = useSelector(state => state.authReducer);
+  const { isAuthenticated } = useSelector(state => state.authReducer);
 
   const dispatch = useDispatch()
 
  
   useEffect(() => {
     dispatch(fetchInitialPosts()); 
+  },[]);
+
+  useEffect(() => {
+    dispatch(fetchFriends()); 
   },[]);
   
   return (
@@ -71,9 +78,9 @@ const Home = () => {
             {maxResultsReached && messageCode !== 300 && <p className={noMorePosts}>{t("NoMoreResults")}</p>}
             <Login/>
             <Register/>
-          {/* isAuthenticated && <FriendMenu/>*/} 
+          {isAuthenticated && <FriendMenu/>} 
       </main>
-      {<SnackbarMessages />}
+      {<SnackbarMessages/>}
       {messageCode === 500 && history.push("/error")}
     </>
   );

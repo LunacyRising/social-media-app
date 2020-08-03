@@ -3,22 +3,15 @@ const router = require("express").Router();
 const User = require("../schemas/user");
 const Post = require("../schemas/post");
 const Comment = require("../schemas/comment");
+const FriendRequest = require("../schemas/FriendRequestNotification");
 const Friend = require("../schemas/friend");
 const Gallery = require("../schemas/Gallery");
 const galleryImg = require("../schemas/GalleryImg");
 const verify = require("./verifyToken");
 const dotenv = require("dotenv");
 const cloudinary = require("cloudinary").v2; 
-const { uploadMedia } = require("../helperFunctions/uploadMedia")
+const { uploadMedia } = require("../helperFunctions/uploadMedia");
 
-
-dotenv.config();
-
-cloudinary.config({
-  cloud_name: process.env.CLOUD_NAME,
-  api_key: process.env.API_KEY,
-  api_secret: process.env.API_SECRET 
-});
 
 // edit profile
 router.post("/user/:userId", verify, async (req, res) => { 
@@ -59,7 +52,7 @@ router.post("/changeAvatar/:userId", async (req, res ) => {
       await Comment.updateMany({userId}, {$set:{avatar: avatar.secure_url}})
       res.status(200).send({code: 235, avatar: avatar.secure_url});
     }catch(err){
-      console.log(err)
+      console.log("error",err)
       res.status(400).send({code: 500});   
     }
   })
@@ -69,17 +62,9 @@ router.post("/gallery/upload/:userName",  async (req, res ) => {
 
   const { userName } = req.params;
 
-  //const description = req.body.galleryImage[0];
-  
-  //const userId = req.body.galleryImage[1];
-
   const { userId , description} = req.body;
 
   const file = req.files.galleryImage; 
-
-  //console.log(req.body)
-
- // console.log(userId, description)
   
   try{
     // check si el usuario ya tiene una galeria
@@ -125,37 +110,106 @@ router.post("/gallery/upload/:userName",  async (req, res ) => {
   }
 })
 
-// addfriend
-router.post("/addFriend", verify, async (req, res) => {
-  const { userName, avatar, userId } = req.body;
+// create friend request
+router.post("/friendRequest", verify, async (req, res) => {
 
-  // check si el usuario ya tiene a ese amigo agregado
-  const friendExists = await Friend.find({userId , userName:{$eq:userName}}) 
-  if(friendExists.length === 1) return res.status(400).send({code:259}); 
+  const { friendId, userId, userName, avatar } = req.body
 
-  const data = new Friend({ userName, avatar, userId });
+  // checkear si el usuario ya envio una peticion de amistad
+  const requestExists = await FriendRequest.findOne({userId: userId});
+  if(requestExists){
+    return res.status(400).send({code:261})
+  }
+  try{
+    await new FriendRequest({
+      friendId,
+      userId,
+      userName,
+      avatar
+    }).save();
+    res.status(200).send({code: 262})
+  }catch(err){
+    res.status(400).send({code: 500})
+  }
+})
+
+//cancel friend request
+router.delete("/cancelFriendRequest/:id", verify, async (req, res) => {
+
+  const { id } = req.params;
+
+  console.log("id", id)
 
   try{
-    const savedFriend = await data.save();
-    res.status(201).send({ code: 258 , savedFriend }); 
+    await FriendRequest.deleteOne({_id: id});
+    res.status(200).send()
+  }catch(err){
+    res.status(400).send({code: 500})
+  }
+})
+
+//fetch friendRequests
+router.get("/friendRequests/:userId", verify, async (req, res) => {
+  
+  const { userId } = req.params;
+  console.log(userId)
+  
+  try{
+    const friendRequests = await FriendRequest.find({friendId: userId});
+    res.status(200).send(friendRequests)
+  }catch(err){
+    res.status(400).send({code:500})
+  }
+})
+
+// addfriend
+router.post("/acceptFriendRequest", verify, async (req, res) => {
+
+  console.log(req.body)
+
+  const { requestUserId, userId } = req.body
+  //para la persona A
+  const friendLink = await new Friend({ friendId: requestUserId, userId }).save();
+  //para la persona B
+  const friendLink2 = await new Friend({ friendId:userId, userId: requestUserId }).save();
+  try{
+    res.status(201).send({ code: 258 , friendLink }); 
   }catch(err){
     res.status(400).send({code: 500});  
   }
 })
 
-// fetch friends
+// fetch friends links
 router.get("/:userId/friends", verify, async (req, res) => {
 
   const { userId } = req.params;
-  
-  const friends = await Friend.find({userId , userId:{$eq:userId}}); 
+
+  const friendLinks = await Friend.find({userId})
 
   try{
-    res.status(200).send({ friends }); 
+    res.status(200).send(friendLinks); 
   }catch(err){
     res.status(400).send({code: 500});  
   }
 })
+
+
+// fetch friends
+router.get("/friends/:friendId", verify, async (req, res) => {
+
+  console.log("params", req.params)
+
+  const { friendId } = req.params; 
+  
+  const friends = await User.find({_id: friendId})
+
+  try{
+    res.status(200).send(friends); 
+  }catch(err){
+    res.status(400).send({code: 500});  
+  }
+})
+
  
 
 module.exports = router;

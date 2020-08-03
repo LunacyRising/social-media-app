@@ -1,81 +1,73 @@
 import React, { useState } from "react";
-//import { useDispatch, useSelector } from "react-redux";
-import { IconButton, Menu, Box, Divider } from "@material-ui/core";
+import { useSelector, useDispatch } from "react-redux";
+import { Box, List, ListItem, ListItemAvatar, ListItemText, Avatar, Divider, Typography, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import ExpandLessRoundedIcon from '@material-ui/icons/ExpandLessRounded';
+import ExpandMoreRoundedIcon from '@material-ui/icons/ExpandMoreRounded';
+import PulsingGreenBall from "../PulsingGreenBall";
 
-const FriendMenu = ({ creatorUserName, avatar}) => { 
+const FriendMenu = () => { 
 
-    const useStyles = makeStyles(() => ({
-        container: {
-            position: "absolute",
+    const useStyles = makeStyles((theme) => ({
+
+        menuContainer:{
+            position: "fixed",
+            right: 70,
             bottom: 0,
-            right: 20,
-            width: 400
+            width: 200
         },
-        menu: {
-            '& div': {
-                width: 300
+        btn:{
+            display: "flex",
+            justifyContent: "space-between",
+            width: "100%",
+            backgroundColor: theme.palette.primary.main,
+            textTransform: "lowercase",
+            '&:hover': {
+                backgroundColor: "#191919",
             }
         },
-        friendsContainer: {
-            width: "80%",
-            margin: "auto",
-        },
-        friend: {
+        friendMenu:{
             width: "100%",
-            height: 60,
-            padding: 10,
+            backgroundColor:"#191919",
+        },
+        listItem:{
+            paddingLeft: 15,
+            cursor: "pointer"
         }
       }));
-      const classes = useStyles();
-      const { container, menu, friendsContainer, friend} = classes;
+    const classes = useStyles();
+    
+    const { menuContainer, btn, friendMenu, listItem } = classes;
 
-      const [anchorEl, setAnchorEl] = useState(null);
-      const open = Boolean(anchorEl);
+    const { friends } = useSelector(state => state.friendsReducer);
 
-      const handleClose = () => {
-        setAnchorEl(null);
-      };
-      const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-      };
+    const [ menuOpen, setMenuOpen ] = useState(false);
 
-    /////////////////////////////////////////////////////////
-    //const {isAuthenticated} = useSelector(state => state.authReducer);
-    /////////////////////////////////////////////////////////
-    //const dispatch = useDispatch(); 
-    //////////////////////////////////////////////////////////
   
     return (
         <>
-            <Box className={container}>
-                <IconButton onClick={handleClick}>Open friends menu</IconButton>
-                <Box className={friendsContainer}>
-                    <Menu className={menu}
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleClose}
-                    anchorOrigin={{
-                        vertical: "top",
-                        horizontal: "center"
-                    }}
-                    transformOrigin={{
-                        vertical: "top",
-                        horizontal: "center"
-                    }}
-                    PopoverClasses={{
-                        width: 500
-                    }}
-                    >
-                        <Box className={friend}>Rubi Henderson</Box>
-                        <Divider/>
-                        <Box className={friend}>Rubi Henderson</Box>
-                        <Divider/>
-                        <Box className={friend}>Rubi Henderson</Box>
-                        <Divider/>
-                        <Box className={friend}>Rubi Henderson</Box>
-                    </Menu>   
-                </Box>
+            <Box className={menuContainer}>
+                <Button className={btn} onClick={() => setMenuOpen(prev => !prev)} endIcon={menuOpen ? <ExpandMoreRoundedIcon/> : <ExpandLessRoundedIcon/>}>
+                    chat ({friends.length})
+                </Button>
+                {menuOpen &&
+                <ClickAwayListener onClickAway={() => setMenuOpen(false)}>
+                    <List className={friendMenu} disablePadding={true}>
+                        {friends.length > 0 && friends.map(friend => (
+                            <>
+                                <ListItem key={friend.userName} className={listItem} disableGutters={true}>
+                                    <ListItemAvatar>
+                                        <Avatar alt={friend.userName} src={friend.avatar}/>
+                                        <PulsingGreenBall friendMenuComponent/>
+                                    </ListItemAvatar>
+                                    <ListItemText primary={<Typography color="primary" variant="caption">{friend.userName}</Typography>}/>
+                                </ListItem>
+                                <Divider/>
+                            </>
+                        ))}
+                    </List>
+                </ClickAwayListener>}
             </Box>
         </>
     );

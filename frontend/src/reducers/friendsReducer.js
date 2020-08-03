@@ -1,6 +1,21 @@
-import {FRIENDS_LOADING, FRIENDS_LOADED, ADDING_FRIEND, FRIEND_ADDED, FAILED_ADD_FRIEND, FAILED_FETCH_FRIENDS} from "../actions/types"; 
+import {
+  FRIEND_REQUESTS_LOADED,
+  FRIEND_REQUESTS_FAILED,
+  FRIENDS_LOADING,
+  FRIENDS_LOADED,
+  ADDING_FRIEND,
+  FRIEND_ADDED,
+  FAILED_ADD_FRIEND,
+  FAILED_FETCH_FRIENDS,
+  CANCEL_FRIEND_REQUEST_SUCCESS,
+  CANCEL_FRIEND_REQUEST_FAILED,
+  ACCEPT_FRIEND_REQUEST_SUCCESS,
+  LOGIN_SUCCESS
+  } from "../actions/types"; 
   
   const initialState = {
+    friendRequests: [],
+    friendLinks: [],
     friends: [],
     isLoading: false,
     friendsLoading: false
@@ -12,6 +27,15 @@ import {FRIENDS_LOADING, FRIENDS_LOADED, ADDING_FRIEND, FRIEND_ADDED, FAILED_ADD
         return {
           ...state,
           isLoading: true
+        };
+      case FRIEND_REQUESTS_LOADED:
+        return {
+          ...state,
+          friendRequests: action.payload
+        };
+      case FRIEND_REQUESTS_FAILED:
+        return {
+          ...state
         };
       case FRIENDS_LOADED:
         return {
@@ -29,16 +53,36 @@ import {FRIENDS_LOADING, FRIENDS_LOADED, ADDING_FRIEND, FRIEND_ADDED, FAILED_ADD
           ...state,
           friendsLoading: true
         };
-      case FRIEND_ADDED:
+      /*case FRIEND_ADDED:
         return {
           ...state,
+          friends: [action.payload, ...state.friends],
           friendsLoading: false
-        };
+        };*/
       case FAILED_ADD_FRIEND:
         return {
           ...state,
           friendsLoading: false
         };
+      case CANCEL_FRIEND_REQUEST_SUCCESS:
+          return {
+            ...state,
+            friendRequests: action.payload
+        };
+      case CANCEL_FRIEND_REQUEST_FAILED:
+          return {
+            ...state
+        };
+      case ACCEPT_FRIEND_REQUEST_SUCCESS:
+        return{
+          ...state,
+          friendLinks: [action.payload, ...state.friendLinks]
+        }
+      case LOGIN_SUCCESS:
+        return {
+          ...state,
+          friendRequests: [...action.payload.friendRequests, ...state.friendRequests]
+        }
       default:
         return state;
     }

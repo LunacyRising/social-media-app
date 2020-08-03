@@ -30,6 +30,7 @@ export const loginAction = ({ email, password }) => async (dispatch, getState) =
           likes: response.data.likes,
           dislikes: response.data.dislikes,
           favorites: response.data.favorites,
+          friendRequests: response.data.friendRequests,
           posts: editKeyValue(posts, response.data.user._id, "userId", keyValue)    
       }
     });

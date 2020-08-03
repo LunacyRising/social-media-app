@@ -4,9 +4,9 @@ import { useTranslation } from "react-i18next";
 import { IconButton,Tooltip } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import AddIcon from '@material-ui/icons/Add';
-import { addFriends } from "../../actions/friendsActions/addFriend";
+import { friendRequest } from "../../actions/friendsActions/friendRequest";
 
-const AddFriend = ({ creatorUserName, avatar}) => { 
+const AddFriend = ({ friendId }) => { 
 
     const useStyles = makeStyles(() => ({
 
@@ -28,8 +28,8 @@ const AddFriend = ({ creatorUserName, avatar}) => {
   
     return (
         <>
-            <Tooltip title={t("AddToFriendList")}>
-                <IconButton onClick={() => dispatch(addFriends({userName : creatorUserName, avatar}))} className={btn}>
+            <Tooltip title={t("AddToFriendList")}> 
+                <IconButton onClick={() => dispatch(friendRequest(friendId))} className={btn}> 
                     <AddIcon />
                 </IconButton>
             </Tooltip>

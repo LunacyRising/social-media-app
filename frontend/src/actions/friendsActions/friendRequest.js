@@ -1,30 +1,27 @@
 import axios from "axios";
 import { returnMessages, snackOpen } from "../messagesActions";
-import { ADDING_FRIEND, FRIEND_ADDED, FAILED_ADD_FRIEND } from "../types"; 
+import { FRIEND_REQUEST_SENDED, FRIEND_REQUEST_FAILED } from "../types"; 
 
-export const addFriends = (friendId) => async (dispatch, getState) => {
-  console.log("friendId", friendId)
-
-  const { token, userId } = getState().authReducer; 
-  
-  dispatch({type: ADDING_FRIEND});
+export const friendRequest = (friendId) => async (dispatch, getState) => {
  
+  const { token, userId, userName, avatar } = getState().authReducer; 
+  
   try {
     const response = await axios.post(
-      `http://localhost:5001/addFriend`,
+      `http://localhost:5001/friendRequest`,
       {
         friendId,
-        userId
+        userId,
+        userName,
+        avatar 
       },
       {
         headers: { "auth-token": token } 
       }
     );
     dispatch({
-      type: FRIEND_ADDED,
-      payload: response.data.friend
+      type: FRIEND_REQUEST_SENDED
     });
-    console.log(response.data)
     const messageCode = response.data.code;
     dispatch(returnMessages(messageCode));
     dispatch(snackOpen())
@@ -32,7 +29,7 @@ export const addFriends = (friendId) => async (dispatch, getState) => {
     let errorCode = err.response ? err.response.data.code : 500;
     dispatch(returnMessages(errorCode));
     dispatch({
-      type: FAILED_ADD_FRIEND
+      type: FRIEND_REQUEST_FAILED
     });
     dispatch(snackOpen());
   }

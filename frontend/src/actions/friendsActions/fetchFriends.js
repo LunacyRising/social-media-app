@@ -9,24 +9,36 @@ export const fetchFriends = () => async (dispatch, getState) => {
   dispatch({type: FRIENDS_LOADING});
 
   try {
-    const response = await axios.get(
-      `http://localhost:5001/${userId}/friends`,
-      {
-        headers: { "auth-token": token } 
-      }
+    const response = await axios.get(`http://localhost:5001/${userId}/friends`,
+    {
+      headers: { "auth-token": token }
+    }
     );
+
+    const fLinks = response.data
+
+    const promisesArray = fLinks.map( async fLink => {
+      return await axios.get(`http://localhost:5001/friends/${fLink.friendId}`,{headers: { "auth-token": token }})
+    })
+
+    const fss = await Promise.all(promisesArray);
+
+    const friends = fss.map(friend => {
+      const { userName, avatar } = friend.data[0]
+      return {userName, avatar}
+    })
+
+    console.log("friends", friends)
+
     dispatch({
-      type: FRIENDS_LOADED,
-      payload: response.data.friends
+      type: FRIENDS_LOADED, 
+      payload: friends
     });
-    const messageCode = response.data.code;
-    dispatch(returnMessages(messageCode));
   } catch (err) {
     let errorCode = err.response ? err.response.data.code : 500;
     dispatch(returnMessages(errorCode));
     dispatch({
       type: FAILED_FETCH_FRIENDS
     });
-    dispatch(snackOpen());
   }
 };
