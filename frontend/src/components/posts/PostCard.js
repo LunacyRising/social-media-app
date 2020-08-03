@@ -258,9 +258,7 @@ const PostCard = ({
                   </Box>
                   <UserRanking creatorAmountOfPosts={creatorAmountOfPosts}/>
                   <Box className={friendBtnContainer}>
-                    <AddFriend creatorUserName={creatorUserName} avatar={postAvatar}/>
-                    <AddFriend creatorUserName={creatorUserName} avatar={postAvatar}/>
-                    <AddFriend creatorUserName={creatorUserName} avatar={postAvatar}/>
+                    <AddFriend friendId={creatorId}/>
                   </Box>
                 </Box>
               <Box className={textAndMedia}>
