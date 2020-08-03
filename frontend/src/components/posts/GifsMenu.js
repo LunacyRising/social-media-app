@@ -118,8 +118,7 @@ const GifsMenu = ({ quillModal, setGifstMenuOpen, values, setValues, quillRef })
 
 
   const handleSearch = (e) => {
-    let query = e.target.value
-    dispatch(updateQuery(query))
+    dispatch(updateQuery(e.target.value))
     dispatch(fetchGifs())
   }
 
