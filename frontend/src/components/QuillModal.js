@@ -123,7 +123,7 @@ const QuillModal = ({ editPostComponent, extraInfo, number, id, openModal, btnTe
             onChange={handleChangeQuill}
             defaultValue={text}
             theme="bubble"
-            placeholder="despues lo tradusco"
+            placeholder={editPostComponent ? t("Edit") : t("AddComment")} 
             />
             {gifstMenuOpen && <GifsMenu quillModal setGifstMenuOpen={setGifstMenuOpen} values={values} setValues={setValues} quillRef={quillRef}/>}
             {emojisMenuOpen && <EmojisMenu setEmojisMenuOpen={setEmojisMenuOpen} quillRef={quillRef}/>}
