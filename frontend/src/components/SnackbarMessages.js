@@ -25,7 +25,7 @@ const SnackbarMessages = () => {
       justifyContent: "center",
       color: "white",
       backgroundColor: theme.palette.warning.main
-    },
+    }
   }));
 
   const classes = useStyles();
@@ -100,6 +100,14 @@ const SnackbarMessages = () => {
       text = "Post already added to favorites!";
       style = messageWarning
       break;
+    case 262: 
+      text = "Friend request sent!";
+      style = messageSuccess
+    break;
+    case 261: 
+      text = "Friend request already sent!";
+      style = messageError
+    break;
     case 257: 
       text = "Favorite Deleted!";
       style = messageSuccess
@@ -115,31 +123,31 @@ const SnackbarMessages = () => {
     case 260: 
       text = "Image added to the gallery!";
       style = messageSuccess
-      break;   
+      break; 
     case 500:
       text = "Unexpected error, try again later";
       style = messageError;
       break;
     default:
-      return null
+      //return null
   }
   ////////////////////////////////////////////////////////////////////////////////////////
-  let captchaSnack = () => {
+ 
+  (function () {
     if (!verifyCaptcha && !messageCode) {
       text = "please enter the captcha";
       style = messageError
-    } else if (verifyCaptcha && !isAuthenticated) {
+    } else if (verifyCaptcha && !isAuthenticated && !messageCode) {
       text = "thank you :3";
     }
-  };
-  captchaSnack();
+  })();
   ////////////////////////////////////////////////////////////////////////////////////////
  
   return (
     <>
       <Snackbar
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-        autoHideDuration={1200}
+        autoHideDuration={1500}
         open={isOpen}
         onClose={() => dispatch(snackClose())}
       >
