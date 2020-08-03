@@ -7,7 +7,7 @@ import {
   WAITING_MAILCONFIRMATION
 } from "../types";
 
-export const emailConfirmedAction = ({ email }) => async dispatch => {
+export const emailConfirmedAction = (email) => async dispatch => {
   dispatch({ type: WAITING_MAILCONFIRMATION });
   try {
     const response = await axios.put(`http://localhost:5001/${email}`, {});

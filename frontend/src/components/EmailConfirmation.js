@@ -34,7 +34,7 @@ const EmailConfirmation = props => {
   const dispatch = useDispatch();
   //////////////////////////////////////////////////////////////////////////////
   const emailConfirmed = () => {
-    setTimeout(() => dispatch(emailConfirmedAction({ props, email })), 2000);
+    setTimeout(() => dispatch(emailConfirmedAction(email)), 2000);
   };
   return !verificarMail && verifyCaptcha? (
     <>
@@ -47,14 +47,15 @@ const EmailConfirmation = props => {
           rel="noopener noreferrer"
         >
         </a>
-        An email has been sent to <a
+          In order to log in please 
+          click on the link bellow to confirm your email <a
           onClick={emailConfirmed}
           href="https://www.google.com/"
           target="_blank"
           rel="noopener noreferrer"
         >
           {email}
-        </a> please confirm it before you can login
+        </a>
         {isLoading && <CircularProgress className={spinner} size={40} />}
       </Paper>
       {<SnackbarMessages />}
