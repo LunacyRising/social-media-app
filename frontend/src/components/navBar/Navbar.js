@@ -9,6 +9,7 @@ import { openDrawer } from "../../actions/modalsActions/drawer";
 import purple from "../../utils/images/purple.svg";
 import DarkModeSwich from "./darkMode/DarkModeSwich";
 import Notifications from "../notifications/Notifications";
+import FriendInvNotification from "../notifications/FriendInvNotification";
 import LoginBtn from "./navLinks/authBtns/LoginBtn"; 
 import RegisterBtn from "./navLinks/authBtns/RegisterBtn";
 import Drawer from "./Drawer";
@@ -84,6 +85,7 @@ const Navbar = () => {
      }
     },
     loggedInBtnsContainer: {
+      position: "relative",
       display: "none",
       alignItems: "center",
       "@media(min-width: 769px)" : {
@@ -132,6 +134,7 @@ const Navbar = () => {
         {userName}
       </Button>
       <Notifications/>
+      <FriendInvNotification/>
     </Box>
 
   return (
