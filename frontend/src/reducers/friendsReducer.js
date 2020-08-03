@@ -81,7 +81,7 @@ import {
       case LOGIN_SUCCESS:
         return {
           ...state,
-          friendRequests: [...action.payload.friendRequests, ...state.friendRequests]
+          friendRequests: [...action.payload.friendRequests]
         }
       default:
         return state;
