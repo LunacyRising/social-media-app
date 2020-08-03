@@ -3,6 +3,7 @@ const app = express();
 const PORT = process.env.PORT || 5001; 
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
+const cloudinary = require("cloudinary");
 const cors = require("cors");
 const fileupload = require("express-fileupload");
 
@@ -26,6 +27,12 @@ const favoritesRoute = require("./routes/favorites");
 const gifsRoute = require("./routes/gifs");
 
 dotenv.config();
+
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET 
+});
 
 //connect to the db
 
