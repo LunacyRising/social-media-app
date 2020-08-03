@@ -8,8 +8,7 @@ export const registerAction = ({
   lastName,
   userName,
   email,
-  password,
-  pushToEmailConfirm
+  password
 }) => async dispatch => {
   dispatch({ type: USER_LOADING });
 
@@ -28,8 +27,8 @@ export const registerAction = ({
     });
     let messageCode = response.data.code;
     dispatch(returnMessages(messageCode));
-    dispatch(registerModalClose())
-    pushToEmailConfirm()
+    dispatch(snackOpen());
+    dispatch(registerModalClose());
   } catch (err) {
     let errorCode = err.response ? err.response.data.code : 500;
     dispatch(returnMessages(errorCode));

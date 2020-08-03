@@ -74,13 +74,10 @@ const RegisterForm = () => {
   const { t } = useTranslation();
 
   const registerSubmit = () => {
-    !verifyCaptcha
+      !verifyCaptcha
       ? dispatch(snackOpen())
-      : dispatch(registerAction({ name, lastName, userName, email, password, pushToEmailConfirm }));
+      : dispatch(registerAction({ name, lastName, userName, email, password }));
   };  
-  const pushToEmailConfirm = () => {
-    useHistory.push("/emailConfirmation")
-  }
 
   return (
     <>
