@@ -3,13 +3,13 @@ import { useTranslation } from "react-i18next";
 import { makeStyles } from "@material-ui/core/styles";
 import { Badge, Tooltip } from "@material-ui/core";
 
-const PulsingGreenBall = () => {
+const PulsingGreenBall = ({ friendMenuComponent }) => {
 
     const useStyles = makeStyles((theme) => ({
 
         badge: {
             position:"absolute",
-            top: 15,
+            top: friendMenuComponent ? 9 : 15,
             left: 12,
             backgroundColor: '#44b700',
             color: '#44b700',
@@ -18,9 +18,9 @@ const PulsingGreenBall = () => {
             borderRadius: "50%",
             boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
             "@media(min-width: 769px)" : {
-                width: 10,
-                height: 10,
-                left: 15,
+                width: friendMenuComponent ? 7 : 10,
+                height: friendMenuComponent ? 7 : 10,
+                left: friendMenuComponent ? 20 : 15,
               },
             '&::after': {
               position: 'absolute',
