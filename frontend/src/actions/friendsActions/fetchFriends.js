@@ -24,8 +24,8 @@ export const fetchFriends = () => async (dispatch, getState) => {
     const fss = await Promise.all(promisesArray);
 
     const friends = fss.map(friend => {
-      const { userName, avatar } = friend.data[0]
-      return {userName, avatar}
+      const { userName, avatar, _id } = friend.data[0]
+      return {userName, avatar, friendId: _id }
     })
 
     console.log("friends", friends)
