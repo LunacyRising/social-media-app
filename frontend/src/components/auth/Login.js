@@ -1,6 +1,5 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
-import EmailConfirmation from "../EmailConfirmation";
 import LoginForm from "./LoginForm";
 import { IconButton, Paper, Modal, Zoom, Backdrop} from "@material-ui/core";
 import CloseIcon from '@material-ui/icons/Close';
@@ -16,6 +15,7 @@ const Login = () => {
   const useStyles = makeStyles(() => ({
     
     formContainer: {
+      position: "relative",
       margin: "20vh auto",
       width: "800px",
       height: "500px",
@@ -103,7 +103,6 @@ const Login = () => {
               <CloseIcon/>
             </IconButton>
             <LoginForm/>
-            {messageCode === 463 && <EmailConfirmation />}
           </Paper>
         </Zoom>
       </Modal>

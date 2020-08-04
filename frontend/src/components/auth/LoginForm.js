@@ -1,5 +1,6 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import useCustomForm from "./useCustomForm";
 import { useTranslation } from "react-i18next";
 import {
@@ -13,9 +14,9 @@ import {
 import EmailOutlinedIcon from '@material-ui/icons/EmailOutlined';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { makeStyles } from "@material-ui/core/styles";
-import { useSelector, useDispatch } from "react-redux";
 import { loginAction } from "../../actions/authActions/loginAction";
-import {registerModalOpen} from "../../actions/modalsActions/register";
+import { registerModalOpen } from "../../actions/modalsActions/register";
+import EmailConfirmation from "../EmailConfirmation";
 
 const LoginForm = () => {
  
@@ -140,6 +141,7 @@ const LoginForm = () => {
             </Button>
           </Box>
         </form>
+        {messageCode === 463 && <EmailConfirmation email={email}/>}
       {messageCode === 500 && useHistory.push("/error")}
     </>
   );

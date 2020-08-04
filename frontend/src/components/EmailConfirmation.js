@@ -1,25 +1,25 @@
 import React from "react";
-import { CircularProgress, Paper,Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import { useSelector, useDispatch } from "react-redux";
 import { Redirect } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { CircularProgress, Paper, Typography, Link } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import { emailConfirmedAction } from "../actions/authActions/emailConfirmedAction";
 import SnackbarMessages from "./SnackbarMessages";
 
-const EmailConfirmation = props => {
-  /////////////////////////////////////////////////////////////
-  const useStyles = makeStyles(() => ({
-    formContainer: {
-      margin: "auto",
-      width: 350,
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center",
-      alignItems: "center",
-      textAlign: "center",
+const EmailConfirmation = ({ email }) => {
+
+  const useStyles = makeStyles((theme) => ({
+
+    container: {
+      position: "absolute",
+      bottom: 0,
+      backgroundColor: theme.palette.background.paper,
       animation: "drop 1s ease"
     },
-    title: {
+    text: {
+      padding: 10
+    },
+    link: {
       padding: 10
     },
     spinner: {
@@ -27,35 +27,31 @@ const EmailConfirmation = props => {
     }
   }));
   const classes = useStyles();
-  const { formContainer, spinner,title } = classes;
-  /////////////////////////////////////////////////////////////////////
-  //const { messageCode } = useSelector(state => state.messagesReducer);
-  const { verificarMail, isLoading, email,verifyCaptcha } = useSelector(state => state.authReducer);
+  const { container, spinner, text } = classes;
+
+  const { verificarMail, isLoading } = useSelector(state => state.authReducer);
+  
   const dispatch = useDispatch();
-  //////////////////////////////////////////////////////////////////////////////
+
   const emailConfirmed = () => {
     setTimeout(() => dispatch(emailConfirmedAction(email)), 2000);
   };
-  return !verificarMail && verifyCaptcha? (
+
+  return !verificarMail ? (
     <>
-      <Paper className={formContainer}>
-        <Typography className={title} color="primary" variant="h6">Confirm your email</Typography>
-        <a
-          onClick={emailConfirmed}
-          href="https://www.google.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-        </a>
+      <Paper className={container}>
+        <Typography className={text} color="primary" variant="h6">Confirm your email</Typography>
+        <Typography className={text} variant="body2">
           In order to log in please 
-          click on the link bellow to confirm your email <a
-          onClick={emailConfirmed}
-          href="https://www.google.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+          click on the link bellow to confirm your email
+        </Typography>
+        <Link 
+        href="https://www.google.com/"
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={emailConfirmed}>
           {email}
-        </a>
+        </Link>
         {isLoading && <CircularProgress className={spinner} size={40} />}
       </Paper>
       {<SnackbarMessages />}
