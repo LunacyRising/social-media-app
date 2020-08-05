@@ -4,6 +4,7 @@ const Post = require("../schemas/post");
 const Like = require("../schemas/Like")
 const Dislike = require("../schemas/Dislike")
 const Favorite = require("../schemas/Favorite");
+const FriendRequest = require("../schemas/FriendRequestNotification");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const verifyPassword = require("../helperFunctions/verifyPassword");
@@ -56,6 +57,8 @@ router.post("/login", verifyEmail, verifyPassword, emailConfirmed, async (req, r
   const dislikes = await Dislike.find({userId: user._id})
   // find favorites
   const favorites = await Favorite.find({userId: user._id})
+  // find friendrequests
+  const friendRequests = await FriendRequest.find({friendId: user._id})
 
   try {
     await Post.updateMany({userName: user.userName}, {$set:{userIsOnline: true}}) 
@@ -69,7 +72,8 @@ router.post("/login", verifyEmail, verifyPassword, emailConfirmed, async (req, r
         user,
         likes,
         dislikes,
-        favorites
+        favorites,
+        friendRequests
       });
   } catch (err) {
     res.status(500).send({ code: 500 });
