@@ -122,6 +122,8 @@ export const MODAL_REGISTER_OPEN = "MODAL_REGISTER_OPEN";
 export const MODAL_REGISTER_CLOSE = "MODAL_REGISTER_CLOSE";
 export const OPEN_DRAWER = "OPEN_DRAWER";
 export const CLOSE_DRAWER = "CLOSE_DRAWER";
+export const OPEN_CHAT_MENU = "OPEN_CHAT_MENU";
+export const CLOSE_CHAT_MENU = "CLOSE_CHAT_MENU";
 /////////////////////////////////////////////////////////////
 //darkMode
 export const DARK_MODE = "DARK_MODE";
