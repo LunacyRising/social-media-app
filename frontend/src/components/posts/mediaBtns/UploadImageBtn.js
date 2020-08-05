@@ -9,11 +9,15 @@ import { insertMedia } from "../../../helperFunctions/insertMedia";
 
 const UploadImageBtn = ({ values, setValues, quillRef, setPreviewLoading }) => {
 
-  const useStyles = makeStyles(() => ({
+  const useStyles = makeStyles((theme) => ({
 
     btn: {
       width: 50,
-      height: 50
+      height: 50,
+      transition: "0.3s ease-in-out",
+      "&:hover": {
+        color: theme.palette.primary.main
+      }
     },
     inputImg: {
       textAlign: "center"

@@ -7,11 +7,15 @@ import GifOutlinedIcon from '@material-ui/icons/GifOutlined';
 
 const SearchGif = ({ setGifstMenuOpen }) => {
 
-  const useStyles = makeStyles(() => ({
+  const useStyles = makeStyles((theme) => ({
 
     btn: {
       width: 50,
-      height: 50
+      height: 50,
+      transition: "0.3s ease-in-out",
+      "&:hover": {
+        color: theme.palette.primary.main
+      }
     }
   })); 
   

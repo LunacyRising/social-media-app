@@ -7,11 +7,15 @@ import EmojiEmotionsOutlinedIcon from '@material-ui/icons/EmojiEmotionsOutlined'
 
 const SearchEmoji = ({ setEmojisMenuOpen }) => {
 
-  const useStyles = makeStyles(() => ({
+  const useStyles = makeStyles((theme) => ({
 
     btn: {
       width: 50,
-      height: 50
+      height: 50,
+      transition: "0.3s ease-in-out",
+      "&:hover": {
+        color: theme.palette.primary.main
+      }
     }
   })); 
   
