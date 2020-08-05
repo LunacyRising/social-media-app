@@ -81,7 +81,7 @@ const FriendMenu = () => {
                         ))}
                     </List>
                 </ClickAwayListener>}
-                <ChatBoxesContainer friends={friends}/>
+                {chatMenuIds.length > 0 && <ChatBoxesContainer friends={friends}/>}
             </Box>
         </>
     );
