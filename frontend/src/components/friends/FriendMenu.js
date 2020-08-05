@@ -6,6 +6,8 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import ExpandLessRoundedIcon from '@material-ui/icons/ExpandLessRounded';
 import ExpandMoreRoundedIcon from '@material-ui/icons/ExpandMoreRounded';
 import PulsingGreenBall from "../PulsingGreenBall";
+import ChatBoxesContainer from "../chat/ChatBoxesContainer";
+import { openChatMenu } from "../../actions/openSingleChatMenu";
 
 const FriendMenu = () => { 
 
@@ -37,14 +39,25 @@ const FriendMenu = () => {
         }
       }));
     const classes = useStyles();
+
+    const dispatch = useDispatch();
     
     const { menuContainer, btn, friendMenu, listItem } = classes;
 
     const { friends } = useSelector(state => state.friendsReducer);
 
+    const { chatMenuIds } = useSelector(state => state.modalsReducer);
+
     const [ menuOpen, setMenuOpen ] = useState(false);
 
-  
+    const friendIdExists = (friendId) => {
+        return  chatMenuIds.some(id => id === friendId )
+    }
+
+    const openSingleChatMenu = (id) => {
+        !friendIdExists(id) && dispatch(openChatMenu(id))
+    }
+
     return (
         <>
             <Box className={menuContainer}>
@@ -56,7 +69,7 @@ const FriendMenu = () => {
                     <List className={friendMenu} disablePadding={true}>
                         {friends.length > 0 && friends.map(friend => (
                             <>
-                                <ListItem key={friend.userName} className={listItem} disableGutters={true}>
+                                <ListItem key={friend.userName} className={listItem} onClick={() => openSingleChatMenu(friend.friendId)} disableGutters={true}>
                                     <ListItemAvatar>
                                         <Avatar alt={friend.userName} src={friend.avatar}/>
                                         <PulsingGreenBall friendMenuComponent/>
@@ -68,6 +81,7 @@ const FriendMenu = () => {
                         ))}
                     </List>
                 </ClickAwayListener>}
+                <ChatBoxesContainer friends={friends}/>
             </Box>
         </>
     );
