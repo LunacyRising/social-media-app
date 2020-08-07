@@ -4,10 +4,10 @@ import Button from '@material-ui/core/Button';
 export const NavBtn = styled(Button)({
     color: "white",
     fontWeight: "bold",
-    fontSize: 16,
+    fontSize: 13,
     textTransform: "uppercase",
     transition: "0.3s ease-in-out",
-    marginRight: 10,
+    marginRight: 7,
     overflow: "hidden",
     "&::after": {
       position: "absolute",
