@@ -266,19 +266,11 @@ a:hover {
   transition: 0.8s all;
 };
 
-.favorite-enter {
-  opacity: 0;
-}
-.favorite-enter-active {
-  opacity: 1;
-}
 .favorite-exit {
-  opacity: 1;
+  opacity: 1
 }
 .favorite-exit-active {
-  transform: translateY(8rem) rotateZ(20deg);
-  opacity: 0;
-  transition: 0.8s all;
+  transform: translateX(100%);
 };
 
 .search-bar-enter {
