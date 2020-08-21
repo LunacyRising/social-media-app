@@ -122,8 +122,6 @@ export const MODAL_REGISTER_OPEN = "MODAL_REGISTER_OPEN";
 export const MODAL_REGISTER_CLOSE = "MODAL_REGISTER_CLOSE";
 export const OPEN_DRAWER = "OPEN_DRAWER";
 export const CLOSE_DRAWER = "CLOSE_DRAWER";
-export const OPEN_CHAT_MENU = "OPEN_CHAT_MENU";
-export const CLOSE_CHAT_MENU = "CLOSE_CHAT_MENU";
 /////////////////////////////////////////////////////////////
 //darkMode
 export const DARK_MODE = "DARK_MODE";
@@ -157,3 +155,13 @@ export const FAILED_ADD_FRIEND = "FAILED_ADD_FRIEND";
 
 
 export const QUERY_FORM = "QUERY_FORM";
+///////////////////////////////////////////////////////////////
+//chat
+export const CREATE_CHAT_BOX= "CREATE_CHAT_BOX";
+export const DELETE_CHAT_BOX = "DELETE_CHAT_BOX";
+export const SAVE_MESSAGE_SUCCESS = "SAVE_MESSAGE_SUCCESS";
+export const PENDING_MESSAGE_SUCCESS = "PENDING_MESSAGE_SUCCESS";
+export const PENDING_MESSAGE_DELETED = "PENDING_MESSAGE_DELETED";
+///////////////////////////////////////////////////////////////
+
+
