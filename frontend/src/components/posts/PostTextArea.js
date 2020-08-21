@@ -8,11 +8,14 @@ import UploadImageBtn from "../posts/mediaBtns/UploadImageBtn";
 import SearchEmoji from "../posts/emojis/SearchEmoji";
 import SearchGif from "../posts/mediaBtns/SearchGif";
 import GifsMenu from "./GifsMenu";
+import QuillEditor from "./editor/QuillEditor";
+import EmojisMenu from "./emojis/EmojisMenu";
 import { createPost } from "../../actions/postsActions/createPostAction";
 import { loginModalOpen } from "../../actions/modalsActions/login";
 import { formData } from "../../helperFunctions/formData";
-import QuillEditor from "./editor/QuillEditor";
-import EmojisMenu from "./emojis/EmojisMenu";
+import { addImage } from "../../helperFunctions/addImage";
+import { addGif } from "../../helperFunctions/addGif";
+import { addEmoji } from "../../helperFunctions/addEmoji";
 
 const PostTextArea = () => {
 
@@ -112,10 +115,10 @@ const PostTextArea = () => {
           />
           <QuillEditor quillRef={quillRef} handleChangeQuill={handleChangeQuill} value={text}/>   
           {previewLoading && <LinearProgress style={{width: "100%"}}/>}
-          {gifstMenuOpen && <GifsMenu setGifstMenuOpen={setGifstMenuOpen} values={values} setValues={setValues} quillRef={quillRef}/>}
-          {emojisMenuOpen && <EmojisMenu setEmojisMenuOpen={setEmojisMenuOpen} values={values} setValues={setValues} quillRef={quillRef}/>}
+          {gifstMenuOpen && <GifsMenu setGifstMenuOpen={setGifstMenuOpen} func={addGif} values={values} setValues={setValues} quillRef={quillRef}/>}
+          {emojisMenuOpen && <EmojisMenu setEmojisMenuOpen={setEmojisMenuOpen} func={addEmoji} values={values} setValues={setValues} quillRef={quillRef}/>}
           <Box className={mediaBtnsContainer}>
-            <UploadImageBtn postComponent values={values} setValues={setValues} quillRef={quillRef} setPreviewLoading={setPreviewLoading}/>
+            <UploadImageBtn postComponent func={addImage} values={values} setValues={setValues} quillRef={quillRef} setPreviewLoading={setPreviewLoading}/>
             <SearchGif setGifstMenuOpen={setGifstMenuOpen}/>
             <SearchEmoji setEmojisMenuOpen={setEmojisMenuOpen}/>
           </Box>
