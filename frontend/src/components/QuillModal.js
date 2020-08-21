@@ -20,7 +20,9 @@ import SearchEmoji from "./posts/emojis/SearchEmoji";
 import EmojisMenu from "./posts/emojis/EmojisMenu";
 import { insertMedia } from "../helperFunctions/insertMedia";
 import { formData } from "../helperFunctions/formData";
-
+import { addImage } from "../helperFunctions/addImage";
+import { addGif } from "../helperFunctions/addGif";
+import { addEmoji } from "../helperFunctions/addEmoji";
 
 const QuillModal = ({ editPostComponent, extraInfo, number, id, openModal, btnText, closeModal, loading, action }) => {  
     
@@ -125,11 +127,11 @@ const QuillModal = ({ editPostComponent, extraInfo, number, id, openModal, btnTe
             theme="bubble"
             placeholder={editPostComponent ? t("Edit") : t("AddComment")} 
             />
-            {gifstMenuOpen && <GifsMenu quillModal setGifstMenuOpen={setGifstMenuOpen} values={values} setValues={setValues} quillRef={quillRef}/>}
-            {emojisMenuOpen && <EmojisMenu setEmojisMenuOpen={setEmojisMenuOpen} quillRef={quillRef}/>}
+            {gifstMenuOpen && <GifsMenu quillModal setGifstMenuOpen={setGifstMenuOpen} func={addGif} values={values} setValues={setValues} quillRef={quillRef}/>}
+            {emojisMenuOpen && <EmojisMenu setEmojisMenuOpen={setEmojisMenuOpen} func={addEmoji} quillRef={quillRef}/>}
             {previewLoading && <LinearProgress style={{width: "100%"}}/>}
             <Box className={mediaBtnsContainer}>
-              <UploadImageBtn quillRef={quillRef} setPreviewLoading={setPreviewLoading} values={values} setValues={setValues}/>
+              <UploadImageBtn func={addImage} quillRef={quillRef} setPreviewLoading={setPreviewLoading} values={values} setValues={setValues}/>
               <SearchGif quillRef={quillRef} setGifstMenuOpen={setGifstMenuOpen}/>
               <SearchEmoji quillRef={quillRef} setEmojisMenuOpen={setEmojisMenuOpen}/>
             </Box>
