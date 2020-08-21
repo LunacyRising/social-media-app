@@ -7,9 +7,9 @@ const Favorite = require("../schemas/Favorite");
 const FriendRequest = require("../schemas/FriendRequestNotification");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const verifyPassword = require("../helperFunctions/verifyPassword");
-const verifyEmail = require("../helperFunctions/verifyEmail");
-const emailConfirmed = require("../helperFunctions/emailConfirmed");
+const verifyPassword = require("../middlewares/verifyPassword");
+const verifyEmail = require("../middlewares/verifyEmail");
+const emailConfirmed = require("../middlewares/emailConfirmed");
 
 //register normal
 router.post("/register", async (req, res) => {
