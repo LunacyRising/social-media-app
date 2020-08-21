@@ -13,6 +13,7 @@ import EsBtn from "./navLinks/translationBtns/EsBtn";
 import PortBtn from "./navLinks/translationBtns/PortBtn";
 import Notifications from "../notifications/Notifications";
 import FriendInvNotification from "../notifications/FriendInvNotification";
+import NewMessageNotification from "../notifications/NewMessageNotification";
 import LoginBtn from "./navLinks/authBtns/LoginBtn"; 
 import RegisterBtn from "./navLinks/authBtns/RegisterBtn";
 import Drawer from "./Drawer";
@@ -144,6 +145,7 @@ const Navbar = () => {
               </IconButton>
               {isAuthenticated &&
                 <>
+                  <NewMessageNotification/>
                   <FriendInvNotification/>
                   <Notifications/>
                 </>
