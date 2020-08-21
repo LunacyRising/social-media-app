@@ -5,15 +5,12 @@ import {
     MODAL_REGISTER_CLOSE,
     OPEN_DRAWER,
     CLOSE_DRAWER,
-    OPEN_CHAT_MENU,
-    CLOSE_CHAT_MENU
   } from "../actions/types";
   
   const initialState = {
     openLogin: false,
     openRegister: false,
     openDrawer: false,
-    chatMenuIds: []
   };
   
   const modalsReducer = (state = initialState, action) => {
@@ -51,18 +48,6 @@ import {
         return {
           ...state,
           openDrawer: false
-        }
-      };
-      case OPEN_CHAT_MENU: {
-        return {
-          ...state,
-          chatMenuIds: [action.payload, ...state.chatMenuIds]
-        }
-      };
-      case CLOSE_CHAT_MENU: {
-        return {
-          ...state,
-          openChatMenu: false
         }
       };
       default:
