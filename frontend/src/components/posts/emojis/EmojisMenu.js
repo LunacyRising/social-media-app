@@ -4,15 +4,22 @@ import { makeStyles } from "@material-ui/core/styles";
 import Picker from 'emoji-picker-react';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
-const EmojisMenu = ({ setEmojisMenuOpen, quillRef }) => { 
+const EmojisMenu = ({ chatBoxComponent, func, setEmojisMenuOpen, quillRef, setChatMessage, messageInfo, saveMessage, socket }) => { 
 
     const useStyles = makeStyles(() => ({
 
         pickerContainer: {
-            pickerContainer: "center",
+            position: chatBoxComponent && "absolute",
+            top: chatBoxComponent && "40%",
+            left: chatBoxComponent && "50%",
+            transform: chatBoxComponent && "translateX(-50%)",
             "@media(min-width: 480px)" : {
-                width: "70%",
+                width: !chatBoxComponent && "70%",
                 margin: "auto"
+            },
+            "@media(min-width: 480px)" : {
+                top: chatBoxComponent && 0,
+                left: chatBoxComponent && "-65%",
             },
         }
         })); 
@@ -23,15 +30,11 @@ const EmojisMenu = ({ setEmojisMenuOpen, quillRef }) => {
 
     const { t } = useTranslation();
 
+    const chatBoxObj = { setChatMessage, messageInfo, saveMessage, socket }
+
     const onEmojiClick = (event, emojiObject) => {
-        const quill = quillRef.current.getEditor();
-        quill.focus();
-        let range = quill.getSelection();
-        let position = range ? range.index : 0;
-        console.log(quill.insertEmbed);
-        quill.insertEmbed(position, "text", emojiObject.emoji); 
-        quill.setSelection(position + 2);
-    };
+        return func(event, emojiObject, quillRef, chatBoxObj)
+    }
 
   return (
       <>
