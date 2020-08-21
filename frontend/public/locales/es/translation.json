@@ -63,5 +63,9 @@
         "symbols": "Simbolos",
         "flags": "Banderas",
         "recently_used": "Usados Recientemente"
-     }
+     },
+    "Chat": {
+    "placeholder": "Escribe algo",
+    "isWritting": "esta escribiendo"
+    }
  }

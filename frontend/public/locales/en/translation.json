@@ -63,5 +63,9 @@
       "symbols": "Symbols",
       "flags": "Flags",
       "recently_used": "Recently used"
+   },
+   "Chat": {
+      "placeholder": "Write something",
+      "isWritting": "is typing"
    }
 }
