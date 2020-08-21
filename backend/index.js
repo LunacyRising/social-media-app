@@ -6,6 +6,9 @@ const mongoose = require("mongoose");
 const cloudinary = require("cloudinary");
 const cors = require("cors");
 const fileupload = require("express-fileupload");
+//test
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
 
 //middleware
 app.use(express.json());
@@ -13,8 +16,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 app.use(fileupload({useTempFiles: true}));
 app.use(express.static(__dirname + "./public/"));
-
-
 
 //import routes
 const authRoute = require("./routes/auth");
@@ -33,6 +34,36 @@ cloudinary.config({
   api_key: process.env.API_KEY,
   api_secret: process.env.API_SECRET 
 });
+
+//socket io stuffs
+const user = {};
+
+io.on("connection", (socket) => {
+
+ socket.on("connects", (userName) => {
+    user[userName] =  socket.id;
+    console.log("userConnected:", userName)
+  })
+
+  socket.on("chat message", ({chatMessage, receiver, sender, avatar, senderId, receiverId, sendedAt}) => {
+    const answer = true
+    socket.to(user[receiver]).emit("answer", {chatMessage, receiver, sender, avatar, senderId, receiverId, sendedAt, answer});
+  })
+
+  socket.on("is writting", (sender, receiver) => {
+    socket.to(user[receiver]).emit("is writting", {sender});
+  })
+
+  socket.on("stopped writting", (sender, receiver) => {
+    socket.to(user[receiver]).emit("stopped writting");
+  })
+
+  socket.on("disconect", (text) => {
+    console.log(text)
+  })
+})
+
+
 
 //connect to the db
 
@@ -58,4 +89,4 @@ app.use("/", notificationsRoute);
 app.use("/", favoritesRoute);
 app.use("/", gifsRoute);
 
-app.listen(PORT, () => console.log(`server is up and running on port ${PORT}`)); 
+server.listen(PORT, () => console.log(`server is up and running on port ${PORT}`)); 
