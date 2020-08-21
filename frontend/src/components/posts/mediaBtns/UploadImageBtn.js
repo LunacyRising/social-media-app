@@ -1,23 +1,26 @@
 import React,{ useRef } from "react";
-import axios from "axios";
 import { useSelector} from "react-redux";
 import { useTranslation } from "react-i18next";
 import { makeStyles } from "@material-ui/core/styles";
 import { IconButton,Tooltip } from "@material-ui/core";
 import ImageOutlinedIcon from '@material-ui/icons/ImageOutlined';
-import { insertMedia } from "../../../helperFunctions/insertMedia";
 
-const UploadImageBtn = ({ values, setValues, quillRef, setPreviewLoading }) => {
+const UploadImageBtn = ({ chatBoxComponent, func, values, setValues, quillRef, setPreviewLoading, messageInfo, saveMessage, socket }) => {
 
   const useStyles = makeStyles((theme) => ({
 
     btn: {
-      width: 50,
-      height: 50,
+      width: !chatBoxComponent ? 34 : 25,
+      height: !chatBoxComponent ? 34 : 25,
+      marginRight: chatBoxComponent && 10,
       transition: "0.3s ease-in-out",
       "&:hover": {
-        color: theme.palette.primary.main
+        color: theme.palette.primary.main,
+        backgroundColor: "transparent"
       }
+    },
+    icon:{
+      fontSize: !chatBoxComponent ? 34 : 25,
     },
     inputImg: {
       textAlign: "center"
@@ -26,9 +29,9 @@ const UploadImageBtn = ({ values, setValues, quillRef, setPreviewLoading }) => {
   
   const classes = useStyles();
 
-  const { inputImg, btn } = classes;
+  const { inputImg, icon, btn } = classes;
 
-  const { isAuthenticated, token } = useSelector(state => state.authReducer);
+  const { token } = useSelector(state => state.authReducer);
 
   const { t } = useTranslation();
 
@@ -38,31 +41,17 @@ const UploadImageBtn = ({ values, setValues, quillRef, setPreviewLoading }) => {
     inputRef.current.click()
   };
 
-  const addImage = async (e) => {
-    const image = e.target.files[0];
-    const previewImage = new FormData(); 
-    previewImage.append("image", image);
-    setPreviewLoading(true);
-    const response = await axios.post("http://localhost:5001/posts/imagePreview", previewImage, { headers: { "auth-token": token, "Content-Type": "multipart/form-data" } }); 
-    setPreviewLoading(false);
-    const preview = response.data.preview;
-    // inserta la imagen en el editor
-    insertMedia(quillRef.current, preview, image.name)
-    setValues({...values, media: response.data.preview, mediaAlt: image.name})
-
-  };
-
   return (
       <>
           <Tooltip title="add image">
               <IconButton className={btn} onClick={openImageInput}> 
-                <ImageOutlinedIcon fontSize="large"/>
+                <ImageOutlinedIcon className={icon}/> 
               </IconButton>
           </Tooltip>
           <input
           className={inputImg}
           ref={inputRef}
-          onChange={addImage}
+          onChange={(e) => func(e, {setPreviewLoading, token, quillRef, values, setValues, messageInfo, saveMessage, socket })}
           name="postImage"
           type="file"
           hidden="hidden"
