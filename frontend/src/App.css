@@ -196,6 +196,21 @@ a:hover {
   }
 }
 
+@keyframes new-msg {
+  0% {
+    background-color:#f5b8d7;
+  }
+  100% {
+    background-color:#c46d99;
+  }
+}
+
+@keyframes new-msg2 {
+  100% {
+    border-color:#c46d99;
+  }
+}
+
 /*clases react-transition-group*/
 .notification-enter {
   opacity: 0;
@@ -229,24 +244,6 @@ a:hover {
   transform: scale(0);
   transition: 0.3s all;
 };
-
-.comment-enter {
-  opacity: 0;
-  transform: translateX(-40rem);
-}
-.comment-enter-active {
-  opacity: 1;
-  transform: translateX(0rem);
-  transition: 0.5s ease;
-}
-.comment-exit {
-  opacity: 1
-}
-.comment-exit-active {
-  opacity: 0;
-  transform: translateX(20rem);
-  transition: 0.5s ease;
-}
 
 .updateProfileFields-enter {
   opacity: 0;
@@ -286,8 +283,6 @@ a:hover {
   transform: translateX(-100%);
   transition: 0.3s ease-in-out;
 };
-
-
 
 .deletebtn{
   position: absolute;
