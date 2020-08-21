@@ -5,23 +5,26 @@ import { makeStyles } from "@material-ui/core/styles";
 import { IconButton,Tooltip } from "@material-ui/core";
 import EmojiEmotionsOutlinedIcon from '@material-ui/icons/EmojiEmotionsOutlined';
 
-const SearchEmoji = ({ setEmojisMenuOpen }) => {
+const SearchEmoji = ({ chatBoxComponent, setEmojisMenuOpen }) => {
 
   const useStyles = makeStyles((theme) => ({
 
     btn: {
-      width: 50,
-      height: 50,
+      width: !chatBoxComponent ? 34 : 25,
+      height: !chatBoxComponent ? 34 : 25,
       transition: "0.3s ease-in-out",
       "&:hover": {
         color: theme.palette.primary.main
-      }
+      },
+    },
+    icon: {
+      fontSize: !chatBoxComponent ? 34 : 25,
     }
   })); 
   
   const classes = useStyles();
 
-  const { btn } = classes;
+  const { btn, icon } = classes;
 
   const { isAuthenticated } = useSelector(state => state.authReducer);
 
@@ -33,7 +36,7 @@ const SearchEmoji = ({ setEmojisMenuOpen }) => {
       <>
           <Tooltip title="search emoji">
               <IconButton className={btn} onClick={() => setEmojisMenuOpen(true)}>
-                <EmojiEmotionsOutlinedIcon fontSize="large"/>
+                <EmojiEmotionsOutlinedIcon className={icon}/>
               </IconButton>
           </Tooltip>
       </>
