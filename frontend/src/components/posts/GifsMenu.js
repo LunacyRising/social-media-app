@@ -9,12 +9,7 @@ import { fetchGifs } from "../../actions/gifsActions/fetchGifs";
 import { updateQuery } from "../../actions/gifsActions/updateQuery";
 import useInfiniteScroll from "./useInfiniteScroll"; 
 
-
-const GifsMenu = ({ quillModal, setGifstMenuOpen, values, setValues, quillRef }) => { 
-
-  useEffect(() => {
-    console.log("quillModal", quillModal)
-  },[])
+const GifsMenu = ({ chatBoxComponent, quillModal, func, setGifstMenuOpen, values, setValues, quillRef ,messageInfo, saveMessage, socket }) => { 
 
   const colorsArr = ["#f7347a", "#5ac18e", "#008080", "#e6e6fa", "#fa8072", "#8a2be2", "#088da5", "#333333"];
 
@@ -24,19 +19,24 @@ const GifsMenu = ({ quillModal, setGifstMenuOpen, values, setValues, quillRef })
 
     menuContainer:{
         position: "absolute",
-        top: quillModal ? 10 : -80,
+        top: quillModal ? 10 : chatBoxComponent ? 0 : -80 ,
         left: "50%",
         transform: "translateX(-50%)",
         width: "inherit",
         height: quillModal ? "auto" : "100%",
         backgroundColor: darkMode ? "#0e1111" : theme.palette.background.paper,
         overflow: "visible",
-        zIndex: 5,
+        zIndex: 1600,
         "@media(min-width: 480px and) and (max-width: 568px)" : {
           width: quillModal ? "70%" : "inherit"
         },
         "@media(min-width: 768px)" : {
-          width: quillModal ? "50%" : "inherit"
+          width: quillModal ? "50%" : chatBoxComponent ? "120%" : "inherit",
+          left: chatBoxComponent && "-65%",
+          height: chatBoxComponent && "initial"
+        },
+        "@media(min-width: 1024px)" : {
+          top: chatBoxComponent && "-20px",
         },
     },
     contentWrapper: {
@@ -68,6 +68,7 @@ const GifsMenu = ({ quillModal, setGifstMenuOpen, values, setValues, quillRef })
     },
     gifBox: {
       width: "28%",
+      height: 98,
       margin: 5,
       backgroundColor: colorsArr[Math.floor(Math.random() * colorsArr.length)],
       cursor: "pointer"
@@ -99,23 +100,11 @@ const GifsMenu = ({ quillModal, setGifstMenuOpen, values, setValues, quillRef })
 
   const { lastElement } = useInfiniteScroll( fetchGifs, maxResultsNotReached, gifsLoading );  
 
+  const gifInfo = {setGifstMenuOpen, values, setValues, quillRef}
+
   useEffect(() => {
     dispatch(fetchGifs())
   },[])
-
-
-  const targetOneGif = (title, gif) => {
-    const quill = quillRef.current.getEditor(); 
-    quill.focus();
-    const range = quill.getSelection();
-    let position = range ? range.index : 0;
-    quill.insertEmbed(position, "image", gif, title); 
-    quill.setSelection(position + 1);
-    setValues({...values, media: gif, mediaAlt: title});
-    dispatch(updateQuery(null));
-    setGifstMenuOpen(false);
-  }
-
 
   const handleSearch = (e) => {
     dispatch(updateQuery(e.target.value))
@@ -150,7 +139,7 @@ const GifsMenu = ({ quillModal, setGifstMenuOpen, values, setValues, quillRef })
                       { maxResults === 0 && !gifsLoading ? <p className={noResults}>no se encontro nada</p> : 
                       gifs && gifs.map((gif, index) => (
                       <Box key={gif.id} className={gifBox}>
-                        <img ref={ gifs.length === index + 1 ? lastElement : null} className={singleGif} loading="lazy" onClick={ () => targetOneGif(gif.title, gif.images.downsized_large.url)} src={gif.images.preview_gif.url} alt={gif.userName}/>
+                        <img ref={ gifs.length === index + 1 ? lastElement : null} className={singleGif} loading="lazy" onClick={ () => func({title: gif.title, gif: gif.images.downsized_large.url, messageInfo, saveMessage, socket, ...gifInfo})} src={gif.images.preview_gif.url} alt={gif.userName}/>
                       </Box>
                       ))}
                   {gifsLoading && <img className={loader} src={dots} alt="loading"/>}
