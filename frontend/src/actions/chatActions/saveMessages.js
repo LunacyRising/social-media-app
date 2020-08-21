@@ -1,4 +1,4 @@
-import { SAVE_MESSAGE_SUCCESS, SAVE_MESSAGE_FAILED } from "../types";
+import { SAVE_MESSAGE_SUCCESS } from "../types";
 import { savePendingMessage } from "./savePendingMessage";
 
 export const saveMessages = (chatMsg) => async (dispatch, getState) => {
@@ -7,19 +7,11 @@ export const saveMessages = (chatMsg) => async (dispatch, getState) => {
 
   const boxExists = chatBoxes.some(item => item.id === chatMsg.senderId);
 
-  console.log("actionMsg",chatMsg)
-
-  try {
-    dispatch({ 
-      type: SAVE_MESSAGE_SUCCESS,
-      payload: {
-        chatMessage: chatMsg 
-      }
+  dispatch({ 
+    type: SAVE_MESSAGE_SUCCESS,
+    payload: {
+      chatMessage: chatMsg 
+    }
     });
-    if(!boxExists && chatMsg.answer){dispatch(savePendingMessage(chatMsg))}
-  }catch (err) {
-    dispatch({
-      type: SAVE_MESSAGE_FAILED
-    });
-  }
+  if(!boxExists && chatMsg.answer){dispatch(savePendingMessage(chatMsg))}
 };
