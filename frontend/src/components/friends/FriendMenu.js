@@ -6,8 +6,7 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import ExpandLessRoundedIcon from '@material-ui/icons/ExpandLessRounded';
 import ExpandMoreRoundedIcon from '@material-ui/icons/ExpandMoreRounded';
 import PulsingGreenBall from "../PulsingGreenBall";
-import ChatBoxesContainer from "../chat/ChatBoxesContainer";
-import { openChatMenu } from "../../actions/openSingleChatMenu";
+import { createChatBox } from "../../actions/chatActions/createChatBox";
 
 const FriendMenu = () => { 
 
@@ -15,7 +14,7 @@ const FriendMenu = () => {
 
         menuContainer:{
             position: "fixed",
-            right: 70,
+            right: 0,
             bottom: 0,
             width: 200
         },
@@ -37,7 +36,8 @@ const FriendMenu = () => {
             paddingLeft: 15,
             cursor: "pointer"
         }
-      }));
+    }));
+
     const classes = useStyles();
 
     const dispatch = useDispatch();
@@ -46,16 +46,16 @@ const FriendMenu = () => {
 
     const { friends } = useSelector(state => state.friendsReducer);
 
-    const { chatMenuIds } = useSelector(state => state.modalsReducer);
+    const { chatBoxes } = useSelector(state => state.chatReducer);
 
     const [ menuOpen, setMenuOpen ] = useState(false);
 
-    const friendIdExists = (friendId) => {
-        return  chatMenuIds.some(id => id === friendId )
+    const chatBoxExists = (personId) => {
+        return chatBoxes.some(person => person.id === personId )
     }
 
-    const openSingleChatMenu = (id) => {
-        !friendIdExists(id) && dispatch(openChatMenu(id))
+    const createSingleChatBox = (personId, personInfo) => {
+        !chatBoxExists(personId) && dispatch(createChatBox(personInfo))
     }
 
     return (
@@ -68,8 +68,8 @@ const FriendMenu = () => {
                 <ClickAwayListener onClickAway={() => setMenuOpen(false)}>
                     <List className={friendMenu} disablePadding={true}>
                         {friends.length > 0 && friends.map(friend => (
-                            <>
-                                <ListItem key={friend.userName} className={listItem} onClick={() => openSingleChatMenu(friend.friendId)} disableGutters={true}>
+                            <Box key={friend.friendId}>
+                                <ListItem className={listItem} onClick={() => createSingleChatBox(friend.friendId, {id: friend.friendId, userName: friend.userName, personAvatar: friend.avatar})} disableGutters={true}>
                                     <ListItemAvatar>
                                         <Avatar alt={friend.userName} src={friend.avatar}/>
                                         <PulsingGreenBall friendMenuComponent/>
@@ -77,11 +77,10 @@ const FriendMenu = () => {
                                     <ListItemText primary={<Typography color="primary" variant="caption">{friend.userName}</Typography>}/>
                                 </ListItem>
                                 <Divider/>
-                            </>
+                            </Box>
                         ))}
                     </List>
                 </ClickAwayListener>}
-                {chatMenuIds.length > 0 && <ChatBoxesContainer friends={friends}/>}
             </Box>
         </>
     );
