@@ -11,7 +11,8 @@ import notificationsReducer from "./notificationsReducer";
 import favoritesReducer from "./favoritesReducer";
 import friendsReducer from "./friendsReducer";
 import galleryReducer from "./galleryReducer";
-
+import chatReducer from "./chatReducer";
+import ioReducer from "./ioReducer";
 
 const allReducers = combineReducers({
   messagesReducer,
@@ -25,7 +26,9 @@ const allReducers = combineReducers({
   notificationsReducer,
   favoritesReducer,
   friendsReducer,
-  galleryReducer
+  galleryReducer,
+  chatReducer,
+  ioReducer
 });
 
 export default allReducers;
