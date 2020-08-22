@@ -10,6 +10,7 @@ const jwt = require("jsonwebtoken");
 const verifyPassword = require("../middlewares/verifyPassword");
 const verifyEmail = require("../middlewares/verifyEmail");
 const emailConfirmed = require("../middlewares/emailConfirmed");
+const isLoggedIn = require("../middlewares/isLoggedIn");
 
 //register normal
 router.post("/register", async (req, res) => {
@@ -49,7 +50,7 @@ router.post("/register", async (req, res) => {
 });
 
 //login normal
-router.post("/login", verifyEmail, verifyPassword, emailConfirmed, async (req, res) => { 
+router.post("/login", isLoggedIn, verifyEmail, verifyPassword, emailConfirmed, async (req, res) => { 
   const { email } = req.body;
   const user = await User.findOne({ email });
   // find user likes and dislikes
@@ -61,7 +62,8 @@ router.post("/login", verifyEmail, verifyPassword, emailConfirmed, async (req, r
   const friendRequests = await FriendRequest.find({friendId: user._id})
 
   try {
-    await Post.updateMany({userName: user.userName}, {$set:{userIsOnline: true}}) 
+    await Post.updateMany({userName: user.userName}, {$set:{userIsOnline: true}});
+    await User.updateMany({userName: user.userName}, {$set:{isOnline: true}})  
     const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET);
     res
       .header("auth-token", token)
@@ -99,6 +101,7 @@ router.put("/:email", async (req, res) => {
 router.post("/logout", async (req,res) => {
   const {userId} = req.body;
   try{
+    await User.updateOne({_id: userId}, {$set:{isOnline: false}})
     await Post.updateMany({userId},{$set:{userIsOnline:false}})
     res.status(201).send({code:900})
   }catch(err) {
