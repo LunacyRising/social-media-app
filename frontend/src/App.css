@@ -290,3 +290,21 @@ a:hover {
   right: 20;
   cursor: pointer;
 }
+
+.gifs-menu-enter {
+  opacity: 0;
+  transform: translateY(200px) !important;
+}
+.gifs-menu-enter-active {
+  transform: translateY(0) !important;
+  transition: 0.2s ease-in-out;
+  opacity: 1;
+}
+.gifs-menu-exit {
+  opacity: 1;
+}
+.gifs-menu-exit-active {
+  transform: translateY(200px) !important;
+  opacity: 0;
+  transition: 0.2s ease-in-out;
+};
