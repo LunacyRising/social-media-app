@@ -4,6 +4,7 @@ import {
   SAVE_MESSAGE_SUCCESS,
   PENDING_MESSAGE_SUCCESS,
   PENDING_MESSAGE_DELETED,
+  LOGOUT_SUCCESS
 } from "../actions/types"; 
    
   const initialState = {
@@ -41,6 +42,13 @@ import {
         return {
           ...state,
           pendingMessages: action.payload
+        };
+      case LOGOUT_SUCCESS:
+        return {
+          ...state,
+          chatBoxes: [],
+          chatMessages: [],
+          pendingMessages:[]
         };
       default:
         return state;
