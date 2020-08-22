@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from "react-redux";
 import { useTranslation } from "react-i18next";
 import { CSSTransition } from 'react-transition-group' 
 import { makeStyles } from "@material-ui/core/styles";
-import { Box, IconButton, Card , TextField } from "@material-ui/core";
+import { Box, IconButton, Card , TextField, ClickAwayListener } from "@material-ui/core";
 import HighlightOffRoundedIcon from '@material-ui/icons/HighlightOffRounded';
 import dots from "../../utils/images/dots.svg";
 import { fetchGifs } from "../../actions/gifsActions/fetchGifs";
@@ -119,12 +119,13 @@ const GifsMenu = ({ chatBoxComponent, quillModal, func, gifstMenuOpen, setGifstM
   return (
       <>
         <CSSTransition
-          in={gifstMenuOpen}
-          timeout={150}
-          unmountOnExit={true}
-          classNames="gifs-menu"
-          >
-          <Card className={menuContainer}>
+        in={gifstMenuOpen}
+        timeout={150}
+        unmountOnExit={true}
+        classNames="gifs-menu"
+        >
+          <ClickAwayListener onClickAway={() => closeGifsMenu()}>
+            <Card className={menuContainer}>
               <Box className={contentWrapper}>
                 <Box className={exitAndTextField}>
                   <IconButton className={exitBtn} onClick={() => closeGifsMenu()}>
@@ -151,8 +152,9 @@ const GifsMenu = ({ chatBoxComponent, quillModal, func, gifstMenuOpen, setGifstM
                   {gifsLoading && <img className={loader} src={dots} alt="loading"/>}
                 </Box>
               </Box>
-          </Card> 
-          </CSSTransition>
+            </Card> 
+          </ClickAwayListener>  
+        </CSSTransition>
       </>
   );
 };
