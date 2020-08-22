@@ -50,6 +50,7 @@ export const loginAction = ({ email, password }) => async (dispatch, getState) =
     console.log(err.response);
     let errorCode = err.response ? err.response.data.code : 500;
     dispatch(returnMessages(errorCode)); 
+    dispatch(snackOpen());
     dispatch({
       type: LOGIN_FAIL
     });

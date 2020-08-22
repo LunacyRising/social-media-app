@@ -124,6 +124,10 @@ const SnackbarMessages = () => {
       text = "Image added to the gallery!";
       style = messageSuccess
       break; 
+    case 464: 
+      text = "You are already logged in on a different device/window!";
+      style = messageError
+      break;  
     case 500:
       text = "Unexpected error, try again later";
       style = messageError;
