@@ -50,7 +50,7 @@ router.post("/register", async (req, res) => {
 });
 
 //login normal
-router.post("/login", isLoggedIn, verifyEmail, verifyPassword, emailConfirmed, async (req, res) => { 
+router.post("/login", verifyEmail, verifyPassword, emailConfirmed, isLoggedIn, async (req, res) => { 
   const { email } = req.body;
   const user = await User.findOne({ email });
   // find user likes and dislikes
