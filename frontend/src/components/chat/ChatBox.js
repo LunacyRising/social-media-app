@@ -293,7 +293,7 @@ console.log("me re renderizochatbox")
                     <SearchGif chatBoxComponent func={addGifChat} messageInfo={messageInfo} saveMessage={saveMessage} socket={socket} setGifstMenuOpen={setGifstMenuOpen}/>
                     <SearchEmoji chatBoxComponent setEmojisMenuOpen={setEmojisMenuOpen}/>
                 </Box>
-                {gifstMenuOpen && <GifsMenu chatBoxComponent setGifstMenuOpen={setGifstMenuOpen} func={addGifChat} messageInfo={messageInfo} saveMessage={saveMessage} socket={socket}/>}
+                {<GifsMenu chatBoxComponent gifstMenuOpen={gifstMenuOpen} setGifstMenuOpen={setGifstMenuOpen} func={addGifChat} messageInfo={messageInfo} saveMessage={saveMessage} socket={socket}/>}
                 {emojisMenuOpen && <EmojisMenu chatBoxComponent setEmojisMenuOpen={setEmojisMenuOpen} setChatMessage={setChatMessage} func={addEmojiChat}/>}
             </Box>
         :<Avatar className={avatarChatClosed} src={personAvatar} onClick={() => setChatOpen(true)}/>}

@@ -127,7 +127,7 @@ const QuillModal = ({ editPostComponent, extraInfo, number, id, openModal, btnTe
             theme="bubble"
             placeholder={editPostComponent ? t("Edit") : t("AddComment")} 
             />
-            {gifstMenuOpen && <GifsMenu quillModal setGifstMenuOpen={setGifstMenuOpen} func={addGif} values={values} setValues={setValues} quillRef={quillRef}/>}
+            {gifstMenuOpen && <GifsMenu quillModal gifstMenuOpen={gifstMenuOpen} setGifstMenuOpen={setGifstMenuOpen} func={addGif} values={values} setValues={setValues} quillRef={quillRef}/>}
             {emojisMenuOpen && <EmojisMenu setEmojisMenuOpen={setEmojisMenuOpen} func={addEmoji} quillRef={quillRef}/>}
             {previewLoading && <LinearProgress style={{width: "100%"}}/>}
             <Box className={mediaBtnsContainer}>

@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import {useDispatch, useSelector} from "react-redux";
 import { useTranslation } from "react-i18next";
+import { CSSTransition } from 'react-transition-group' 
 import { makeStyles } from "@material-ui/core/styles";
 import { Box, IconButton, Card , TextField } from "@material-ui/core";
 import HighlightOffRoundedIcon from '@material-ui/icons/HighlightOffRounded';
@@ -9,7 +10,7 @@ import { fetchGifs } from "../../actions/gifsActions/fetchGifs";
 import { updateQuery } from "../../actions/gifsActions/updateQuery";
 import useInfiniteScroll from "./useInfiniteScroll"; 
 
-const GifsMenu = ({ chatBoxComponent, quillModal, func, setGifstMenuOpen, values, setValues, quillRef ,messageInfo, saveMessage, socket }) => { 
+const GifsMenu = ({ chatBoxComponent, quillModal, func, gifstMenuOpen, setGifstMenuOpen, values, setValues, quillRef ,messageInfo, saveMessage, socket }) => { 
 
   const colorsArr = ["#f7347a", "#5ac18e", "#008080", "#e6e6fa", "#fa8072", "#8a2be2", "#088da5", "#333333"];
 
@@ -20,19 +21,18 @@ const GifsMenu = ({ chatBoxComponent, quillModal, func, setGifstMenuOpen, values
     menuContainer:{
         position: "absolute",
         top: quillModal ? 10 : chatBoxComponent ? 0 : -80 ,
-        left: "50%",
-        transform: "translateX(-50%)",
         width: "inherit",
         height: quillModal ? "auto" : "100%",
         backgroundColor: darkMode ? "#0e1111" : theme.palette.background.paper,
         overflow: "visible",
         zIndex: 1600,
+        transition: "0.2s ease-in-out",
         "@media(min-width: 480px and) and (max-width: 568px)" : {
           width: quillModal ? "70%" : "inherit"
         },
         "@media(min-width: 768px)" : {
           width: quillModal ? "50%" : chatBoxComponent ? "120%" : "inherit",
-          left: chatBoxComponent && "-65%",
+          left: chatBoxComponent && "-120%",
           height: chatBoxComponent && "initial"
         },
         "@media(min-width: 1024px)" : {
@@ -83,7 +83,7 @@ const GifsMenu = ({ chatBoxComponent, quillModal, func, setGifstMenuOpen, values
     loader: {
       width: "50%",
       margin: "10px auto"
-    }
+    },
   })); 
 
   const classes = useStyles();
@@ -118,6 +118,12 @@ const GifsMenu = ({ chatBoxComponent, quillModal, func, setGifstMenuOpen, values
 
   return (
       <>
+        <CSSTransition
+          in={gifstMenuOpen}
+          timeout={150}
+          unmountOnExit={true}
+          classNames="gifs-menu"
+          >
           <Card className={menuContainer}>
               <Box className={contentWrapper}>
                 <Box className={exitAndTextField}>
@@ -145,7 +151,8 @@ const GifsMenu = ({ chatBoxComponent, quillModal, func, setGifstMenuOpen, values
                   {gifsLoading && <img className={loader} src={dots} alt="loading"/>}
                 </Box>
               </Box>
-          </Card>   
+          </Card> 
+          </CSSTransition>
       </>
   );
 };

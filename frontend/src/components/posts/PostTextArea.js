@@ -115,7 +115,7 @@ const PostTextArea = () => {
           />
           <QuillEditor quillRef={quillRef} handleChangeQuill={handleChangeQuill} value={text}/>   
           {previewLoading && <LinearProgress style={{width: "100%"}}/>}
-          {gifstMenuOpen && <GifsMenu setGifstMenuOpen={setGifstMenuOpen} func={addGif} values={values} setValues={setValues} quillRef={quillRef}/>}
+          {<GifsMenu gifstMenuOpen={gifstMenuOpen} setGifstMenuOpen={setGifstMenuOpen} func={addGif} values={values} setValues={setValues} quillRef={quillRef}/>}
           {emojisMenuOpen && <EmojisMenu setEmojisMenuOpen={setEmojisMenuOpen} func={addEmoji} values={values} setValues={setValues} quillRef={quillRef}/>}
           <Box className={mediaBtnsContainer}>
             <UploadImageBtn postComponent func={addImage} values={values} setValues={setValues} quillRef={quillRef} setPreviewLoading={setPreviewLoading}/>
