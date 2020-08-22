@@ -48,6 +48,10 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: "false"
   },
+  isOnline: {
+    type: Boolean,
+    default: "false"
+  },
   createdAt: {
     type: Date,
     default: Date.now
