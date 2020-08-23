@@ -9,6 +9,8 @@ const fileupload = require("express-fileupload");
 //test
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
+//test2
+const saveMessageNotification = require("./helperFunctions/saveMessageNotification");
 
 //middleware
 app.use(express.json());
@@ -47,6 +49,7 @@ io.on("connection", (socket) => {
 
   socket.on("chat message", ({chatMessage, receiver, sender, avatar, senderId, receiverId, sendedAt}) => {
     const answer = true
+    !user[receiver] ? saveMessageNotification({chatMessage, receiver, sender, avatar, senderId, receiverId, sendedAt}) : 
     socket.to(user[receiver]).emit("answer", {chatMessage, receiver, sender, avatar, senderId, receiverId, sendedAt, answer});
   })
 
