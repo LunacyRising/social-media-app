@@ -31,7 +31,7 @@ const NewMessageNotification = () => {
 
     const { socket } = useSelector(state => state.ioReducer);
     
-    const { pendingMessages, chatMessages } = useSelector(state => state.chatReducer);
+    const { messagesNotifications } = useSelector(state => state.notificationsReducer);
 
     const [ menuOpen, setMenuOpen ] = useState(false);
 
@@ -44,10 +44,10 @@ const NewMessageNotification = () => {
     return(
         <> 
             <IconButton className={ btn } onClick={() => setMenuOpen(prev => !prev)}> 
-                <Badge badgeContent={pendingMessages.length} color="primary">
+                <Badge badgeContent={messagesNotifications.length} color="primary">
                     <ChatBubbleOutlineOutlinedIcon  className={notiIcon}/>
                 </Badge>
-                <PendingMessagesMenu menuOpen={menuOpen} setMenuOpen={setMenuOpen}/>
+                <PendingMessagesMenu menuOpen={menuOpen} setMenuOpen={setMenuOpen} messagesNotifications={messagesNotifications}/>
             </IconButton> 
         </>
     )

@@ -7,7 +7,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Typography,Box, Avatar, ListItemText, List, ListItem } from "@material-ui/core";
 import { createChatBox } from "../../actions/chatActions/createChatBox";
 
-const PendingMessagesMenu = ({ menuOpen, setMenuOpen }) => {
+const PendingMessagesMenu = ({ menuOpen, setMenuOpen, messagesNotifications }) => {
 
   const { darkMode } = useSelector(state => state.darkModeReducer);
 
@@ -56,8 +56,6 @@ const PendingMessagesMenu = ({ menuOpen, setMenuOpen }) => {
 
   const { menu, menuItem, avatarAndText, messageTime, avatar, userName, textMessage, } = classes;
 
-  const { pendingMessages } = useSelector(state => state.chatReducer);
-
   const { chatBoxes } = useSelector(state => state.chatReducer);
 
   const dispatch = useDispatch();
@@ -77,8 +75,8 @@ const PendingMessagesMenu = ({ menuOpen, setMenuOpen }) => {
         {menuOpen &&
         <ClickAwayListener onClickAway={() => setMenuOpen(false)}>
             <List className={menu}>
-                {pendingMessages.length > 0 &&
-                pendingMessages.map(message =>(
+                {messagesNotifications.length > 0 &&
+                messagesNotifications.map(message =>(
                 <ListItem className={menuItem}  onClick={() => createSingleChatBox(message.senderId, {id: message.senderId, userName: message.sender, personAvatar: message.avatar})} disableGutters={true}>
                         <Typography className={messageTime} variant="caption">
                             {dayjs(message.sendedAt).fromNow()}
