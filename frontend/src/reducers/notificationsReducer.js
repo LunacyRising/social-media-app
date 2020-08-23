@@ -5,12 +5,14 @@ import {
   GET_NOTIFICATIONS_FAIL,
   NOTIFICATIONS_LOADING,
   DELETE_NOTIFICATION,
-  DELETE_ALL_NOTIFICATIONS, 
+  DELETE_ALL_NOTIFICATIONS,
+  LOGIN_SUCCESS, 
   } from "../actions/types";
   
   const initialState = {
     notificationsLoading: false,
-    notifications: []
+    notifications: [],
+    messagesNotifications: []
   };
   
   const notificationsReducer = (state = initialState, action) => {
@@ -46,6 +48,11 @@ import {
         return {
           ...state,
           notificationsLoading: false
+        };
+      case LOGIN_SUCCESS:
+        return {
+          ...state,
+          messagesNotifications: action.payload.messageNotifications
         };
       default:
         return state;
