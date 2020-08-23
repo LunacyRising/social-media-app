@@ -54,7 +54,7 @@ import {
       case PENDING_MESSAGE_SUCCESS:
         return {
           ...state,
-          messagesNotifications: [...state.messagesNotifications, action.payload]
+          messagesNotifications: [action.payload, ...state.messagesNotifications]
         };
       case PENDING_MESSAGE_DELETED:
         return {
