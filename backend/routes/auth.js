@@ -62,7 +62,7 @@ router.post("/login", verifyEmail, verifyPassword, emailConfirmed, isLoggedIn, a
   // find friendrequests
   const friendRequests = await FriendRequest.find({friendId: user._id})
   // find message notifications
-  const messageNotifications = await MessageNotification.find({receiverId: user._id})
+  const messagesNotifications = await MessageNotification.find({receiverId: user._id})
 
   try {
     await Post.updateMany({userName: user.userName}, {$set:{userIsOnline: true}});
@@ -79,7 +79,7 @@ router.post("/login", verifyEmail, verifyPassword, emailConfirmed, isLoggedIn, a
         dislikes,
         favorites,
         friendRequests,
-        messageNotifications
+        messagesNotifications
       });
   } catch (err) {
     res.status(500).send({ code: 500 });
