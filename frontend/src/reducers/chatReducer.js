@@ -2,15 +2,12 @@ import {
   CREATE_CHAT_BOX,
   DELETE_CHAT_BOX,
   SAVE_MESSAGE_SUCCESS,
-  PENDING_MESSAGE_SUCCESS,
-  PENDING_MESSAGE_DELETED,
   LOGOUT_SUCCESS
 } from "../actions/types"; 
    
   const initialState = {
     chatBoxes: [],
     chatMessages: [],
-    pendingMessages:[],
     messageLoading: false
   };
   
@@ -32,16 +29,6 @@ import {
         return {
           ...state,
           chatMessages: [...state.chatMessages, action.payload.chatMessage], 
-        };
-      case PENDING_MESSAGE_SUCCESS:
-        return {
-          ...state,
-          pendingMessages: [...state.pendingMessages, action.payload]
-        };
-      case PENDING_MESSAGE_DELETED:
-        return {
-          ...state,
-          pendingMessages: action.payload
         };
       case LOGOUT_SUCCESS:
         return {

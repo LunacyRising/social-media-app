@@ -6,6 +6,8 @@ import {
   NOTIFICATIONS_LOADING,
   DELETE_NOTIFICATION,
   DELETE_ALL_NOTIFICATIONS,
+  PENDING_MESSAGE_SUCCESS,
+  PENDING_MESSAGE_DELETED,
   LOGIN_SUCCESS, 
   } from "../actions/types";
   
@@ -48,6 +50,16 @@ import {
         return {
           ...state,
           notificationsLoading: false
+        };
+      case PENDING_MESSAGE_SUCCESS:
+        return {
+          ...state,
+          messagesNotifications: [...state.messagesNotifications, action.payload]
+        };
+      case PENDING_MESSAGE_DELETED:
+        return {
+          ...state,
+          messagesNotifications: action.payload
         };
       case LOGIN_SUCCESS:
         return {
