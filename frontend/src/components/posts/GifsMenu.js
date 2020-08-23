@@ -23,8 +23,8 @@ const GifsMenu = ({ chatBoxComponent, quillModal, func, gifstMenuOpen, setGifstM
         top: quillModal ? 10 : chatBoxComponent ? 0 : -80 ,
         width: "inherit",
         height: quillModal ? "auto" : "100%",
+        padding: 10,
         backgroundColor: darkMode ? "#0e1111" : theme.palette.background.paper,
-        overflow: "visible",
         zIndex: 1600,
         transition: "0.2s ease-in-out",
         "@media(min-width: 480px and) and (max-width: 568px)" : {
@@ -33,15 +33,10 @@ const GifsMenu = ({ chatBoxComponent, quillModal, func, gifstMenuOpen, setGifstM
         "@media(min-width: 768px)" : {
           width: quillModal ? "50%" : chatBoxComponent ? "120%" : "inherit",
           left: chatBoxComponent && "-120%",
-          height: chatBoxComponent && "initial"
         },
         "@media(min-width: 1024px)" : {
           top: chatBoxComponent && "-20px",
         },
-    },
-    contentWrapper: {
-      width: "90%",
-      margin: "auto"
     },
     exitAndTextField: {
         display: "flex",
@@ -63,15 +58,19 @@ const GifsMenu = ({ chatBoxComponent, quillModal, func, gifstMenuOpen, setGifstM
       flexDirection: "row",
       flexWrap: "wrap",
       width: "100%",
-      maxHeight: 350,
+      height: "100%",
       overflow: "hidden auto"
     },
     gifBox: {
-      width: "28%",
+      width: "29.5%",
       height: 98,
       margin: 5,
       backgroundColor: colorsArr[Math.floor(Math.random() * colorsArr.length)],
-      cursor: "pointer"
+      cursor: "pointer",
+      "@media(min-width: 768px)" : {
+        width: chatBoxComponent && "45%",
+        overflow: "hidden auto"
+      },
     },  
     singleGif: {
       width: "100%",
@@ -81,14 +80,14 @@ const GifsMenu = ({ chatBoxComponent, quillModal, func, gifstMenuOpen, setGifstM
         margin: "10px auto",
     },
     loader: {
-      width: "50%",
-      margin: "10px auto"
+      width: "100%",
+      padding: "20px 20px 50px 20px"
     },
   })); 
 
   const classes = useStyles();
 
-  const { contentWrapper, menuContainer, exitAndTextField, exitBtn, field, gifsContainer, gifBox, singleGif, noResults, loader } = classes;
+  const { menuContainer, exitAndTextField, exitBtn, field, gifsContainer, gifBox, singleGif, noResults, loader } = classes;
 
   const { gifs, maxResults , gifsLoading, gifOffset, gifQuery } = useSelector(state => state.gifsReducer);
 
@@ -126,7 +125,6 @@ const GifsMenu = ({ chatBoxComponent, quillModal, func, gifstMenuOpen, setGifstM
         >
           <ClickAwayListener onClickAway={() => closeGifsMenu()}>
             <Card className={menuContainer}>
-              <Box className={contentWrapper}>
                 <Box className={exitAndTextField}>
                   <IconButton className={exitBtn} onClick={() => closeGifsMenu()}>
                       <HighlightOffRoundedIcon/>
@@ -149,9 +147,8 @@ const GifsMenu = ({ chatBoxComponent, quillModal, func, gifstMenuOpen, setGifstM
                         <img ref={ gifs.length === index + 1 ? lastElement : null} className={singleGif} loading="lazy" onClick={ () => func({title: gif.title, gif: gif.images.downsized_large.url, messageInfo, saveMessage, socket, ...gifInfo})} src={gif.images.preview_gif.url} alt={gif.userName}/>
                       </Box>
                       ))}
-                  {gifsLoading && <img className={loader} src={dots} alt="loading"/>}
+                    {gifsLoading && <img className={loader} src={dots} alt="loading"/>}
                 </Box>
-              </Box>
             </Card> 
           </ClickAwayListener>  
         </CSSTransition>
