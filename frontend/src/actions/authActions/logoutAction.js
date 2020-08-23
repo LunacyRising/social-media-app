@@ -2,13 +2,15 @@ import axios from "axios";
 import { returnMessages, snackOpen } from "../messagesActions";
 import { LOGOUT_SUCCESS, LOGGING_OUT, FAIL_LOGOUT } from "../types";
 import { editKeyValue } from "../../helperFunctions/editKeyValue"
-
+import { disconnects, socketOff } from "../../ioEvents/disconnects";
 
 export const logoutAction = () => async (dispatch,getState) => {
 
   const { userId } = getState().authReducer;
 
   const { posts } = getState().postReducer;
+
+  const { socket } = getState().ioReducer;
 
   const keyValue = {userIsOnline: false}
 
@@ -19,6 +21,8 @@ export const logoutAction = () => async (dispatch,getState) => {
       type: LOGOUT_SUCCESS,
       payload: editKeyValue(posts, userId, "userId", keyValue) 
     })
+    disconnects("disconect", "usuario desconectado", socket);
+    socketOff(socket)
   }catch(err){
     let errorCode = err.response ? err.response.data.code : 500;
     dispatch(returnMessages(errorCode));
