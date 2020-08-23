@@ -9,17 +9,27 @@ const EmojisMenu = ({ chatBoxComponent, func, setEmojisMenuOpen, quillRef, setCh
     const useStyles = makeStyles(() => ({
 
         pickerContainer: {
-            position: chatBoxComponent && "absolute",
-            top: chatBoxComponent && "40%",
-            left: chatBoxComponent && "50%",
-            transform: chatBoxComponent && "translateX(-50%)",
+           // position: chatBoxComponent && "absolute",
+            //top: chatBoxComponent && "40%",
+            //left: chatBoxComponent && "50%",
+            width: "100%",
+            height: "22%",
+            marginTop: 10,
+            overflowY: "scroll",
+            //transform: chatBoxComponent && "translateX(-50%)",
             "@media(min-width: 480px)" : {
-                width: !chatBoxComponent && "70%",
-                margin: "auto"
+                //width: !chatBoxComponent && "70%",
+                //margin: "auto"
             },
             "@media(min-width: 480px)" : {
-                top: chatBoxComponent && 0,
-                left: chatBoxComponent && "-65%",
+                //top: chatBoxComponent && 0,
+                //left: chatBoxComponent && "-65%",
+            },
+            "@media(min-width: 768px)" : {
+                position: chatBoxComponent && "absolute",
+                top: chatBoxComponent && "40%",
+                left: chatBoxComponent && "50%",
+                transform: chatBoxComponent && "translateX(-50%)",
             },
         }
         })); 
