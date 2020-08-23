@@ -34,9 +34,6 @@ const GifsMenu = ({ chatBoxComponent, quillModal, func, gifstMenuOpen, setGifstM
           width: quillModal ? "50%" : chatBoxComponent ? "120%" : "inherit",
           left: chatBoxComponent && "-120%",
         },
-        "@media(min-width: 1024px)" : {
-          top: chatBoxComponent && "-20px",
-        },
     },
     exitAndTextField: {
         display: "flex",
