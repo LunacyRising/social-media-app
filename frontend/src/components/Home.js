@@ -13,6 +13,8 @@ import SnackbarMessages from "./SnackbarMessages";
 import FriendMenu from "./friends/FriendMenu";
 import ChatBoxesContainer from "./chat/ChatBoxesContainer";
 import { fetchInitialPosts } from "../actions/postsActions/fetchInitialPosts";
+import { connects } from "../ioEvents/connects";
+import { disconnects, socketOff } from "../ioEvents/disconnects";
 
 const Home = () => {
 
@@ -45,6 +47,8 @@ const Home = () => {
 
   const { messageCode } = useSelector(state => state.messagesReducer);
 
+  const { socket } = useSelector(state => state.ioReducer);
+
   const { postsLoading, postsLoading2, maxResults, skip } = useSelector(state => state.postReducer);
 
   const { isAuthenticated, userName } = useSelector(state => state.authReducer);
@@ -60,6 +64,14 @@ const Home = () => {
  
   useEffect(() => {
     dispatch(fetchInitialPosts()); 
+  },[]);
+
+  useEffect(() => {
+    connects("connects", userName, socket);
+    return () => {
+      disconnects("disconnects", `${userName} desconectado`);
+      socketOff()
+    } 
   },[]);
 
   return (
