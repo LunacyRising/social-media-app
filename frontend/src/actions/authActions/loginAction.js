@@ -4,10 +4,13 @@ import { loginModalClose } from "../modalsActions/login";
 import { USER_LOADING, LOGIN_SUCCESS, LOGIN_FAIL } from "../types";
 import { editKeyValue } from "../../helperFunctions/editKeyValue";
 import { fetchFriends } from "../friendsActions/fetchFriends";
+import { connects } from "../../ioEvents/connects";
 
 export const loginAction = ({ email, password }) => async (dispatch, getState) => {
 
   const { posts } = getState().postReducer;
+
+  const { socket } = getState().ioReducer;
 
   const keyValue = {userIsOnline : true}
 
@@ -42,6 +45,8 @@ export const loginAction = ({ email, password }) => async (dispatch, getState) =
     dispatch(loginModalClose())
 
     dispatch(snackOpen());
+
+    connects("connects",response.data.user.userName, socket)
 
     const messageCode = response.data.code; 
 
