@@ -19,12 +19,38 @@ a:hover {
   text-decoration: none;
 }
 
-
 /* estilos para el emoji picker*/
-
 .emoji-picker-react{
   margin: 5px auto 0px;
   box-shadow: none !important;
+  width: 100% !important;
+}
+
+.emoji-picker-react > div:nth-of-type(1) {
+   display: none;
+}
+
+.emoji-scroll-wrapper ul:before {
+  display: none !important
+}
+
+@media (min-width: 768px) {
+  .emoji-picker-react {
+    height: 100% !important;
+    margin: initial !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .emoji-picker-react > div:nth-of-type(1) {
+    display: initial;
+  }
+}
+
+@media (min-width: 768px) {
+  .emoji-scroll-wrapper ul:before {
+    display: block !important;
+  }
 }
 
 /*testeando estilo para el quill*/
