@@ -45,8 +45,6 @@ const Home = () => {
 
   const { messageCode } = useSelector(state => state.messagesReducer);
 
-  const { socket } = useSelector(state => state.ioReducer);
-
   const { postsLoading, postsLoading2, maxResults, skip } = useSelector(state => state.postReducer);
 
   const { isAuthenticated, userName } = useSelector(state => state.authReducer);
@@ -63,14 +61,6 @@ const Home = () => {
   useEffect(() => {
     dispatch(fetchInitialPosts()); 
   },[]);
-
-  useEffect(() => {
-    isAuthenticated && socket && socket.emit("connects", userName);
-    return () => {
-        socket.emit("disconect", "usuario desconectado");
-        socket.off()
-    }
-},[])
 
   return (
     <>
