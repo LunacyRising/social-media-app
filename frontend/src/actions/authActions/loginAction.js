@@ -4,7 +4,7 @@ import { loginModalClose } from "../modalsActions/login";
 import { USER_LOADING, LOGIN_SUCCESS, LOGIN_FAIL } from "../types";
 import { editKeyValue } from "../../helperFunctions/editKeyValue";
 import { fetchFriends } from "../friendsActions/fetchFriends";
-import { connects } from "../../ioEvents/connects";
+import { emitEvent } from "../../io/emitEvents/emitEvents";
 
 export const loginAction = ({ email, password }) => async (dispatch, getState) => {
 
@@ -35,7 +35,7 @@ export const loginAction = ({ email, password }) => async (dispatch, getState) =
           dislikes: response.data.dislikes,
           favorites: response.data.favorites,
           friendRequests: response.data.friendRequests,
-          messagesNotifications: response.data.messagesNotifications,
+          pendingMessages: response.data.pendingMessages,
           posts: editKeyValue(posts, response.data.user._id, "userId", keyValue)    
       }
     });
@@ -46,7 +46,7 @@ export const loginAction = ({ email, password }) => async (dispatch, getState) =
 
     dispatch(snackOpen());
 
-    connects("connects",response.data.user.userName, socket)
+    emitEvent("connects",response.data.user.userName, socket)
 
     const messageCode = response.data.code; 
 

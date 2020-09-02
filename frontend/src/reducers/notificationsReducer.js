@@ -64,7 +64,7 @@ import {
       case LOGIN_SUCCESS:
         return {
           ...state,
-          messagesNotifications: action.payload.messagesNotifications
+          messagesNotifications: action.payload.pendingMessages
         };
       default:
         return state;

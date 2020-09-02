@@ -5,7 +5,7 @@ const Like = require("../schemas/Like")
 const Dislike = require("../schemas/Dislike")
 const Favorite = require("../schemas/Favorite");
 const FriendRequest = require("../schemas/FriendRequestNotification");
-const MessageNotification = require("../schemas/MessageNotification");
+const ChatMessage = require("../schemas/ChatMessage");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const verifyPassword = require("../middlewares/verifyPassword");
@@ -62,8 +62,8 @@ router.post("/login", verifyEmail, verifyPassword, emailConfirmed, isLoggedIn, a
   // find friendrequests
   const friendRequests = await FriendRequest.find({friendId: user._id})
   // find message notifications
-  const messagesNotifications = await MessageNotification.find({receiverId: user._id})
-
+  
+  const pendingMessages = await ChatMessage.find({receiverId: user._id}, {messageStatus: "unseen"})
   try {
     await Post.updateMany({userName: user.userName}, {$set:{userIsOnline: true}});
     await User.updateMany({userName: user.userName}, {$set:{isOnline: true}})  
@@ -79,7 +79,7 @@ router.post("/login", verifyEmail, verifyPassword, emailConfirmed, isLoggedIn, a
         dislikes,
         favorites,
         friendRequests,
-        messagesNotifications
+        pendingMessages
       });
   } catch (err) {
     res.status(500).send({ code: 500 });
