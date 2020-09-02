@@ -13,8 +13,7 @@ import SnackbarMessages from "./SnackbarMessages";
 import FriendMenu from "./friends/FriendMenu";
 import ChatBoxesContainer from "./chat/ChatBoxesContainer";
 import { fetchInitialPosts } from "../actions/postsActions/fetchInitialPosts";
-import { connects } from "../ioEvents/connects";
-import { disconnects, socketOff } from "../ioEvents/disconnects";
+import { emitEvent } from "../io/emitEvents/emitEvents";
 
 const Home = () => {
 
@@ -67,10 +66,10 @@ const Home = () => {
   },[]);
 
   useEffect(() => {
-    connects("connects", userName, socket);
+   isAuthenticated && emitEvent("connects", userName, socket);
     return () => {
-      disconnects("disconnects", `${userName} desconectado`);
-      socketOff()
+      emitEvent("disconect", `${userName} desconectado`, socket);
+      socket.off()
     } 
   },[]);
 
