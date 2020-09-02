@@ -162,6 +162,7 @@ export const DELETE_CHAT_BOX = "DELETE_CHAT_BOX";
 export const SAVE_MESSAGE_SUCCESS = "SAVE_MESSAGE_SUCCESS";
 export const PENDING_MESSAGE_SUCCESS = "PENDING_MESSAGE_SUCCESS";
 export const PENDING_MESSAGE_DELETED = "PENDING_MESSAGE_DELETED";
+export const CHANGE_MESSAGE_STATUS = "CHANGE_MESSAGE_STATUS";
 ///////////////////////////////////////////////////////////////
 
 

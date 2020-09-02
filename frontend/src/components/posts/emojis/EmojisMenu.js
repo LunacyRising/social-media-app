@@ -4,7 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Picker from 'emoji-picker-react';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
-const EmojisMenu = ({ chatBoxComponent, func, setEmojisMenuOpen, quillRef, setChatMessage, messageInfo, saveMessage, socket }) => { 
+const EmojisMenu = ({ chatBoxComponent, func, setEmojisMenuOpen, quillRef, setValues, values}) => { 
 
     const useStyles = makeStyles(() => ({
 
@@ -16,7 +16,7 @@ const EmojisMenu = ({ chatBoxComponent, func, setEmojisMenuOpen, quillRef, setCh
                 position: chatBoxComponent && "absolute",
                 left: chatBoxComponent && "-100%",
                 bottom: 0,
-                height: "100%",
+                height: chatBoxComponent ? "100%": 320,
                 margin: "initial"
             },
         }
@@ -28,32 +28,30 @@ const EmojisMenu = ({ chatBoxComponent, func, setEmojisMenuOpen, quillRef, setCh
 
     const { t } = useTranslation();
 
-    const chatBoxObj = { setChatMessage, messageInfo, saveMessage, socket }
-
     const onEmojiClick = (event, emojiObject) => {
-        return func(event, emojiObject, quillRef, chatBoxObj)
+        return func(event, emojiObject, quillRef, setValues, values) 
     }
 
   return (
-      <>
+    <>
         <ClickAwayListener onClickAway={() => setEmojisMenuOpen(false)}>
-        <div className={pickerContainer}>
-            <Picker onEmojiClick={onEmojiClick}
-            groupNames={{
-            smileys_people: t('EmojiPicker.smileys_people'),
-            animals_nature: t('EmojiPicker.animals_nature'),
-            food_drink: t('EmojiPicker.food_drink'),
-            travel_places: t('EmojiPicker.travel_places'),
-            activities: t('EmojiPicker.activities'),
-            objects: t('EmojiPicker.objects'),
-            symbols: t('EmojiPicker.symbols'),
-            flags: t('EmojiPicker.flags'),
-            recently_used: t('EmojiPicker.recently_used'),
-            }}
-            />
-        </div>
+            <div className={pickerContainer}>
+                <Picker onEmojiClick={onEmojiClick}
+                groupNames={{
+                smileys_people: t('EmojiPicker.smileys_people'),
+                animals_nature: t('EmojiPicker.animals_nature'),
+                food_drink: t('EmojiPicker.food_drink'),
+                travel_places: t('EmojiPicker.travel_places'),
+                activities: t('EmojiPicker.activities'),
+                objects: t('EmojiPicker.objects'),
+                symbols: t('EmojiPicker.symbols'),
+                flags: t('EmojiPicker.flags'),
+                recently_used: t('EmojiPicker.recently_used'),
+                }}
+                />
+            </div>
         </ClickAwayListener>
-      </>
+    </>
   );
 };
 

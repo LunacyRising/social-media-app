@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { makeStyles } from "@material-ui/core/styles";
 import { Box, TextField } from "@material-ui/core"; 
 
-const InputField = ({ chatMsg, removeAlert, handleChange, submitMsg }) => { 
+const InputField = ({ chatMessage, removeAlert, handleChange, handleSubmit, filteredMessages }) => { 
 
   const useStyles = makeStyles(() => ({ 
 
@@ -26,8 +26,8 @@ const InputField = ({ chatMsg, removeAlert, handleChange, submitMsg }) => {
   return (
     <>
         <Box className={messageInputContainer}>
-            <form onSubmit={submitMsg} autoComplete="off">
-                <TextField  className={messageInput} value={chatMsg} onFocus={removeAlert} onChange={handleChange} placeholder={t('Chat.placeholder')} />
+            <form onSubmit={handleSubmit} autoComplete="off">
+                <TextField  className={messageInput} value={chatMessage} name="chatMessage" onFocus={removeAlert} onChange={handleChange} placeholder={t('Chat.placeholder')} />
             </form>
         </Box>
     </>

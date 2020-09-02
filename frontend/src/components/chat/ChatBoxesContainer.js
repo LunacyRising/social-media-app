@@ -32,13 +32,13 @@ const ChatBoxesContainer = () => {
 
   const { chatBoxesContainer } = classes;
 
-  const { chatBoxes } = useSelector(state => state.chatReducer);
+  const { chatBoxes, chatMessages } = useSelector(state => state.chatReducer);
 
   return (
     <>
         <Box className={chatBoxesContainer}> 
             {chatBoxes.map(box =>(
-              <ChatBox key={box.id} personUserName={box.userName} personId={box.id} personAvatar={box.personAvatar}/>
+              <ChatBox key={box.id} personUserName={box.userName} personId={box.id} personAvatar={box.personAvatar} chatBoxes={chatBoxes} chatMessages={chatMessages}/>
              ))}
         </Box> 
     </>

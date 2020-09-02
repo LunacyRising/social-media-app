@@ -6,7 +6,7 @@ import { IconButton,Tooltip } from "@material-ui/core";
 import HighlightOffRoundedIcon from '@material-ui/icons/HighlightOffRounded';
 import { deleteChat } from "../../../actions/chatActions/deleteChat";
 
-const DeleteChatBox = ({ id }) => {
+const DeleteChatBox = ({ id, setChatOpen }) => {
 
   const useStyles = makeStyles((theme) => ({
 
@@ -30,6 +30,7 @@ const DeleteChatBox = ({ id }) => {
 
   const removeChatBox = () => {
     dispatch(deleteChat(id))
+    setChatOpen(prev => !prev)
   }
 
   return (

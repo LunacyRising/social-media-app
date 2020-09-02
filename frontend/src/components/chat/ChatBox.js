@@ -8,6 +8,9 @@ import {
   Box,
   List,
   ListItem,
+  CircularProgress,
+  Tooltip,
+  Button,
 } from "@material-ui/core"; 
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime"; 
@@ -20,16 +23,20 @@ import UploadImageBtn from "../posts/mediaBtns/UploadImageBtn";
 import SearchGif from "../posts/mediaBtns/SearchGif";
 import SearchEmoji from "../posts/emojis/SearchEmoji";
 import DeleteChatBox from "./btns/DeleteChatBox";
+import DoneRoundedIcon from '@material-ui/icons/DoneRounded';
+import DoneAllRoundedIcon from '@material-ui/icons/DoneAllRounded';
+import ErrorOutlineRoundedIcon from '@material-ui/icons/ErrorOutlineRounded';
 import { saveMessages } from "../../actions/chatActions/saveMessages";
 import { addImageChat } from "../../helperFunctions/addImageChat";
 import { addGifChat } from "../../helperFunctions/addGifChat";
 import { addEmojiChat } from "../../helperFunctions/addEmojiChat";
+import { changeMessageStatus } from "../../actions/chatActions/changeMessageStatus";
+import { changeMessageStatus2 } from "../../actions/chatActions/changeMessageStatus";
+import useIoEvents from "../../io/useIoEvents";
 
-const ChatBox = ({ personUserName, personId, personAvatar }) => { 
+const ChatBox = ({ personUserName, personId, personAvatar, chatMessages }) => { 
 
 const [ alert, setAlert ] = useState(false);
-
-console.log("me re renderizochatbox")
 
   const useStyles = makeStyles((theme) => ({ 
 
@@ -87,10 +94,6 @@ console.log("me re renderizochatbox")
             height: 250
         },
     },
-    chatClosed: {
-        transform: "translateX(100%)",
-        transition: "0.2s ease-in-out"
-    },
     avatarChatClosed: {
         alignSelf: "end",
         width: 50,
@@ -137,7 +140,13 @@ console.log("me re renderizochatbox")
         fontSize: 14,
         wordBreak: "break-word"
     },
+    statusIcon: {
+        alignSelf: "flex-end",
+        color: theme.palette.secondary.dark,
+        fontSize: 12,
+    },  
     sender:{
+        marginRight: 5,
         color: "white",
         backgroundColor: theme.palette.secondary.dark,
     },
@@ -163,111 +172,156 @@ console.log("me re renderizochatbox")
 
     const classes = useStyles();
 
-    const { chatBoxContainer, chatToggle, name, chat, chatClosed, avatarChatClosed, messageContainer, message, sender, messageTime, sendedMessage, receivedMessage, receiver, isWrittingMessage, friendAvatar, btnsContainer } = classes;
+    const { chatBoxContainer, chatToggle, name, chat, avatarChatClosed, messageContainer, message, statusIcon, sender, messageTime, sendedMessage, receivedMessage, receiver, isWrittingMessage, friendAvatar, btnsContainer } = classes;
 
     const { userId, userName, avatar } = useSelector(state => state.authReducer);
 
-    const { chatMessages } = useSelector(state => state.chatReducer);
-
     const { socket } = useSelector(state => state.ioReducer);
 
-    const [ play ] = useSound(alerta);
-
-    const { t } = useTranslation();
-
-    dayjs.extend(relativeTime);
-
     const [ chatOpen, setChatOpen ] = useState(true);
-
-    const [ chatMessage, setChatMessage ] = useState(null);
-
-    const [ writter, setWritter ] = useState(null);
-
-    const [ isWritting, setIsWritting ] = useState(false);
 
     const [ gifstMenuOpen, setGifstMenuOpen ] = useState(false);
 
     const [ emojisMenuOpen, setEmojisMenuOpen ] = useState(false);
 
+    const [ play ] = useSound(alerta);
+
+    const { t } = useTranslation();
+
+    const chatRef = useRef();
+
+    const playRef = useRef();
+
     const lastElementRef = useRef();
 
-    const dispatch = useDispatch();
+    dayjs.extend(relativeTime);
 
     const filteredMessages = chatMessages.filter( msg => msg.senderId === personId && msg.receiverId === userId || msg.senderId === userId && msg.receiverId === personId);
 
+    const dispatch = useDispatch();
+
+    const toggleChat = () => {
+        setChatOpen(prev => !prev)
+    }
+
     const newMessageAlert = () => {
         setAlert(true);
-        play()
+        playRef.current()
     }
 
-    //alerta de mensaje cuando el chat esta minimizado
+    const initialValues = {  
+        chatMessage: "",
+        sender: userName,
+        receiver: personUserName,
+        senderId: userId,
+        receiverId: personId,
+        avatar,
+        personUserName
+    };
+
+    const { values, setValues, messageInfo, handleChange, handleSubmit, writter, isWritting, error, isWrittingEvent, stoppedWrittingEvent, emitStoppedWrittingEvent, messageReceivedEvent, messageSeenConfirmed, emitMessageSeenEvent2, isWrittingListener, stoppedWrittingListener, messageSeenConfirmedListener } = useIoEvents(initialValues)
+
+    const {chatMessage} = values
+
     useEffect(() => {
-        socket.on("answer", ({senderId}) => {
-            !chatOpen && senderId === personId && newMessageAlert()
-        })
-    },[chatMessages])
+        playRef.current = play
+    },[play])
 
-
-    const handleChange = (e) => {
-        e.preventDefault();
-        setChatMessage(e.target.value);
-        socket.emit("is writting", userName, personUserName)
-    }
-
-    //recive el evento del cuando el otro usuario esta escribiendo
     useEffect(() => {
-        socket.on("is writting",({sender}) => {
-        setWritter(sender)
-        setIsWritting(true)
-        })
-    },[writter])
+        chatRef.current = chatOpen
+    },[chatOpen])
 
-    //recive el evento del cuando el otro usuario dejo de escribir
+    //recibe el evento del cuando el otro usuario esta escribiendo
     useEffect(() => {
-        socket.on("stopped writting", () => {
-            setIsWritting(false)
-        })
-    },[isWritting])
+        isWrittingEvent();
+        return () => {
+            socket.removeListener("is writting", isWrittingListener);
+        }
+    },[socket])
 
-   //emite evento de parar de escribir cuando uno borra lo que escribio previamente
+    //recibe evento cuando se dejo de escribir
     useEffect(() => {
-        chatMessage === "" && socket.emit("stopped writting", userName, personUserName)
+        stoppedWrittingEvent();
+        return () => {
+            socket.removeListener("stopped writting", stoppedWrittingListener);
+        }
+    },[socket])
+
+    //emite evento cuando se dejo de escribir
+    useEffect(() => {
+        emitStoppedWrittingEvent();
+        return () => {
+            socket.removeListener("stopped writting");
+        } 
     },[chatMessage])
 
-
-    //scroll cuando se manda o recive mensaje
+    //recibe evento mensaje visto
     useEffect(() => {
-        lastElementRef.current !== null && lastElementRef.current.scrollIntoView({behavior: "smooth"})
-    },[filteredMessages])
+        messageReceivedEvent();
+        return () => {
+            socket.removeListener("message-received-confirmed");
+        } 
+    },[socket])
 
-    const messageInfo = {chatMessage, receiver: personUserName, sender: userName, avatar, receiverId: personId, senderId: userId, sendedAt: Date.now()};
+    //recibe evento mensaje visto
+    useEffect(() => {
+        messageSeenConfirmed();
+        return () => {
+            socket.removeListener("message-seen-confirmed", messageSeenConfirmedListener);
+        } 
+    },[socket])
 
-    const submitMsg = (e) => {
-        e.preventDefault();
-        dispatch(saveMessages(messageInfo))
-        socket.emit("chat message", messageInfo)
-        socket.emit("stopped writting", userName, personUserName)
-        setChatMessage("")
-        console.log("socketemit", socket["emit"])
+    useEffect(() => {
+        lastElementRef.current && lastElementRef.current.scrollIntoView({behavior: "smooth"})
+    },[chatMessages, chatOpen, isWritting])
+
+   
+    //alerta de mensaje cuando el chat esta minimizado
+    const receiveMessage = (data) => {
+        console.log("data", data)
+        const {sender, senderId, clientMsgId} = data;
+        if(senderId === personId && chatRef.current){
+            socket.emit("message-seen", {sender, clientMsgId, seenAt: Date.now()}, () => {
+               dispatch(saveMessages({...data, messageStatus: "seen"}));
+               dispatch(changeMessageStatus(clientMsgId, "seen"));
+            });
+            }else if(senderId === personId && !chatRef.current){
+            dispatch(saveMessages({...data, messageStatus: "unseen"}));
+            newMessageAlert()
+        }
     }
+    useEffect(() => {
+        socket.on("receive-message", receiveMessage)
+        return () => {
+            socket.removeListener("receive-message", receiveMessage);
+        }
+    },[socket])
 
-    const saveMessage = (args) => {
-        dispatch(saveMessages(args))
+    const saveMessage = (data) => {
+        dispatch(saveMessages(data))
     }
 
     const removeAlert = () => {
-       alert && setAlert(false) 
+       if(alert){
+            setAlert(false)
+            const unseenMessages = filteredMessages
+            .filter(chat => chat.messageStatus === "unseen")
+            .map(msg => {return {clientMsgId: msg.clientMsgId, seenAt: Date.now()}})
+            emitMessageSeenEvent2(unseenMessages)
+            dispatch(changeMessageStatus2(unseenMessages, userName))
+       }
     }
 
     return (
     <>
         {chatOpen ?
-            <Box className={ chatOpen ? chatBoxContainer : chatClosed}>
-                <Box className={chatToggle} onClick={() => setChatOpen(prev => !prev)}>
+            <Box className={chatBoxContainer}>
+                <Box className={chatToggle} onClick={toggleChat}>
                     <Typography className={name}>
                         {personUserName}
                     </Typography>
-                    <DeleteChatBox id={personId}/>
+                    {error && <Typography style={{color: "red", position: "absolute", top: 40, left: "50%", transform: "translatex(-50%)"}}>no hay internet</Typography>}
+                    <DeleteChatBox id={personId} setChatOpen={setChatOpen}/>
                 </Box>   
                 <List className={chat}> 
                     {filteredMessages.map((msg, index) => (
@@ -279,26 +333,37 @@ console.log("me re renderizochatbox")
                             <Box className={ msg.senderId === personId ? messageContainer : `${messageContainer} ${sendedMessage}`}>
                                 {msg.senderId === personId && <Avatar className={friendAvatar} src={msg.avatar}/>}
                                 {msg.chatMessage.includes("cloudinary") || msg.chatMessage.includes("giphy") ?
-                                <img style={{ width: "100%"}} className={msg.senderId === userId ? `${message} ${sender}`: `${message} ${receiver}`}src={msg.chatMessage} alt="chat picture"/> :
+                                <img style={{ width: "100%"}} className={msg.senderId === userId ? `${message} ${sender}`: `${message} ${receiver}`}src={msg.chatMessage} alt="chat pic"/> :
                                 <Typography className={msg.senderId === userId ? `${message} ${sender}`: `${message} ${receiver}`}>
                                     {msg.chatMessage}
                                 </Typography>}
+                                {msg.messageStatus === "sending" && msg.sender === userName && <CircularProgress className={statusIcon}/>}
+                                {msg.messageStatus === "error" && msg.sender === userName && <ErrorOutlineRoundedIcon className={statusIcon}/>}
+                                {msg.messageStatus === "sent" && msg.sender === userName && <DoneRoundedIcon className={statusIcon}/>}
+                                {msg.messageStatus === "seen" && msg.sender === userName &&
+                                <Tooltip title={`visto ${dayjs(msg.seenAt).fromNow()}`}>
+                                    <DoneAllRoundedIcon className={statusIcon}/>
+                                </Tooltip>
+                                }
                             </Box>
                         </ListItem>
                     ))}
-                    {isWritting && <Typography className={isWrittingMessage} color="primary">{`${writter} ${t("Chat.isWritting")}...`}</Typography>}
-                    <Box ref={lastElementRef} style={{height: 0}}/>
+                    {isWritting &&
+                    <Typography className={isWrittingMessage} color="primary">
+                        {`${writter} ${t("Chat.isWritting")}...`}
+                    </Typography>}
+                    <Box ref={lastElementRef}/>
                 </List>
-                <InputField chatMsg={chatMessage} removeAlert={removeAlert} handleChange={handleChange} submitMsg={submitMsg}/>
+                <InputField chatMessage={chatMessage} removeAlert={removeAlert} handleChange={handleChange} handleSubmit={handleSubmit} filteredMessages={filteredMessages}/>
                 <Box className={btnsContainer}>
                     <UploadImageBtn chatBoxComponent func={addImageChat} messageInfo={messageInfo} saveMessage={saveMessage} socket={socket}/>
                     <SearchGif chatBoxComponent func={addGifChat} messageInfo={messageInfo} saveMessage={saveMessage} socket={socket} setGifstMenuOpen={setGifstMenuOpen}/>
                     <SearchEmoji chatBoxComponent setEmojisMenuOpen={setEmojisMenuOpen}/>
                 </Box>
-                {<GifsMenu chatBoxComponent gifstMenuOpen={gifstMenuOpen} setGifstMenuOpen={setGifstMenuOpen} func={addGifChat} messageInfo={messageInfo} saveMessage={saveMessage} socket={socket}/>}
-                {emojisMenuOpen && <EmojisMenu chatBoxComponent setEmojisMenuOpen={setEmojisMenuOpen} setChatMessage={setChatMessage} func={addEmojiChat}/>}
+                {gifstMenuOpen && <GifsMenu chatBoxComponent gifstMenuOpen={gifstMenuOpen} setGifstMenuOpen={setGifstMenuOpen} func={addGifChat} messageInfo={messageInfo} saveMessage={saveMessage} socket={socket}/>}
+                {emojisMenuOpen && <EmojisMenu chatBoxComponent setEmojisMenuOpen={setEmojisMenuOpen}  func={addEmojiChat} setValues={setValues} values={values}/>}
             </Box>
-        :<Avatar className={avatarChatClosed} src={personAvatar} onClick={() => setChatOpen(true)}/>}
+        :<Avatar className={avatarChatClosed} src={personAvatar} onClick={toggleChat}/>}
     </>
   );
 };

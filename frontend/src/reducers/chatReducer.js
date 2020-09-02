@@ -2,7 +2,8 @@ import {
   CREATE_CHAT_BOX,
   DELETE_CHAT_BOX,
   SAVE_MESSAGE_SUCCESS,
-  LOGOUT_SUCCESS
+  CHANGE_MESSAGE_STATUS,
+  LOGOUT_SUCCESS,
 } from "../actions/types"; 
    
   const initialState = {
@@ -30,6 +31,12 @@ import {
           ...state,
           chatMessages: [...state.chatMessages, action.payload.chatMessage], 
         };
+      case CHANGE_MESSAGE_STATUS:{
+        return{
+          ...state,
+          chatMessages: action.payload
+        }
+      }
       case LOGOUT_SUCCESS:
         return {
           ...state,

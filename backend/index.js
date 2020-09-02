@@ -10,7 +10,7 @@ const fileupload = require("express-fileupload");
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 //test2
-const saveMessageNotification = require("./helperFunctions/saveMessageNotification");
+const saveChatMessage = require("./helperFunctions/saveChatMessage");
 
 //middleware
 app.use(express.json());
@@ -28,6 +28,7 @@ const commentRoute = require("./routes/comments");
 const notificationsRoute = require("./routes/notifications");
 const favoritesRoute = require("./routes/favorites");
 const gifsRoute = require("./routes/gifs");
+const chatRoute = require("./routes/chat");
 
 dotenv.config();
 
@@ -47,18 +48,39 @@ io.on("connection", (socket) => {
     console.log("userConnected:", userName)
   })
 
-  socket.on("chat message", ({chatMessage, receiver, sender, avatar, senderId, receiverId, sendedAt}) => {
-    const answer = true
-    !user[receiver] ? saveMessageNotification({chatMessage, receiver, sender, avatar, senderId, receiverId, sendedAt}) : 
-    socket.to(user[receiver]).emit("answer", {chatMessage, receiver, sender, avatar, senderId, receiverId, sendedAt, answer});
+  socket.on("send-message", (data, callback) => {
+    const { receiver, sender, senderId, receiverId, clientMsgId } = data;
+    socket.to(user[receiver]).emit("stopped-writting", {sender, receiver, senderId});
+    const answer = true;
+    socket.emit("message-sent", {receiverId, clientMsgId}, async () => {
+      if(!user[receiver]){
+        saveChatMessage({...data, messageStatus: "unseen"});
+        console.log("no esta online")
+      }else{
+        const message = await saveChatMessage({...data, messageStatus: "sent"});
+        socket.to(user[receiver]).emit("receive-message", {...message._doc, answer});
+      };
+    });
+    callback && callback()
+  })
+ 
+  socket.on("message-seen", ({sender, clientMsgId, seenAt}, callback) =>{
+    socket.to(user[sender]).emit("message-seen-confirmed", {clientMsgId, seenAt});
+    callback()
   })
 
-  socket.on("is writting", (sender, receiver) => {
-    socket.to(user[receiver]).emit("is writting", {sender});
+  socket.on("is-writting", ({sender, receiver, senderId}) => {
+    socket.to(user[receiver]).emit("is-writting2", {sender, senderId});
+
   })
 
-  socket.on("stopped writting", (sender, receiver) => {
-    socket.to(user[receiver]).emit("stopped writting");
+  socket.on("stopped-writting2", (data) => {
+    const { sender, receiver } = data;
+    socket.to(user[receiver]).emit("stopped-writting", {sender});
+  });
+
+  socket.on("message-seen-confirmed-2", ({sender, receiver, messages}) => {
+    socket.to(user[receiver]).emit("message-seen-confirmed-2", {sender, receiver, messages} );
   })
 
   socket.on("disconect", (text) => {
@@ -91,5 +113,6 @@ app.use("/", commentRoute);
 app.use("/", notificationsRoute);
 app.use("/", favoritesRoute);
 app.use("/", gifsRoute);
+app.use("/", chatRoute);
 
 server.listen(PORT, () => console.log(`server is up and running on port ${PORT}`)); 

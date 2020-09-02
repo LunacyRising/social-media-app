@@ -1,11 +1,9 @@
-import { sendMessage } from "../ioEvents/sendChatMessage";
+import { emitEvent } from "../io/emitEvents/emitEvents";
 
 export const addGifChat = (args) => {
-    console.log("args", args)
     const { messageInfo, saveMessage, setGifstMenuOpen, socket, gif, title } = args;
-    const {receiver, sender, avatar, senderId, receiverId, sendedAt} = messageInfo;
-    //dispatch(updateQuery(null));
+    const { clientMsgId, receiver, sender, avatar, senderId, receiverId, sendedAt } = messageInfo;
     setGifstMenuOpen(false);
-    saveMessage({chatMessage : gif, receiver, sender, avatar, senderId, receiverId, sendedAt})
-    sendMessage("chat message", {chatMessage : gif, receiver, sender, avatar, senderId, receiverId, sendedAt}, socket);
+    saveMessage({clientMsgId, chatMessage : gif, receiver, sender, avatar, senderId, receiverId, sendedAt})
+    emitEvent("send-message", {clientMsgId, chatMessage : gif, receiver, sender, avatar, senderId, receiverId, sendedAt}, socket)
   }
