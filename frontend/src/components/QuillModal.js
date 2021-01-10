@@ -62,7 +62,7 @@ const QuillModal = ({ editPostComponent, extraInfo, number, id, openModal, btnTe
   }));
   const classes = useStyles();
 
-  const { modalContent, modal, mediaBtnsContainer, btn } = classes;
+  const { modalContent, modal, mediaBtnsContainer, btn } = classes; 
 
   const [ gifstMenuOpen, setGifstMenuOpen ] = useState(false);
 
@@ -136,7 +136,7 @@ const QuillModal = ({ editPostComponent, extraInfo, number, id, openModal, btnTe
               <SearchEmoji quillRef={quillRef} setEmojisMenuOpen={setEmojisMenuOpen}/>
             </Box>
             <Button
-              onClick={() => dispatchAction()}
+              onClick={dispatchAction}
               color="primary"
               className={btn}
             >

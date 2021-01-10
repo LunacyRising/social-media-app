@@ -12,7 +12,7 @@ const Dislike = require("../schemas/Dislike")
 router.post("/post/:postId/createComment", verify, async (req, res) => {
 
   const { userId, userName, avatar, postCreator, title, text, media, mediaAlt } = req.body;
-
+  
   const { postId } = req.params;
 
   

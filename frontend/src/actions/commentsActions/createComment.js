@@ -4,7 +4,7 @@ import { LOADING, SUCCESS_COMMENT, FAIL_COMMENT } from "../types";
 import { editKeyValue } from "../../helperFunctions/editKeyValue"; 
 
 export const createComment = (data, id, number) => async (dispatch, getState) => {
- 
+  
   const { token } = getState().authReducer
 
   const { posts } = getState().postReducer
