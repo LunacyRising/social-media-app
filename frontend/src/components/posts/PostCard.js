@@ -186,18 +186,10 @@ const PostCard = ({
     editAndDeletePostVisible: {
       display: "flex",
     },
-    friendBtnContainer: {
-      //display: "flex",
-      //alignItems: "center",
-      //justifyContent: "space-between",
-      //width: "100%",
-      marginTop: 15,
-     // marginLeft: 10,
-    },
   }));
   const classes = useStyles();
   
-  const {card, wrapper, rankingAndAvatar, leftAndRightWrapper, textAndMedia, userAvatarAndGreenBall, userAvatar, postInfo, mediaContainer, mediaStyle, postTitle, postText, creatorAndDate, creator, createdAt, btns, editAndDeletePostHidden, editAndDeletePostVisible, likeDislikeBtns,restOfBtns, friendBtnContainer } = classes;
+  const {card, wrapper, rankingAndAvatar, leftAndRightWrapper, textAndMedia, userAvatarAndGreenBall, userAvatar, postInfo, mediaContainer, mediaStyle, postTitle, postText, creatorAndDate, creator, createdAt, btns, editAndDeletePostHidden, editAndDeletePostVisible, likeDislikeBtns,restOfBtns } = classes;
 
   dayjs.extend(relativeTime); 
 
@@ -257,9 +249,7 @@ const PostCard = ({
                     {userIsOnline && <PulsingGreenBall/>}
                   </Box>
                   <UserRanking creatorAmountOfPosts={creatorAmountOfPosts}/>
-                  <Box className={friendBtnContainer}>
-                    <AddFriend friendId={creatorId}/>
-                  </Box>
+                  {creatorId !== userId && <AddFriend friendId={creatorId}/>}
                 </Box>
               <Box className={textAndMedia}>
                 <Box className={postInfo}> 
