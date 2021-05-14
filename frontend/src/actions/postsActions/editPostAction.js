@@ -1,4 +1,4 @@
-import axios from "axios";
+import apiUtil from "../../utils/apiUtil/apiUtil";
 import { returnMessages, snackOpen } from "../messagesActions";
 import { editKeyValue } from "../../helperFunctions/editKeyValue"; 
 
@@ -11,9 +11,7 @@ export const editPost = (data, postId) => async (dispatch, getState) => {
   const { posts } = getState().postReducer;
 
   try {
-    const response = await axios.post(`http://localhost:5001/posts/${postId}/edit`,
-    data,
-    {headers: { "auth-token": token, "Content-Type": "multipart/form-data"}});
+    const response = await apiUtil.post(`/posts/${postId}/edit`, data, {headers: { "auth-token": token, "Content-Type": "multipart/form-data"}});
 
     const id = response.data.post._id;
     

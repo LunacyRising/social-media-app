@@ -1,4 +1,4 @@
-import axios from "axios";
+import apiUtil from "../../utils/apiUtil/apiUtil";
 import { returnMessages, snackOpen } from "../messagesActions";
 import { FETCH_GALLERY_SUCCESS,  FETCH_GALLERY_FAIL, GALLERY_LOADING } from "../types";
 
@@ -14,18 +14,9 @@ export const fetchGalleryImages = (page) => async (dispatch, getState) => {
   dispatch({type: GALLERY_LOADING});
 
   try {
-    const response = await axios.post(
-      `http://localhost:5001/gallery/${userName}`,
-       {
-        // index de donde va a comenzar a fetchear las imagenes en el backend, ej: 0 * 5 = primera pagina y 5 imagenes.
-        skip : page * limit ,
-        // limite de imagenes a fetchear, fijado a 5
-        limit
-       }
+    const response = await apiUtil.post(`http://localhost:5001/gallery/${userName}`,{skip : page * limit , limit}
     );
-  
-    console.log(response)
-
+    
     dispatch({
       type: FETCH_GALLERY_SUCCESS,
       payload: {

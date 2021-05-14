@@ -16,7 +16,6 @@ import { fetchInitialPosts } from "../actions/postsActions/fetchInitialPosts";
 import { emitEvent } from "../io/emitEvents/emitEvents";
 
 const Home = () => {
-
   const useStyles = makeStyles((theme) => ({
 
     main: {

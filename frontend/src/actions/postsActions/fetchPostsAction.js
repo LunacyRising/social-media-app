@@ -1,4 +1,4 @@
-import axios from "axios";
+import apiUtil from "../../utils/apiUtil/apiUtil";
 import { FETCH_POSTS_SUCCESS, FETCH_POSTS_FAIL, POSTS_LOADING, POSTS_LOADING2} from "../types";
 import { returnMessages } from "../messagesActions";
 
@@ -18,12 +18,8 @@ export const fetchPosts = (sortOrder, replacePosts) => async (dispatch, getState
   replacePosts && dispatch({ type: POSTS_LOADING2 })
 
   try {
-    const response = await axios.post(`http://localhost:5001/posts/`, 
-     {offSet, limit, query, sort}
-    );
-
-    console.log(response) 
-
+    const response = await apiUtil.post(`/posts/`, {offSet, limit, query, sort});
+    
     dispatch({ 
       type: FETCH_POSTS_SUCCESS,
       payload: {

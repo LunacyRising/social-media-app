@@ -1,30 +1,21 @@
-import axios from "axios";
+import apiUtil from "../../utils/apiUtil/apiUtil";
 import { returnMessages, snackOpen } from "../messagesActions";
 import { ADDING_FRIEND, FRIEND_ADDED, FAILED_ADD_FRIEND } from "../types"; 
 
 export const addFriends = (friendId) => async (dispatch, getState) => {
-  console.log("friendId", friendId)
 
   const { token, userId } = getState().authReducer; 
   
   dispatch({type: ADDING_FRIEND});
  
   try {
-    const response = await axios.post(
-      `http://localhost:5001/addFriend`,
-      {
-        friendId,
-        userId
-      },
-      {
-        headers: { "auth-token": token } 
-      }
-    );
+    const response = await apiUtil.post(`/addFriend`,{friendId, userId}, {headers: { "auth-token": token }});
+
     dispatch({
       type: FRIEND_ADDED,
       payload: response.data.friend
     });
-    console.log(response.data)
+
     const messageCode = response.data.code;
     dispatch(returnMessages(messageCode));
     dispatch(snackOpen())

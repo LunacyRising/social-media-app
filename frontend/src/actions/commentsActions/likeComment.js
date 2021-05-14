@@ -1,4 +1,4 @@
-import axios from "axios";
+import apiUtil from "../../utils/apiUtil/apiUtil";
 import { returnMessages, snackOpen } from "../messagesActions";
 import { LIKE_COMMENT_SUCCESSS, LIKE_COMMENT_FAILED } from "../types";
 import { editKeyValue } from "../../helperFunctions/editKeyValue";
@@ -21,14 +21,8 @@ export const likeComment = ({ replyComponent, postId, commentId, deleteItem, lik
   console.log(postId)
 
   try {
-    const response = await axios.post(
-      `http://localhost:5001/comments/${commentId}/likes`, 
+    const response = await apiUtil.post(`/comments/${commentId}/likes`, { userId, postId },{ headers: { "auth-token": token } });
 
-      { userId, postId },
-
-      { headers: { "auth-token": token } } 
-    );
-    console.log(response)
     dispatch({
       type: LIKE_COMMENT_SUCCESSS, 
       payload: {
@@ -38,6 +32,7 @@ export const likeComment = ({ replyComponent, postId, commentId, deleteItem, lik
         replies : deleteItem && replyComponent ?  editKeyValue(replies, commentId,"_id", keyValue, keyValue2) : editKeyValue(replies, commentId,"_id", keyValue), 
       }
     });
+    
     const messageCode = response.data.code;
     dispatch(returnMessages(messageCode));
     dispatch(snackOpen());

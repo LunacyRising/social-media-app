@@ -1,4 +1,4 @@
-import axios from "axios";
+import apiUtil from "../../utils/apiUtil/apiUtil";
 import { returnMessages, snackOpen } from "../messagesActions";
 import { removeItem } from "../../helperFunctions/removeItem";
 
@@ -11,13 +11,13 @@ export const deletePost = ({ postId }) => async (dispatch, getState) => {
   const { posts } = getState().postReducer;
 
   try {
-    const response = await axios.delete(`http://localhost:5001/posts/${postId}`, {
-      headers: { "auth-token": token }
-    });
+    const response = await apiUtil.delete(`/posts/${postId}`, {headers: { "auth-token": token }});
+
     dispatch({
       type: DELETE_POST,
       payload: removeItem(posts, postId,"_id") 
     });
+    
     const messageCode = response.data.code;
     dispatch(returnMessages(messageCode));
     dispatch(snackOpen());

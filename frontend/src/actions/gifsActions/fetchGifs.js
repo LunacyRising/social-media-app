@@ -1,4 +1,5 @@
 import axios from "axios";
+import apiUtil from "../../utils/apiUtil/apiUtil";
 import { GIFS_LOADING, FETCH_GIFS_SUCCESS, FETCH_GIFS_FAILED } from "../types";
 import { returnMessages } from "../messagesActions";
 const CancelToken = axios.CancelToken;
@@ -12,7 +13,7 @@ export const fetchGifs = () => async (dispatch, getState) => {
 
   try {
     cancel && cancel();
-    const response = await axios.post("http://localhost:5001/gifs/", { gifOffset, gifLimit, gifQuery }, { cancelToken: new CancelToken(c =>  cancel = c) });
+    const response = await apiUtil.post("/gifs", { gifOffset, gifLimit, gifQuery }, { cancelToken: new CancelToken(c =>  cancel = c) });
 
     dispatch({ 
       type: FETCH_GIFS_SUCCESS,
@@ -22,7 +23,8 @@ export const fetchGifs = () => async (dispatch, getState) => {
           maxResults: response.data.maxResults
          }
     });
-    dispatch(returnMessages(response.data.code))
+
+    dispatch(returnMessages(response.data.code));
   } catch (err) {
     if(axios.isCancel(err)) return;
     let errorCode = err.response ? err.response.data.code : 500;

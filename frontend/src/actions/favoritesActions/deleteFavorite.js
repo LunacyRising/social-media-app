@@ -1,4 +1,4 @@
-import axios from "axios";
+import apiUtil from "../../utils/apiUtil/apiUtil";
 import { returnMessages, snackOpen } from "../messagesActions";
 import {  FAVORITE_DELETED, FAVORITE_DELETED_FAIL } from "../types"; 
 import { removeItem } from "../../helperFunctions/removeItem";
@@ -9,11 +9,8 @@ export const deleteFavorite = ( favoriteId ) => async (dispatch, getState)=> {
 
   const { favoritesSqueleton , favorites } = getState().favoritesReducer;
   try {
-    const response = await axios.delete(`http://localhost:5001/favorites/delete/${userId}/${favoriteId}`,
-    {
-      headers: { "auth-token": token } 
-    }
-    );
+    const response = await apiUtil.delete(`/favorites/delete/${userId}/${favoriteId}`,{ headers: { "auth-token": token } });
+
     dispatch({
       type: FAVORITE_DELETED,
       payload: {
@@ -21,7 +18,7 @@ export const deleteFavorite = ( favoriteId ) => async (dispatch, getState)=> {
         favorites: removeItem(favorites, favoriteId,"_id") 
       }
     });
-    console.log(favoriteId) 
+
     const messageCode = response.data.code;
     dispatch(returnMessages(messageCode));
     dispatch(snackOpen())

@@ -1,4 +1,4 @@
-import axios from "axios";
+import apiUtil from "../../utils/apiUtil/apiUtil";
 import { returnMessages } from "../messagesActions";
 import { FRIEND_REQUESTS_LOADED, FRIEND_REQUESTS_FAILED } from "../types"; 
 
@@ -7,10 +7,8 @@ export const fetchFriendRequests = () => async (dispatch, getState) => {
   const{userId, token} = getState().authReducer;
 
   try {
-    const response = await axios.get(`http://localhost:5001/friendRequests/${userId}`,{
-      headers: { "auth-token": token } 
-    });
-    console.log(response)
+    const response = await apiUtil.get(`http://localhost:5001/friendRequests/${userId}`,{headers: { "auth-token": token } });
+
     dispatch({
       type: FRIEND_REQUESTS_LOADED,
       payload: response.data

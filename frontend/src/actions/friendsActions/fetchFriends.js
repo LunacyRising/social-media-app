@@ -1,5 +1,5 @@
-import axios from "axios";
-import { returnMessages, snackOpen } from "../messagesActions";
+import apiUtil from "../../utils/apiUtil/apiUtil";
+import { returnMessages } from "../messagesActions";
 import {  FRIENDS_LOADING, FRIENDS_LOADED, FAILED_FETCH_FRIENDS } from "../types"; 
 
 export const fetchFriends = () => async (dispatch, getState) => {
@@ -7,18 +7,13 @@ export const fetchFriends = () => async (dispatch, getState) => {
   const {token, userId} = getState().authReducer; 
   
   dispatch({type: FRIENDS_LOADING});
-
   try {
-    const response = await axios.get(`http://localhost:5001/${userId}/friends`,
-    {
-      headers: { "auth-token": token }
-    }
-    );
+    const response = await apiUtil.get(`/${userId}/friends`, {headers: { "auth-token": token }});
 
     const fLinks = response.data
 
     const promisesArray = fLinks.map( async fLink => {
-      return await axios.get(`http://localhost:5001/friends/${fLink.friendId}`,{headers: { "auth-token": token }})
+      return await apiUtil.get(`/friends/${fLink.friendId}`,{headers: { "auth-token": token }})
     })
 
     const fss = await Promise.all(promisesArray);
@@ -26,9 +21,7 @@ export const fetchFriends = () => async (dispatch, getState) => {
     const friends = fss.map(friend => {
       const { userName, avatar, _id } = friend.data[0]
       return {userName, avatar, friendId: _id }
-    })
-
-    console.log("friends", friends)
+    });
 
     dispatch({
       type: FRIENDS_LOADED, 

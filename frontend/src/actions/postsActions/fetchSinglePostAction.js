@@ -1,4 +1,4 @@
-import axios from "axios";
+import apiUtil from "../../utils/apiUtil/apiUtil";
 import { returnMessages } from "../messagesActions";
 
 import { FETCH_POST_SUCCESS, FETCH_POST_FAIL } from "../types";
@@ -6,7 +6,7 @@ import { FETCH_POST_SUCCESS, FETCH_POST_FAIL } from "../types";
 export const fetchPost = ( postId ) => async dispatch => {
   
   try {
-    const response = await axios.get(`http://localhost:5001/posts/${postId}/`);
+    const response = await apiUtil.get(`/posts/${postId}/`);
 
     const data = response.data;
 
@@ -15,10 +15,9 @@ export const fetchPost = ( postId ) => async dispatch => {
       payload: data
     });
 
-    console.log(response)
     const messageCode = response.data.code;
     dispatch(returnMessages(messageCode));
-    console.log(response);
+
   } catch (err) {
     let errorCode = err.response ? err.response.data.code : 500;
     dispatch(returnMessages(errorCode));

@@ -1,4 +1,4 @@
-import axios from "axios";
+import apiUtil from "../../utils/apiUtil/apiUtil";
 import { returnMessages, snackOpen } from "../messagesActions";
 import { editKeyValue } from "../../helperFunctions/editKeyValue";
 import { removePostsLikesDislikes } from "../../helperFunctions/removePostsLikesDislikes";
@@ -20,16 +20,8 @@ export const dislikePost = ({ postId, dislikes, likes, deleteItem }) => async (d
   dispatch({type: DISLIKE_LOADING})
 
   try {
-    const response = await axios.post(
-      `http://localhost:5001/posts/${postId}/dislike`,  
-      {
-        postId,
-        userId
-      },
-      {
-        headers: { "auth-token": token } 
-      }
-    );
+    const response = await apiUtil.post(`/posts/${postId}/dislike`, {postId, userId}, { headers: { "auth-token": token }});
+    
     dispatch({
       type: DISLIKE_SUCCESS,  
       payload: {

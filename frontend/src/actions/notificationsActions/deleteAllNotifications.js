@@ -1,17 +1,18 @@
-import axios from "axios";
+import apiUtil from "../../utils/apiUtil/apiUtil";
 import { DELETE_ALL_NOTIFICATIONS, FAIL_DELETE_NOTIFICATION} from "../types";
 import { returnMessages } from "../messagesActions";
 
 
 export const deleteAllNotifications = () => async (dispatch, getState) => {
-    const{userId, token} = getState().authReducer;
+  const{userId, token} = getState().authReducer;
+
   try { 
-      await axios.delete(`http://localhost:5001/notifications/deleteAll/${userId}`,{
-      headers: { "auth-token": token }  
-    });
+    await apiUtil.delete(`/notifications/deleteAll/${userId}`,{headers: { "auth-token": token }});
+
     dispatch({
       type: DELETE_ALL_NOTIFICATIONS 
     });
+    
   } catch (err) {
     let errorCode = err.response ? err.response.data.code : 500;
     dispatch(returnMessages(errorCode));

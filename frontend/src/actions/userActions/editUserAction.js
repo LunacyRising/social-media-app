@@ -1,4 +1,4 @@
-import axios from "axios";
+import apiUtil from "../../utils/apiUtil/apiUtil";
 import { returnMessages, snackOpen } from "../messagesActions";
 import { EDIT_USER, EDITUSER_FAIL, DATA_LOADING } from "../types";
 
@@ -11,8 +11,7 @@ export const editUser = ({
 }) => async dispatch => {
   dispatch({ type: DATA_LOADING });
   try {
-    let response = await axios.patch(
-      `http://localhost:5001/admin/user/${id}`,
+    let response = await apiUtil.patch(`/admin/user/${id}`,
       {
         name,
         email,
@@ -22,10 +21,11 @@ export const editUser = ({
         headers: { "auth-token": token }
       }
     );
-    let data = response.data.updatedUser;
+
     dispatch({
       type: EDIT_USER
     });
+
     let messageCode = response.data.code;
     dispatch(returnMessages(messageCode));
     dispatch(snackOpen());
