@@ -1,4 +1,4 @@
-import axios from "axios";
+import apiUtil from "../../utils/apiUtil/apiUtil";
 import { CHANGE_MESSAGE_STATUS } from "../types";
 import { editKeyValue } from "../../helperFunctions/editKeyValue";
 import { changeMessagesStatus } from "../../helperFunctions/changeMessagesStatus";
@@ -6,8 +6,6 @@ import { changeMessagesStatus } from "../../helperFunctions/changeMessagesStatus
 export const changeMessageStatus = (id, status, seenAt) => async (dispatch,getState) => {
 
   const{ chatMessages } = getState().chatReducer;  
-
-  console.log("chatMessages", chatMessages)
 
   const t = {
     messageStatus : status
@@ -20,7 +18,7 @@ export const changeMessageStatus = (id, status, seenAt) => async (dispatch,getSt
 
   if(seenAt){
     try {
-      await axios.post(`http://localhost:5001/chat/changeMessageStatus`, {id, status, seenAt});
+      await apiUtil.post("/chat/changeMessageStatus", {id, status, seenAt});
     }catch (err) {
       console.log("err", err)
     }
@@ -38,7 +36,7 @@ export const changeMessageStatus2 = (items, receiver) => async (dispatch,getStat
 
   if(receiver){
       try {
-        await axios.post(`http://localhost:5001/chat/changeMessageStatus2`, items);
+        await apiUtil.post("/chat/changeMessageStatus2", items);
       }catch (err) {
         console.log("err", err)
       }

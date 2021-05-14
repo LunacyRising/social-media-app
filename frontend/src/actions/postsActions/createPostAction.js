@@ -1,4 +1,4 @@
-import axios from "axios";
+import apiUtil from "../../utils/apiUtil/apiUtil";
 import { returnMessages, snackOpen } from "../messagesActions";
 import { CREATE_POST_SUCCESS, CREATE_POST_FAIL,POSTS_LOADING } from "../types";
 
@@ -9,13 +9,8 @@ export const createPost = (data) => async (dispatch, getState) => {
   dispatch({ type: POSTS_LOADING });
 
   try {
-    const response = await axios.post(
-      `http://localhost:5001/createPost/${userId}`, 
-      data,
-      {
-        headers: { "auth-token": token, "Content-Type": "multipart/form-data" } 
-      }
-    );
+    const response = await apiUtil.post(`/createPost/${userId}`, data, {headers: { "auth-token": token, "Content-Type": "multipart/form-data" }})
+   
     dispatch({ 
       type: CREATE_POST_SUCCESS,
       payload: response.data.post

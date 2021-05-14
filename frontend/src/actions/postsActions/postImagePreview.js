@@ -1,4 +1,4 @@
-import axios from "axios";
+import apiUtil from "../../utils/apiUtil/apiUtil";
 import { returnMessages, snackOpen } from "../messagesActions";
 import { POST_IMAGE_PREVIEW_SUCCESS, POST_IMAGE_PREVIEW_FAILED } from "../types";
 
@@ -9,14 +9,12 @@ export const postImagePreview = ( data ) => async (dispatch, getState) => {
   console.log(data)
 
   try {
-    const response = await axios.post("http://localhost:5001/posts/imagePreview", data, { headers: { "auth-token": token, "Content-Type": "multipart/form-data" } }); 
+    const response = await apiUtil.post("/posts/imagePreview", data, { headers: { "auth-token": token, "Content-Type": "multipart/form-data" } }); 
 
     dispatch({ 
       type: POST_IMAGE_PREVIEW_SUCCESS,
       payload: response.data.preview
     });
-
-    console.log(response)
 
     const messageCode = response.data.code;
 

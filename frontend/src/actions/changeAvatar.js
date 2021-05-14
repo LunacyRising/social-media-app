@@ -1,4 +1,4 @@
-import axios from "axios";
+import apiUtil from "../utils/apiUtil/apiUtil";
 import { returnMessages, snackOpen } from "./messagesActions";
 import { CHANGE_AVATAR_SUCESS, CHANGE_AVATAR_FAIL, CHANGING_AVATAR } from "./types"; 
 import { editKeyValue } from "../helperFunctions/editKeyValue";
@@ -13,9 +13,7 @@ export const changeAvatar = ({ userAvatar }) => async (dispatch,getState) => {
 
   dispatch({ type: CHANGING_AVATAR });
   try {
-    const response = await axios.post(`http://localhost:5001/changeAvatar/${userId}`, userAvatar, 
-    {headers: { "Content-Type": "multipart/form-data" }}
-    );
+    const response = await apiUtil.post(`/changeAvatar/${userId}`, userAvatar, {headers: { "Content-Type": "multipart/form-data" }});
 
     const keyValue = { avatar: response.data.avatar } 
 
@@ -29,6 +27,7 @@ export const changeAvatar = ({ userAvatar }) => async (dispatch,getState) => {
         replies: editKeyValue(replies, userId, "userId", keyValue)
       }
     });
+
     dispatch(snackOpen());
 
     const messageCode = response.data.code;

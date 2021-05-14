@@ -1,4 +1,4 @@
-import axios from "axios";
+import apiUtil from "../../utils/apiUtil/apiUtil";
 import { returnMessages, snackOpen } from "../messagesActions";
 import { LOGOUT_SUCCESS, LOGGING_OUT, FAIL_LOGOUT } from "../types";
 import { editKeyValue } from "../../helperFunctions/editKeyValue"
@@ -16,11 +16,13 @@ export const logoutAction = () => async (dispatch,getState) => {
 
   dispatch({type: LOGGING_OUT}); 
   try{
-    await axios.post(`http://localhost:5001/logout`,{ userId}); 
+    await apiUtil.post(`/logout`,{ userId}); 
+
     dispatch({
       type: LOGOUT_SUCCESS,
       payload: editKeyValue(posts, userId, "userId", keyValue) 
-    })
+    });
+    
     emitEvent("disconect", `${userName} se ha desconectado`, socket);
     socket.off()
   }catch(err){

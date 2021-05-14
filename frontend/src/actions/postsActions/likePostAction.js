@@ -1,14 +1,10 @@
-import axios from "axios";
+import apiUtil from "../../utils/apiUtil/apiUtil";
 import { returnMessages, snackOpen } from "../messagesActions";
 import { LIKE_SUCCESS, LIKE_FAIL, LIKE_LOADING } from "../types";
 import { editKeyValue } from "../../helperFunctions/editKeyValue";
 import { removePostsLikesDislikes } from "../../helperFunctions/removePostsLikesDislikes";
 
 export const likePost = ({  postId, creatorUserName, title, likes, dislikes, deleteItem}) => async (dispatch,getState) => {
-
-
-
-  console.log(deleteItem, dislikes)
 
   const{ token, userId, userName } = getState().authReducer 
 
@@ -21,8 +17,8 @@ export const likePost = ({  postId, creatorUserName, title, likes, dislikes, del
   dispatch({type: LIKE_LOADING})
 
   try {
-    const response = await axios.post(
-      `http://localhost:5001/posts/${postId}/likes`,     
+    const response = await apiUtil.post(
+      `/posts/${postId}/likes`,     
       {
         postId,
         userId,
@@ -42,12 +38,8 @@ export const likePost = ({  postId, creatorUserName, title, likes, dislikes, del
         filteredDislikes: deleteItem ? removePostsLikesDislikes(allDislikes, postId) : allDislikes 
       } 
     });
-    const messageCode = response.data.code;
-   // dispatch(returnMessages(messageCode, message));
-   // dispatch(snackOpen());
-    console.log(response.data.message, response.data.likes);
+
   } catch (err) {
-    console.log(err.response) 
     let errorCode = err.response ? err.response.data.code : 500;
     dispatch(returnMessages(errorCode));
     dispatch({

@@ -1,19 +1,16 @@
-import axios from "axios";
+import apiUtil from "../../utils/apiUtil/apiUtil";
 import { returnMessages, snackOpen } from "../messagesActions";
-
-import {
-  MAIL_CONFIRM_SUCCESS,
-  MAIL_CONFIRM_FAILED,
-  WAITING_MAILCONFIRMATION
-} from "../types";
+import {MAIL_CONFIRM_SUCCESS, MAIL_CONFIRM_FAILED, WAITING_MAILCONFIRMATION} from "../types";
 
 export const emailConfirmedAction = (email) => async dispatch => {
   dispatch({ type: WAITING_MAILCONFIRMATION });
   try {
-    const response = await axios.put(`http://localhost:5001/${email}`, {});
+    const response = await apiUtil.put(`/${email}`);
+
     dispatch({
       type: MAIL_CONFIRM_SUCCESS
     });
+
     const messageCode = response.data.code;
     dispatch(returnMessages(messageCode));
     dispatch(snackOpen());

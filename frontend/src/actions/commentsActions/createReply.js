@@ -1,4 +1,4 @@
-import axios from "axios";
+import apiUtil from "../../utils/apiUtil/apiUtil";
 import { returnMessages, snackOpen } from "../messagesActions";
 import { REPLY_SUCCESS, REPLY_FAILED } from "../types";
 import { editKeyValue } from "../../helperFunctions/editKeyValue";
@@ -7,15 +7,13 @@ export const createReply = ({ postId, commentId, comment , replies }) => async (
 
   const { userId, userName, avatar, token } = getState().authReducer;
 
-  console.log(postId, commentId, comment, replies)
-
   const { comments } = getState().commentsReducer;  
 
   let keyValue = { replies: replies +1 };
 
   try {
-    const response = await axios.post(
-      `http://localhost:5001/reply`,  
+    const response = await apiUtil.post(
+      "/reply",  
       {
         userName,
         comment,
@@ -35,7 +33,7 @@ export const createReply = ({ postId, commentId, comment , replies }) => async (
         comments: editKeyValue(comments, commentId, "_id", keyValue) 
       }
     });
-    console.log(response)
+
     const messageCode = response.data.code;
     dispatch(returnMessages(messageCode));
     dispatch(snackOpen());

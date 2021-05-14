@@ -1,13 +1,10 @@
-import axios from "axios";
 import { FETCH_INITIAL_POSTS_SUCCESS, FETCH_POSTS_FAIL, POSTS_LOADING, POSTS_LOADING2 } from "../types";
 import { returnMessages } from "../messagesActions";
+import apiUtil  from "../../utils/apiUtil/apiUtil";
 
 export const fetchInitialPosts = () => async (dispatch, getState) => {
-
   let { limit, sortOptions } = getState().postReducer; 
-
   const offSet = 0;
-  // lo puse dentro de una variable para que tenga el mismo nombre que el q pasa la accion de fetchposts al backend
   const sort = sortOptions;
   
   dispatch({ type: POSTS_LOADING });
@@ -15,11 +12,7 @@ export const fetchInitialPosts = () => async (dispatch, getState) => {
   dispatch({ type: POSTS_LOADING2 });
 
   try {
-    const response = await axios.post(`http://localhost:5001/posts/`, 
-     {offSet, limit, sort}
-    );
-
-    console.log(response)
+    const response = await apiUtil.post("/posts", {offSet, limit, sort});
 
     dispatch({ 
       type: FETCH_INITIAL_POSTS_SUCCESS,

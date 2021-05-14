@@ -1,4 +1,4 @@
-import axios from "axios";
+import apiUtil from "../../utils/apiUtil/apiUtil";
 import { returnMessages, snackOpen } from "../messagesActions";
 import { loginModalClose } from "../modalsActions/login";
 import { USER_LOADING, LOGIN_SUCCESS, LOGIN_FAIL } from "../types";
@@ -16,10 +16,7 @@ export const loginAction = ({ email, password }) => async (dispatch, getState) =
 
   try {
     dispatch({ type: USER_LOADING });
-    const response = await axios.post("http://localhost:5001/login",  
-    { email, password });
-
-    console.log(response);
+    const response = await apiUtil.post("/login",{ email, password });
 
     dispatch({
       type: LOGIN_SUCCESS,

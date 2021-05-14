@@ -1,4 +1,4 @@
-import axios from "axios";
+import apiUtil from "../../utils/apiUtil/apiUtil";
 import { returnMessages, snackOpen } from "../messagesActions";
 import { LOADING, SUCCESS_COMMENT, FAIL_COMMENT } from "../types";
 import { editKeyValue } from "../../helperFunctions/editKeyValue"; 
@@ -14,7 +14,8 @@ export const createComment = (data, id, number) => async (dispatch, getState) =>
   dispatch({ type: LOADING }); 
 
   try {
-    const response = await axios.post(`http://localhost:5001/post/${id}/createComment`, data, {headers: { "auth-token": token, "Content-Type": "multipart/form-data" }});
+    const response = await apiUtil.post(`/post/${id}/createComment`, data, {headers: { "auth-token": token, "Content-Type": "multipart/form-data" }});
+
     dispatch({ 
       type: SUCCESS_COMMENT,
       payload: {
@@ -22,6 +23,7 @@ export const createComment = (data, id, number) => async (dispatch, getState) =>
         posts: editKeyValue(posts, id, "_id", keyValue)    
       }
     });
+    
     const messageCode = response.data.code;
     dispatch(returnMessages(messageCode));
     dispatch(snackOpen());

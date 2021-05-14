@@ -1,4 +1,4 @@
-import axios from "axios";
+import apiUtil from "../../utils/apiUtil/apiUtil";
 import { returnMessages, snackOpen } from "../messagesActions";
 import { FRIEND_REQUEST_SENDED, FRIEND_REQUEST_FAILED } from "../types"; 
 
@@ -7,8 +7,7 @@ export const friendRequest = (friendId) => async (dispatch, getState) => {
   const { token, userId, userName, avatar } = getState().authReducer; 
   
   try {
-    const response = await axios.post(
-      `http://localhost:5001/friendRequest`,
+    const response = await apiUtil.post(`/friendRequest`,
       {
         friendId,
         userId,
@@ -19,9 +18,11 @@ export const friendRequest = (friendId) => async (dispatch, getState) => {
         headers: { "auth-token": token } 
       }
     );
+
     dispatch({
       type: FRIEND_REQUEST_SENDED
     });
+    
     const messageCode = response.data.code;
     dispatch(returnMessages(messageCode));
     dispatch(snackOpen())

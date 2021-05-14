@@ -1,4 +1,4 @@
-import axios from "axios";
+import apiUtil from "../../utils/apiUtil/apiUtil";
 import { returnMessages, snackOpen } from "../messagesActions";
 import { DISLIKE_COMMENT_SUCCESS, DISLIKE_COMMENT_FAILED } from "../types";
 import { editKeyValue } from "../../helperFunctions/editKeyValue";
@@ -16,17 +16,9 @@ export const dislikeComment = ({ replyComponent, postId, commentId, deleteItem, 
 
   let keyValue2 = { ...keyValue, likes : likes -1}
 
-  console.log(`id de comentario desde el action: ${commentId} removeItem: ${deleteItem}`)
-
   try {
-    const response = await axios.post(
-      `http://localhost:5001/comments/${commentId}/dislikes`,    
+    const response = await apiUtil.post(`/comments/${commentId}/dislikes`, { userId, postId }, { headers: { "auth-token": token } });
 
-      { userId, postId },
-
-      { headers: { "auth-token": token } }
-    );
-    console.log(response)
     dispatch({
       type: DISLIKE_COMMENT_SUCCESS, 
       payload: {
@@ -36,6 +28,7 @@ export const dislikeComment = ({ replyComponent, postId, commentId, deleteItem, 
         replies : deleteItem && replyComponent ?  editKeyValue(replies, commentId, "_id", keyValue, keyValue2) : editKeyValue(replies, commentId, "_id", keyValue), 
       }
     });
+
     const messageCode = response.data.code;
     dispatch(returnMessages(messageCode));
     dispatch(snackOpen());

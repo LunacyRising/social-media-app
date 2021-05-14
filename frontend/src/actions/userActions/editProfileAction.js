@@ -1,4 +1,4 @@
-import axios from "axios";
+import apiUtil from "../../utils/apiUtil/apiUtil";
 import { returnMessages, snackOpen } from "../messagesActions";
 import { editKeyValue } from "../../helperFunctions/editKeyValue";
 import { EDITPROFILE_FAIL, PROFILE_UPDATING, UPDATE_PROFILE_SUCCESS} from "../types";
@@ -14,12 +14,8 @@ export const editProfile = ({ values }) => async (dispatch, getState )=> {
 
   dispatch({ type: PROFILE_UPDATING});
   try { 
-    const response = await axios.post(`http://localhost:5001/user/${userId}`,
-    { values },
-    { headers: { "auth-token": token }}
-    );
+    const response = await apiUtil.post(`/user/${userId}`,{ values },{ headers: { "auth-token": token }});
     const userName = response.data.user.userName;
-
     const keyValue = { userName: userName };
 
     dispatch({
