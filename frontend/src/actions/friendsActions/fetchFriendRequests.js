@@ -7,7 +7,7 @@ export const fetchFriendRequests = () => async (dispatch, getState) => {
   const{userId, token} = getState().authReducer;
 
   try {
-    const response = await apiUtil.get(`http://localhost:5001/friendRequests/${userId}`,{headers: { "auth-token": token } });
+    const response = await apiUtil.get(`/friendRequests/${userId}`,{headers: { "auth-token": token } });
 
     dispatch({
       type: FRIEND_REQUESTS_LOADED,

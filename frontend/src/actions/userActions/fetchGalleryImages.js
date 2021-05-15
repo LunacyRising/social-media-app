@@ -14,7 +14,7 @@ export const fetchGalleryImages = (page) => async (dispatch, getState) => {
   dispatch({type: GALLERY_LOADING});
 
   try {
-    const response = await apiUtil.post(`http://localhost:5001/gallery/${userName}`,{skip : page * limit , limit}
+    const response = await apiUtil.post(`/gallery/${userName}`,{skip : page * limit , limit}
     );
     
     dispatch({
