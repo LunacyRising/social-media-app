@@ -1,4 +1,4 @@
-import { apiUtil } from "../utils/apiUtil/apiUtil"
+import apiUtil from "../utils/apiUtil/apiUtil"
 import { insertMedia } from "./insertMedia";
 
 export const addImage = async (e,args) => {

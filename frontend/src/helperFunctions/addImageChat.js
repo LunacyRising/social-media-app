@@ -1,4 +1,4 @@
-import { apiUtil } from "../utils/apiUtil/apiUtil"
+import apiUtil from "../utils/apiUtil/apiUtil"
 import { emitEvent } from "../io/emitEvents/emitEvents";
 
 export const addImageChat = async (e, data) => {
