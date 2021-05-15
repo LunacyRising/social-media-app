@@ -1,6 +1,6 @@
 //admin
 const router = require("express").Router();
-const User = require("../schemas/user");
+const User = require("../schemas/User");
 const verify = require("./verifyToken");
 
 //get all users

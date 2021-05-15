@@ -1,10 +1,10 @@
 //user
 const router = require("express").Router();
-const User = require("../schemas/user");
-const Post = require("../schemas/post");
-const Comment = require("../schemas/comment");
+const User = require("../schemas/User");
+const Post = require("../schemas/Post");
+const Comment = require("../schemas/Comment");
 const FriendRequest = require("../schemas/FriendRequestNotification");
-const Friend = require("../schemas/friend");
+const Friend = require("../schemas/Friend");
 const Gallery = require("../schemas/Gallery");
 const galleryImg = require("../schemas/GalleryImg");
 const verify = require("./verifyToken");

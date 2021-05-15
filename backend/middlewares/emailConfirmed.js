@@ -1,4 +1,4 @@
-const User = require("../schemas/user");
+const User = require("../schemas/User");
 
 const emailConfirmed = async (req, res, next) => {
     const { email } = req.body;

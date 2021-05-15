@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const verify = require("./verifyToken");
 const Favorite = require("../schemas/Favorite");
-const Post = require("../schemas/post");
+const Post = require("../schemas/Post");
 
 
 // create favorite 
